@@ -1,6 +1,7 @@
 class PatientsController < ApplicationController
   before_action :ensure_clinic!
   before_action :set_patient, only: [:show, :edit, :update, :destroy, :history]
+  before_action :check_patient_limit!, only: [:new, :create]
 
   def index
     @patients = current_clinic.patients.order(created_at: :desc)
@@ -44,6 +45,15 @@ class PatientsController < ApplicationController
   end
 
   private
+
+  def check_patient_limit!
+    return if current_clinic.within_limit?(:patients)
+
+    redirect_to patients_path,
+      alert: t("flash.plan.limit_reached_patients",
+               limit: current_clinic.patient_limit,
+               plan:  current_clinic.plan_name)
+  end
 
   def set_patient
     @patient = current_clinic.patients.find(params[:id])

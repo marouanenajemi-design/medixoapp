@@ -13,9 +13,8 @@ en:
     prescriptions: "Prescriptions"
     appointments: "Appointments"
     calendar: "Calendar"
-
+    analytics: "Analytics"
     chatbot: "Medicine Chatbot"
-
     clinic_settings: "Clinic Settings"
   layout:
     navigation:
@@ -45,7 +44,31 @@ en:
           description: "See appointments, doctors, and patients instantly with a modern interface."
   forms:
     errors_heading: "Please fix these errors:"
+  analytics:
+    index:
+      title: "Analytics"
+      subtitle: "Track your clinic's performance and growth over time."
+      view_dashboard: "Dashboard"
+      stats:
+        this_month: "This Month"
+        last_month: "Last Month"
+        completion_rate: "Completion Rate"
+        active_patients: "Active Patients"
+      charts:
+        appointments_title: "Appointments per Month"
+        appointments_subtitle: "Total bookings over the last 6 months"
+        growth_title: "Patient Growth"
+        growth_subtitle: "Cumulative patients over the last 6 months"
+        doctors_title: "Doctor Activity"
+        doctors_subtitle: "Appointments per doctor"
+        status_title: "Status Breakdown"
+        status_subtitle: "Appointment outcomes distribution"
+
   flash:
+    plan:
+      limit_reached_doctors: "You've reached the %{limit}-doctor limit on your %{plan} plan. Upgrade to add more doctors."
+      limit_reached_patients: "You've reached the %{limit}-patient limit on your %{plan} plan. Upgrade to add more patients."
+      analytics_required: "Analytics is available on Pro and Clinic+ plans. Upgrade to unlock full reporting."
     clinics:
       setup_required: "Please set up your clinic before continuing."
       already_exists: "Your clinic is already set up."

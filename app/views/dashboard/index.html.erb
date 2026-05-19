@@ -1,13 +1,21 @@
 <div class="page-shell">
-  <% if current_user.clinic&.trialing? %>
-    <div class="alert alert-info mb-4">
-      Your free trial is active.
-      <strong><%= current_user.clinic.trial_days_left %> day(s)</strong> remaining.
+  <%# ── Plan status banner ── %>
+  <% if current_clinic.trialing? %>
+    <div class="alert alert-info mb-4 d-flex align-items-center gap-3">
+      <i class="bi bi-clock fs-5"></i>
+      <div>
+        Your free trial is active.
+        <strong><%= current_clinic.trial_days_left %> day(s)</strong> remaining.
+        <%= link_to "See plans →", pricing_path, class: "fw-bold text-decoration-none ms-2" %>
+      </div>
     </div>
-  <% elsif current_user.clinic && !current_user.clinic.subscribed? %>
-    <div class="alert alert-warning mb-4">
-      Your free trial has ended.
-      <%= link_to "Subscribe now", pricing_path, class: "fw-bold text-decoration-none" %>
+  <% elsif current_clinic && !current_clinic.subscribed? %>
+    <div class="alert alert-warning mb-4 d-flex align-items-center gap-3">
+      <i class="bi bi-exclamation-triangle fs-5"></i>
+      <div>
+        Your free trial has ended.
+        <%= link_to "Subscribe now", pricing_path, class: "fw-bold text-decoration-none ms-2" %>
+      </div>
     </div>
   <% end %>
 
@@ -16,49 +24,146 @@
       <h1 class="page-title"><%= t("dashboard.index.title") %></h1>
       <div class="page-subtitle"><%= t("dashboard.index.subtitle") %></div>
     </div>
-
     <div class="page-actions d-flex gap-2 flex-wrap justify-content-start justify-content-md-end">
       <%= link_to t("shared.actions.new_appointment"), new_appointment_path, class: "btn btn-primary action-btn" %>
       <%= link_to t("shared.actions.new_prescription"), new_prescription_path, class: "btn btn-outline-primary action-btn" %>
     </div>
   </div>
 
+  <%# ── Stat cards ── %>
   <div class="row g-4 mb-4">
     <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
+      <div class="stat-card stat-card-teal h-100">
         <div class="stat-label"><%= t("dashboard.index.stats.doctors") %></div>
         <div class="stat-value"><%= @doctors_count %></div>
       </div>
     </div>
-
     <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
+      <div class="stat-card stat-card-green h-100">
         <div class="stat-label"><%= t("dashboard.index.stats.patients") %></div>
         <div class="stat-value"><%= @patients_count %></div>
       </div>
     </div>
-
     <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
+      <div class="stat-card stat-card-amber h-100">
         <div class="stat-label"><%= t("dashboard.index.stats.total_appointments") %></div>
         <div class="stat-value"><%= @appointments_count %></div>
       </div>
     </div>
-
     <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
+      <div class="stat-card stat-card-rose h-100">
         <div class="stat-label"><%= t("dashboard.index.stats.today_appointments") %></div>
         <div class="stat-value"><%= @appointments_today %></div>
       </div>
     </div>
   </div>
 
+  <%# ── Plan & usage card ── %>
+  <div class="content-card mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+      <div class="d-flex align-items-center gap-3">
+        <span class="plan-tier-badge" style="background:<%= current_clinic.plan_badge_color %>;">
+          <i class="bi bi-<%= current_clinic.plan_tier == 'clinic_plus' ? 'gem' : current_clinic.plan_tier == 'pro' ? 'star-fill' : 'lightning' %>"></i>
+          <%= current_clinic.plan_name %> Plan
+        </span>
+        <div>
+          <div class="fw-700 text-dark" style="font-size:0.96rem;">Your plan usage</div>
+          <div class="text-muted" style="font-size:0.82rem;">Resource limits for your current tier</div>
+        </div>
+      </div>
+      <% unless current_clinic.plan_tier == "clinic_plus" %>
+        <%= link_to "Upgrade Plan →", pricing_path, class: "btn btn-sm btn-outline-primary" %>
+      <% end %>
+    </div>
+
+    <div class="row g-3">
+      <%# Doctors usage %>
+      <div class="col-12 col-md-4">
+        <div class="usage-meter-wrap">
+          <div class="usage-meter-header">
+            <span><i class="bi bi-person-badge me-1"></i> Doctors</span>
+            <span class="usage-meter-count">
+              <%= current_clinic.doctors.count %>
+              <% if current_clinic.doctor_limit %>
+                / <%= current_clinic.doctor_limit %>
+              <% else %>
+                <span class="text-muted">/ ∞</span>
+              <% end %>
+            </span>
+          </div>
+          <% pct = current_clinic.plan_usage_percent(:doctors) %>
+          <% if pct %>
+            <div class="usage-meter-bar">
+              <div class="usage-meter-fill <%= pct >= 90 ? 'usage-danger' : pct >= 70 ? 'usage-warn' : 'usage-ok' %>"
+                   style="width:<%= pct %>%;"></div>
+            </div>
+          <% else %>
+            <div class="usage-meter-bar">
+              <div class="usage-meter-fill usage-ok" style="width:30%;"></div>
+            </div>
+            <div style="font-size:0.78rem;color:#14b8a6;margin-top:4px;">Unlimited</div>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Patients usage %>
+      <div class="col-12 col-md-4">
+        <div class="usage-meter-wrap">
+          <div class="usage-meter-header">
+            <span><i class="bi bi-people me-1"></i> Patients</span>
+            <span class="usage-meter-count">
+              <%= current_clinic.patients.count %>
+              <% if current_clinic.patient_limit %>
+                / <%= current_clinic.patient_limit %>
+              <% else %>
+                <span class="text-muted">/ ∞</span>
+              <% end %>
+            </span>
+          </div>
+          <% pct = current_clinic.plan_usage_percent(:patients) %>
+          <% if pct %>
+            <div class="usage-meter-bar">
+              <div class="usage-meter-fill <%= pct >= 90 ? 'usage-danger' : pct >= 70 ? 'usage-warn' : 'usage-ok' %>"
+                   style="width:<%= pct %>%;"></div>
+            </div>
+          <% else %>
+            <div class="usage-meter-bar">
+              <div class="usage-meter-fill usage-ok" style="width:25%;"></div>
+            </div>
+            <div style="font-size:0.78rem;color:#14b8a6;margin-top:4px;">Unlimited</div>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Analytics status %>
+      <div class="col-12 col-md-4">
+        <div class="usage-meter-wrap">
+          <div class="usage-meter-header">
+            <span><i class="bi bi-bar-chart-line me-1"></i> Analytics</span>
+            <span class="usage-meter-count">
+              <% if current_clinic.plan_allows?(:analytics) %>
+                <span style="color:#22c55e;font-size:0.82rem;"><i class="bi bi-check-circle-fill"></i> Enabled</span>
+              <% else %>
+                <span style="color:#f59e0b;font-size:0.82rem;"><i class="bi bi-lock-fill"></i> Pro+</span>
+              <% end %>
+            </span>
+          </div>
+          <% if current_clinic.plan_allows?(:analytics) %>
+            <%= link_to "View Analytics →", analytics_path, class: "usage-analytics-link" %>
+          <% else %>
+            <%= link_to "Upgrade to unlock", pricing_path, class: "usage-analytics-link usage-analytics-link--locked" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── Status breakdown ── %>
   <div class="content-card mb-4">
     <div class="card-toolbar d-flex justify-content-between align-items-center gap-3 flex-wrap">
       <h2 class="section-title mb-0"><%= t("dashboard.index.status_breakdown.title") %></h2>
       <div class="text-muted small"><%= t("dashboard.index.status_breakdown.subtitle") %></div>
     </div>
-
     <div class="row g-3 mt-1">
       <% @status_breakdown.each do |status, count| %>
         <div class="col-6 col-md-3">
@@ -71,13 +176,13 @@
     </div>
   </div>
 
+  <%# ── Recent + upcoming tables ── %>
   <div class="row g-4">
     <div class="col-12 col-xl-6">
       <div class="content-card h-100">
         <div class="card-toolbar">
           <h2 class="section-title mb-0"><%= t("dashboard.index.recent_appointments") %></h2>
         </div>
-
         <% if @recent_appointments.any? %>
           <div class="table-responsive">
             <table class="table table-clean responsive-table">
@@ -95,8 +200,7 @@
                     <td data-label="<%= t("shared.tables.patient") %>"><%= appointment.patient.name %></td>
                     <td data-label="<%= t("shared.tables.doctor") %>"><%= appointment.doctor.name %></td>
                     <td data-label="<%= t("shared.tables.date") %>">
-                      <%= appointment.appointment_date %> -
-                      <%= formatted_time(appointment.appointment_time) %>
+                      <%= appointment.appointment_date %> — <%= formatted_time(appointment.appointment_time) %>
                     </td>
                     <td data-label="<%= t("shared.tables.status") %>">
                       <span class="badge-soft <%= appointment_status_badge_class(appointment.status) %>">
@@ -109,7 +213,10 @@
             </table>
           </div>
         <% else %>
-          <div class="empty-state"><%= t("dashboard.index.empty_recent") %></div>
+          <div class="empty-state">
+            <i class="bi bi-calendar-x"></i>
+            <%= t("dashboard.index.empty_recent") %>
+          </div>
         <% end %>
       </div>
     </div>
@@ -119,7 +226,6 @@
         <div class="card-toolbar">
           <h2 class="section-title mb-0"><%= t("dashboard.index.upcoming_appointments") %></h2>
         </div>
-
         <% if @upcoming_appointments.any? %>
           <div class="table-responsive">
             <table class="table table-clean responsive-table">
@@ -137,8 +243,7 @@
                     <td data-label="<%= t("shared.tables.patient") %>"><%= appointment.patient.name %></td>
                     <td data-label="<%= t("shared.tables.doctor") %>"><%= appointment.doctor.name %></td>
                     <td data-label="<%= t("shared.tables.date") %>">
-                      <%= appointment.appointment_date %> -
-                      <%= formatted_time(appointment.appointment_time) %>
+                      <%= appointment.appointment_date %> — <%= formatted_time(appointment.appointment_time) %>
                     </td>
                     <td data-label="<%= t("shared.tables.status") %>">
                       <span class="badge-soft <%= appointment_status_badge_class(appointment.status) %>">
@@ -151,7 +256,10 @@
             </table>
           </div>
         <% else %>
-          <div class="empty-state"><%= t("dashboard.index.empty_upcoming") %></div>
+          <div class="empty-state">
+            <i class="bi bi-calendar-plus"></i>
+            <%= t("dashboard.index.empty_upcoming") %>
+          </div>
         <% end %>
       </div>
     </div>

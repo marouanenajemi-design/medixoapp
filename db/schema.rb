@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_15_000001) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_19_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,6 +69,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_15_000001) do
     t.boolean "subscribed"
     t.string "billing_customer_id"
     t.string "billing_subscription_id"
+    t.string "plan_tier", default: "starter", null: false
     t.index ["user_id"], name: "index_clinics_on_user_id"
   end
 

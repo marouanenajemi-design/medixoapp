@@ -1,0 +1,360 @@
+<% content_for :head do %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<% end %>
+
+<script id="mx-analytics-data" type="application/json">
+{
+  "appointments_by_month": <%= @appointments_by_month.to_json %>,
+  "patient_growth":        <%= @patient_growth.to_json %>,
+  "doctor_activity":       <%= @doctor_activity.to_json %>,
+  "status_breakdown":      <%= @status_breakdown.to_json %>
+}
+</script>
+
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("analytics.index.title") %></h1>
+      <div class="page-subtitle"><%= t("analytics.index.subtitle") %></div>
+    </div>
+    <div class="page-actions">
+      <span class="analytics-plan-badge" style="background:<%= current_clinic.plan_badge_color %>;">
+        <%= current_clinic.plan_name %> Plan
+      </span>
+      <%= link_to t("analytics.index.view_dashboard"), dashboard_path, class: "btn btn-outline-secondary btn-sm" %>
+    </div>
+  </div>
+
+  <%# ── Summary stat cards ── %>
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-xl-3">
+      <div class="stat-card stat-card-teal h-100">
+        <div class="stat-label"><%= t("analytics.index.stats.this_month") %></div>
+        <div class="stat-value"><%= @total_this_month %></div>
+        <div class="analytics-trend">
+          <% if @total_last_month > 0 %>
+            <% pct = ((@total_this_month - @total_last_month).to_f / @total_last_month * 100).round %>
+            <% trend_up = pct >= 0 %>
+            <span class="trend-badge <%= trend_up ? 'trend-up' : 'trend-down' %>">
+              <i class="bi bi-arrow-<%= trend_up ? 'up' : 'down' %>-short"></i>
+              <%= pct.abs %>% vs last month
+            </span>
+          <% else %>
+            <span class="trend-badge trend-neutral">First month</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+      <div class="stat-card stat-card-green h-100">
+        <div class="stat-label"><%= t("analytics.index.stats.last_month") %></div>
+        <div class="stat-value"><%= @total_last_month %></div>
+        <div class="analytics-trend">
+          <span class="trend-badge trend-neutral"><i class="bi bi-calendar3"></i> Previous month</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+      <div class="stat-card stat-card-amber h-100">
+        <div class="stat-label"><%= t("analytics.index.stats.completion_rate") %></div>
+        <div class="stat-value"><%= @completion_rate %>%</div>
+        <div class="analytics-trend">
+          <span class="trend-badge <%= @completion_rate >= 70 ? 'trend-up' : 'trend-down' %>">
+            <i class="bi bi-check-circle"></i> Completed vs total
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+      <div class="stat-card stat-card-rose h-100">
+        <div class="stat-label"><%= t("analytics.index.stats.active_patients") %></div>
+        <div class="stat-value"><%= @active_patients %></div>
+        <div class="analytics-trend">
+          <span class="trend-badge trend-neutral"><i class="bi bi-people"></i> Last 3 months</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── Row 1: Appointments per month + Patient growth ── %>
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-xl-7">
+      <div class="content-card h-100">
+        <div class="analytics-card-header">
+          <div>
+            <div class="analytics-card-title"><%= t("analytics.index.charts.appointments_title") %></div>
+            <div class="analytics-card-subtitle"><%= t("analytics.index.charts.appointments_subtitle") %></div>
+          </div>
+          <div class="analytics-card-icon" style="background: rgba(20,184,166,0.1); color: #14b8a6;">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+        </div>
+        <div class="analytics-chart-wrap">
+          <canvas id="chartAppointments"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-5">
+      <div class="content-card h-100">
+        <div class="analytics-card-header">
+          <div>
+            <div class="analytics-card-title"><%= t("analytics.index.charts.growth_title") %></div>
+            <div class="analytics-card-subtitle"><%= t("analytics.index.charts.growth_subtitle") %></div>
+          </div>
+          <div class="analytics-card-icon" style="background: rgba(34,197,94,0.1); color: #22c55e;">
+            <i class="bi bi-people"></i>
+          </div>
+        </div>
+        <div class="analytics-chart-wrap">
+          <canvas id="chartPatientGrowth"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── Row 2: Doctor activity + Status breakdown ── %>
+  <div class="row g-4">
+    <div class="col-12 col-xl-6">
+      <div class="content-card h-100">
+        <div class="analytics-card-header">
+          <div>
+            <div class="analytics-card-title"><%= t("analytics.index.charts.doctors_title") %></div>
+            <div class="analytics-card-subtitle"><%= t("analytics.index.charts.doctors_subtitle") %></div>
+          </div>
+          <div class="analytics-card-icon" style="background: rgba(20,184,166,0.1); color: #14b8a6;">
+            <i class="bi bi-person-badge"></i>
+          </div>
+        </div>
+        <div class="analytics-chart-wrap">
+          <canvas id="chartDoctorActivity"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-6">
+      <div class="content-card h-100">
+        <div class="analytics-card-header">
+          <div>
+            <div class="analytics-card-title"><%= t("analytics.index.charts.status_title") %></div>
+            <div class="analytics-card-subtitle"><%= t("analytics.index.charts.status_subtitle") %></div>
+          </div>
+          <div class="analytics-card-icon" style="background: rgba(245,158,11,0.1); color: #f59e0b;">
+            <i class="bi bi-pie-chart"></i>
+          </div>
+        </div>
+
+        <div class="analytics-donut-layout">
+          <div class="analytics-chart-wrap analytics-chart-wrap--donut">
+            <canvas id="chartStatusBreakdown"></canvas>
+          </div>
+          <div class="analytics-donut-legend" id="statusLegend"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const STATUS_COLORS = {
+    confirmed: "#22c55e",
+    pending:   "#f59e0b",
+    completed: "#14b8a6",
+    cancelled: "#ef4444"
+  };
+
+  let charts = {};
+
+  function destroyCharts() {
+    Object.values(charts).forEach(c => { try { c.destroy(); } catch (_) {} });
+    charts = {};
+  }
+
+  function buildGradient(ctx, colorStart, colorEnd) {
+    const grad = ctx.createLinearGradient(0, 0, 0, 280);
+    grad.addColorStop(0, colorStart);
+    grad.addColorStop(1, colorEnd);
+    return grad;
+  }
+
+  function sharedOptions(extra) {
+    return Object.assign({
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: "#0f172a",
+          titleColor: "#94a3b8",
+          bodyColor: "#f1f5f9",
+          padding: 12,
+          cornerRadius: 10,
+          displayColors: false
+        }
+      }
+    }, extra);
+  }
+
+  function initCharts() {
+    destroyCharts();
+
+    const raw = document.getElementById("mx-analytics-data");
+    if (!raw) return;
+    let data;
+    try { data = JSON.parse(raw.textContent); } catch (_) { return; }
+
+    const monthLabels = data.appointments_by_month.map(d => d.label);
+    const apptCounts  = data.appointments_by_month.map(d => d.count);
+    const growthLabels = data.patient_growth.map(d => d.label);
+    const growthCounts = data.patient_growth.map(d => d.count);
+
+    // ── Chart 1: Appointments per month (bar) ──
+    const apptCtx = document.getElementById("chartAppointments");
+    if (apptCtx) {
+      const grad = buildGradient(apptCtx.getContext("2d"), "rgba(20,184,166,0.9)", "rgba(20,184,166,0.15)");
+      charts.appt = new Chart(apptCtx, {
+        type: "bar",
+        data: {
+          labels: monthLabels,
+          datasets: [{
+            label: "Appointments",
+            data: apptCounts,
+            backgroundColor: grad,
+            borderRadius: 10,
+            borderSkipped: false
+          }]
+        },
+        options: sharedOptions({
+          scales: {
+            x: { grid: { display: false }, ticks: { color: "#64748b", font: { size: 12 } } },
+            y: {
+              grid: { color: "#f1f5f9" },
+              ticks: { color: "#64748b", font: { size: 12 }, stepSize: 5 },
+              beginAtZero: true
+            }
+          }
+        })
+      });
+    }
+
+    // ── Chart 2: Patient growth (line) ──
+    const growthCtx = document.getElementById("chartPatientGrowth");
+    if (growthCtx) {
+      const lineGrad = buildGradient(growthCtx.getContext("2d"), "rgba(34,197,94,0.25)", "rgba(34,197,94,0.0)");
+      charts.growth = new Chart(growthCtx, {
+        type: "line",
+        data: {
+          labels: growthLabels,
+          datasets: [{
+            label: "Total Patients",
+            data: growthCounts,
+            fill: true,
+            backgroundColor: lineGrad,
+            borderColor: "#22c55e",
+            borderWidth: 2.5,
+            pointBackgroundColor: "#22c55e",
+            pointBorderColor: "#fff",
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            tension: 0.4
+          }]
+        },
+        options: sharedOptions({
+          scales: {
+            x: { grid: { display: false }, ticks: { color: "#64748b", font: { size: 12 } } },
+            y: {
+              grid: { color: "#f1f5f9" },
+              ticks: { color: "#64748b", font: { size: 12 } },
+              beginAtZero: true
+            }
+          }
+        })
+      });
+    }
+
+    // ── Chart 3: Doctor activity (horizontal bar) ──
+    const drCtx = document.getElementById("chartDoctorActivity");
+    if (drCtx) {
+      charts.doctors = new Chart(drCtx, {
+        type: "bar",
+        data: {
+          labels: data.doctor_activity.map(d => d.name),
+          datasets: [{
+            label: "Appointments",
+            data: data.doctor_activity.map(d => d.count),
+            backgroundColor: "rgba(20,184,166,0.80)",
+            borderRadius: 8,
+            borderSkipped: false
+          }]
+        },
+        options: sharedOptions({
+          indexAxis: "y",
+          scales: {
+            x: {
+              grid: { color: "#f1f5f9" },
+              ticks: { color: "#64748b", font: { size: 12 }, stepSize: 5 },
+              beginAtZero: true
+            },
+            y: { grid: { display: false }, ticks: { color: "#334155", font: { size: 12, weight: "600" } } }
+          }
+        })
+      });
+    }
+
+    // ── Chart 4: Status breakdown (doughnut) ──
+    const stCtx = document.getElementById("chartStatusBreakdown");
+    if (stCtx) {
+      const labels = data.status_breakdown.map(d => d.status);
+      const counts  = data.status_breakdown.map(d => d.count);
+      const colors  = labels.map(l => STATUS_COLORS[l] || "#94a3b8");
+
+      charts.status = new Chart(stCtx, {
+        type: "doughnut",
+        data: {
+          labels: labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: colors,
+            borderWidth: 3,
+            borderColor: "#fff",
+            hoverOffset: 6
+          }]
+        },
+        options: sharedOptions({
+          cutout: "68%",
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "#0f172a",
+              titleColor: "#94a3b8",
+              bodyColor: "#f1f5f9",
+              padding: 12,
+              cornerRadius: 10
+            }
+          }
+        })
+      });
+
+      // Build custom legend
+      const legend = document.getElementById("statusLegend");
+      if (legend) {
+        legend.innerHTML = labels.map((label, i) => `
+          <div class="donut-legend-item">
+            <span class="donut-legend-dot" style="background:${colors[i]};"></span>
+            <span class="donut-legend-label">${label.charAt(0).toUpperCase() + label.slice(1)}</span>
+            <span class="donut-legend-count">${counts[i]}</span>
+          </div>
+        `).join("");
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", initCharts);
+  document.addEventListener("turbo:load", initCharts);
+  document.addEventListener("turbo:before-cache", destroyCharts);
+})();
+</script>

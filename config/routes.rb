@@ -35,7 +35,8 @@ Rails.application.routes.draw do
   post "chatbot", to: "chatbot#index"
   get "chatbot/widget", to: "chatbot#widget", as: :chatbot_widget
 
-  get "pricing", to: "pages#pricing"
+  get "pricing",   to: "pages#pricing"
+  get "analytics", to: "analytics#index", as: :analytics
   post "/webhooks/lemonsqueezy", to: "webhooks#lemonsqueezy"
 
   resource :clinic, only: [:new, :create, :edit, :update]

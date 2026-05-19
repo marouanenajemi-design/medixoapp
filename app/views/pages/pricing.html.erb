@@ -1,69 +1,159 @@
-
 <div class="page-shell">
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">MedixoApp Subscription</h1>
-      <div class="page-subtitle">
-        <% if current_user&.clinic&.trialing? %>
-          Your free trial is active. <strong><%= current_user.clinic.trial_days_left %> day(s)</strong> left.
+  <div class="page-header" style="text-align:center;display:block;margin-bottom:12px;">
+    <div class="pricing-eyebrow">Simple, transparent pricing</div>
+    <h1 class="page-title" style="font-size:2.6rem;">Choose the right plan for your clinic</h1>
+    <p class="page-subtitle" style="max-width:560px;margin:8px auto 0;">
+      Start free. Upgrade when your clinic grows.
+      All plans include a <strong>7-day free trial</strong> — no credit card required.
+    </p>
+  </div>
+
+  <%# ── Current plan indicator ── %>
+  <% if user_signed_in? && current_clinic.present? %>
+    <div class="pricing-current-plan-bar">
+      <i class="bi bi-check-circle-fill"></i>
+      You are on the
+      <strong><%= current_clinic.plan_name %></strong> plan.
+      <% if current_clinic.trialing? %>
+        &nbsp;Trial ends in <strong><%= current_clinic.trial_days_left %> day(s)</strong>.
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# ── Plan cards ── %>
+  <div class="pricing-grid">
+
+    <%# ── Starter ── %>
+    <div class="pricing-card">
+      <div class="pricing-card-header">
+        <div class="pricing-plan-icon pricing-plan-icon--starter">
+          <i class="bi bi-lightning-charge-fill"></i>
+        </div>
+        <div class="pricing-plan-name">Starter</div>
+        <div class="pricing-plan-tagline">Perfect for solo practitioners</div>
+      </div>
+      <div class="pricing-price">
+        <span class="pricing-currency">€</span>29<span class="pricing-period">/mo</span>
+      </div>
+      <ul class="pricing-features">
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Up to <strong>2 doctors</strong></li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Up to <strong>100 patients</strong></li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Unlimited appointments</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Digital prescriptions</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Appointment calendar</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> AI medicine chatbot</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Patient history</li>
+        <li class="feature-no"><i class="bi bi-x-lg"></i> Analytics dashboard</li>
+        <li class="feature-no"><i class="bi bi-x-lg"></i> Priority support</li>
+        <li class="feature-no"><i class="bi bi-x-lg"></i> API access</li>
+      </ul>
+      <div class="pricing-cta">
+        <% if user_signed_in? && current_clinic&.plan_tier == "starter" && current_clinic&.subscribed? %>
+          <div class="pricing-current-badge">Your current plan</div>
         <% else %>
-          Your free trial has ended. Subscribe to continue using MedixoApp.
+          <a href="<%= ENV.fetch("LEMON_STARTER_URL", "https://clinicflow-saas.lemonsqueezy.com/checkout/buy/508d92eb-5487-4a44-925d-75a4ecf204a4") %>"
+             class="btn pricing-btn pricing-btn--starter"
+             target="_blank" rel="noopener">
+            Get Started — €29/mo
+          </a>
         <% end %>
       </div>
     </div>
-  </div>
 
-  <div class="content-card" style="max-width: 760px; margin: 0 auto;">
-    <div class="text-center mb-4">
-      <div style="display:inline-block;background:#ccfbf1;color:#0d9488;padding:8px 18px;border-radius:999px;font-weight:700;font-size:0.9rem;letter-spacing:0.3px;">
-        All-Inclusive Medical Plan
-      </div>
-    </div>
-
-    <h2 class="fw-bold mb-2 text-center" style="font-size:2rem;letter-spacing:-0.5px;">MedixoApp Monthly</h2>
-
-    <div class="text-center mb-3" style="font-size: 2.8rem; font-weight: 800; color: #0f172a;">
-      €29<span style="font-size: 1rem; color: #64748b; font-weight: 500;"> / month</span>
-    </div>
-
-    <p class="text-muted text-center mb-4" style="max-width:500px;margin-left:auto;margin-right:auto;">
-      One complete plan for medical clinics — doctors, patients, appointments,
-      prescriptions, history, and full practice management in one premium platform.
-    </p>
-
-    <div class="row mb-4">
-      <div class="col-md-10 mx-auto">
-        <div class="row g-2">
-          <% [
-            "Unlimited doctors & specialists",
-            "Unlimited patient records",
-            "Appointment calendar & scheduling",
-            "Digital prescription management",
-            "Full patient history & notes",
-            "Clinic branding & settings",
-            "AI medicine information assistant",
-            "Secure login & data protection",
-            "7-day free trial included"
-          ].each do |feature| %>
-            <div class="col-12 col-sm-6">
-              <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
-                <span style="color:#14b8a6;font-size:1rem;">&#10003;</span>
-                <span style="font-size:0.92rem;font-weight:600;color:#334155;"><%= feature %></span>
-              </div>
-            </div>
-          <% end %>
+    <%# ── Pro (highlighted) ── %>
+    <div class="pricing-card pricing-card--featured">
+      <div class="pricing-popular-badge">Most Popular</div>
+      <div class="pricing-card-header">
+        <div class="pricing-plan-icon pricing-plan-icon--pro">
+          <i class="bi bi-star-fill"></i>
         </div>
+        <div class="pricing-plan-name">Pro</div>
+        <div class="pricing-plan-tagline">For growing medical practices</div>
+      </div>
+      <div class="pricing-price pricing-price--featured">
+        <span class="pricing-currency">€</span>69<span class="pricing-period">/mo</span>
+      </div>
+      <ul class="pricing-features">
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Up to <strong>10 doctors</strong></li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Up to <strong>1,000 patients</strong></li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Unlimited appointments</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Digital prescriptions</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Appointment calendar</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> AI medicine chatbot</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Patient history</li>
+        <li class="feature-yes feature-highlight"><i class="bi bi-bar-chart-line-fill"></i> <strong>Analytics dashboard</strong></li>
+        <li class="feature-no"><i class="bi bi-x-lg"></i> Priority support</li>
+        <li class="feature-no"><i class="bi bi-x-lg"></i> API access</li>
+      </ul>
+      <div class="pricing-cta">
+        <% if user_signed_in? && current_clinic&.plan_tier == "pro" && current_clinic&.subscribed? %>
+          <div class="pricing-current-badge pricing-current-badge--featured">Your current plan</div>
+        <% else %>
+          <a href="<%= ENV.fetch("LEMON_PRO_URL", "https://clinicflow-saas.lemonsqueezy.com/checkout/buy/508d92eb-5487-4a44-925d-75a4ecf204a4") %>"
+             class="btn pricing-btn pricing-btn--pro"
+             target="_blank" rel="noopener">
+            Upgrade to Pro — €69/mo
+          </a>
+        <% end %>
       </div>
     </div>
 
-    <%= link_to "Subscribe Now — €29/month",
-          "https://clinicflow-saas.lemonsqueezy.com/checkout/buy/508d92eb-5487-4a44-925d-75a4ecf204a4",
-          class: "btn btn-primary w-100",
-          target: "_blank",
-          rel: "noopener" %>
+    <%# ── Clinic+ ── %>
+    <div class="pricing-card pricing-card--enterprise">
+      <div class="pricing-card-header">
+        <div class="pricing-plan-icon pricing-plan-icon--enterprise">
+          <i class="bi bi-gem"></i>
+        </div>
+        <div class="pricing-plan-name">Clinic+</div>
+        <div class="pricing-plan-tagline">For multi-location clinics</div>
+      </div>
+      <div class="pricing-price">
+        <span class="pricing-currency">€</span>149<span class="pricing-period">/mo</span>
+      </div>
+      <ul class="pricing-features">
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> <strong>Unlimited</strong> doctors</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> <strong>Unlimited</strong> patients</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Unlimited appointments</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Digital prescriptions</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Appointment calendar</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> AI medicine chatbot</li>
+        <li class="feature-yes"><i class="bi bi-check-lg"></i> Patient history</li>
+        <li class="feature-yes feature-highlight"><i class="bi bi-bar-chart-line-fill"></i> <strong>Analytics dashboard</strong></li>
+        <li class="feature-yes feature-highlight"><i class="bi bi-headset"></i> <strong>Priority support</strong></li>
+        <li class="feature-yes feature-highlight"><i class="bi bi-code-slash"></i> <strong>API access</strong></li>
+      </ul>
+      <div class="pricing-cta">
+        <% if user_signed_in? && current_clinic&.plan_tier == "clinic_plus" && current_clinic&.subscribed? %>
+          <div class="pricing-current-badge">Your current plan</div>
+        <% else %>
+          <a href="<%= ENV.fetch("LEMON_CLINIC_PLUS_URL", "https://clinicflow-saas.lemonsqueezy.com/checkout/buy/508d92eb-5487-4a44-925d-75a4ecf204a4") %>"
+             class="btn pricing-btn pricing-btn--enterprise"
+             target="_blank" rel="noopener">
+            Get Clinic+ — €149/mo
+          </a>
+        <% end %>
+      </div>
+    </div>
 
-    <div class="mt-4 text-center text-muted" style="font-size: 0.9rem;">
-      Cancel anytime. Secure checkout powered by Lemon Squeezy.
+  </div><%# /pricing-grid %>
+
+  <%# ── Trust bar ── %>
+  <div class="pricing-trust-bar">
+    <div class="pricing-trust-item">
+      <i class="bi bi-shield-check"></i>
+      <span>SSL secured checkout</span>
+    </div>
+    <div class="pricing-trust-item">
+      <i class="bi bi-arrow-repeat"></i>
+      <span>Cancel anytime</span>
+    </div>
+    <div class="pricing-trust-item">
+      <i class="bi bi-credit-card"></i>
+      <span>Powered by Lemon Squeezy</span>
+    </div>
+    <div class="pricing-trust-item">
+      <i class="bi bi-clock-history"></i>
+      <span>7-day free trial</span>
     </div>
   </div>
 </div>

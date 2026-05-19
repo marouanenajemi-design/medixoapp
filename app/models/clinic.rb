@@ -1,4 +1,6 @@
 class Clinic < ApplicationRecord
+  include PlanGating
+
   belongs_to :user
 
   has_many :doctors, dependent: :destroy
