@@ -56,6 +56,6 @@ class ApplicationController < ActionController::Base
 
     return if current_clinic.access_active?
 
-    redirect_to pricing_path, alert: "Your free trial has ended. Please subscribe to continue using ClinicFlow."
+    redirect_to pricing_path, alert: "Your free trial has ended. Please subscribe to continue using MedixoApp."
   end
 end

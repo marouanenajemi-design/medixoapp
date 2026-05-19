@@ -1,3 +1,9 @@
+<% content_for :head do %>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.15/locales-all.global.min.js"></script>
+<% end %>
+
 <% calendar_events = (@appointments || []).map do |appointment|
      {
        title: t("appointments.calendar.event_title", patient: appointment.patient.name, doctor: appointment.doctor.name),

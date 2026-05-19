@@ -1,8 +1,8 @@
 en:
   app:
-    title: "ClinicFlow"
-    name: "ClinicFlow"
-    default_clinic_name: "ClinicFlow"
+    title: "MedixoApp"
+    name: "MedixoApp"
+    default_clinic_name: "MedixoApp"
   locales:
     en: "EN"
     fr: "FR"
@@ -22,14 +22,14 @@ en:
       open: "Open navigation"
       close: "Close navigation"
     sidebar:
-      panel: "Clinic Panel"
+      panel: "Medical Platform"
     topbar:
-      subtitle: "Doctor appointment dashboard"
+      subtitle: "Smart medical management platform"
     auth:
-      badge: "Clinic management made simple"
-      title: "A modern way to manage doctors, patients, and appointments."
-      description: "Organize your clinic with a clean dashboard, faster scheduling, patient tracking, and a professional workflow designed for growing medical practices."
-      footer: "Built for clinics that want a clean, simple, and professional experience."
+      badge: "Medical practice management, reimagined"
+      title: "A modern platform to manage your medical practice."
+      description: "Run your clinic smarter — from scheduling and prescriptions to patient records and analytics. MedixoApp gives your practice a professional, modern edge."
+      footer: "Built for modern medical practices that want clarity, speed, and professionalism."
       features:
         scheduling:
           title: "Smart Scheduling"
@@ -290,8 +290,8 @@ en:
     sessions:
       new:
         logo: "Welcome back"
-        title: "Log in to ClinicFlow"
-        subtitle: "Access your clinic dashboard and manage your appointments with ease."
+        title: "Log in to MedixoApp"
+        subtitle: "Access your clinic dashboard and manage your medical practice with ease."
         submit: "Log in"
         create_account: "Register"
         forgot_password: "Forgot your password?"
@@ -300,8 +300,8 @@ en:
     registrations:
       new:
         logo: "Get started"
-        title: "Create your ClinicFlow account"
-        subtitle: "Build a clean and professional system for your clinic in just a few steps."
+        title: "Create your MedixoApp account"
+        subtitle: "Set up a professional medical management system for your clinic in minutes."
         password_hint: "Use at least 6 characters."
         submit: "Register"
         login_link: "Already have an account? Log in"
@@ -387,7 +387,7 @@ en:
       title: "Admin Panel"
       badge: "Super Admin"
       nav_label: "Management"
-      topbar_title: "ClinicFlow Admin"
+      topbar_title: "MedixoApp Admin"
       topbar_subtitle: "Platform administration panel"
     navigation:
       dashboard: "Dashboard"
@@ -431,7 +431,7 @@ en:
       extend_trial: "Add 7 days to this clinic's trial?"
     dashboard:
       title: "Platform Overview"
-      subtitle: "Monitor all clinics, users, and activity across ClinicFlow."
+      subtitle: "Monitor all clinics, users, and activity across MedixoApp."
       recent_users: "Recent Signups"
       recent_clinics: "Recent Clinics"
       view_all: "View all"
@@ -519,7 +519,7 @@ en:
       new:
         page_title: "Super Admin Login"
         title: "Super Admin Login"
-        subtitle: "Sign in to access the ClinicFlow administration panel."
+        subtitle: "Sign in to access the MedixoApp administration panel."
         submit: "Sign In as Admin"
         clinic_login_prompt: "Clinic owner?"
         back_to_clinic_login: "Sign in to your clinic →"

@@ -29,8 +29,7 @@
         padding: 28px 18px;
         flex-shrink: 0;
         overflow-y: auto;
-        /* Admin sidebar: deep indigo/purple instead of navy */
-        background: linear-gradient(180deg, #12082a 0%, #1e0a3c 100%);
+        background: linear-gradient(180deg, #071c18 0%, #0f172a 100%);
       }
 
       .sidebar a {
@@ -40,7 +39,7 @@
         align-items: center;
         padding: 14px 18px;
         border-radius: 16px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         font-size: 1.02rem;
         font-weight: 500;
         gap: 10px;
@@ -48,8 +47,9 @@
       }
       .sidebar a:hover,
       .sidebar a.active {
-        background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
         color: white;
+        box-shadow: 0 6px 16px rgba(20, 184, 166, 0.22);
       }
 
       .sidebar-brand {
@@ -64,14 +64,14 @@
         width: 44px;
         height: 44px;
         border-radius: 14px;
-        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-        color: #1a0b2e;
+        background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+        color: white;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-size: 1.4rem;
         font-weight: 900;
-        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+        box-shadow: 0 8px 20px rgba(20, 184, 166, 0.35);
         flex-shrink: 0;
       }
 
@@ -79,9 +79,9 @@
       .admin-brand-name { color: #fff; font-size: 1.1rem; font-weight: 800; }
       .admin-brand-badge {
         display: inline-block;
-        background: rgba(245, 158, 11, 0.18);
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        color: #fbbf24;
+        background: rgba(20, 184, 166, 0.18);
+        border: 1px solid rgba(20, 184, 166, 0.30);
+        color: #2dd4bf;
         font-size: 0.7rem;
         font-weight: 800;
         letter-spacing: 0.6px;
@@ -134,8 +134,8 @@
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        background: linear-gradient(135deg, #f59e0b, #fbbf24);
-        color: #1a0b2e;
+        background: linear-gradient(135deg, #0d9488, #14b8a6);
+        color: white;
         font-size: 0.72rem;
         font-weight: 800;
         letter-spacing: 0.5px;
@@ -190,14 +190,14 @@
       .badge-cancelled   { background: #fee2e2; color: #b91c1c; }
 
       .btn-primary {
-        background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
         border: none; border-radius: 16px; min-height: 48px;
         font-weight: 700; padding: 0 22px; color: white;
         display: inline-flex; align-items: center; justify-content: center;
-        line-height: 1; box-shadow: 0 8px 18px rgba(124, 58, 237, 0.28);
+        line-height: 1; box-shadow: 0 8px 18px rgba(20, 184, 166, 0.28);
         transition: all 0.25s ease; text-decoration: none;
       }
-      .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(124, 58, 237, 0.38); color: white; }
+      .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(20, 184, 166, 0.38); color: white; }
 
       .btn-warning, .btn-danger, .btn-success {
         border-radius: 12px; font-weight: 600;
@@ -237,7 +237,7 @@
         font-size: 0.82rem; font-weight: 700;
         text-decoration: none; text-transform: uppercase;
       }
-      .locale-link.active { background: #7c3aed; border-color: #7c3aed; color: white; }
+      .locale-link.active { background: #14b8a6; border-color: #14b8a6; color: white; }
 
       .responsive-table { width: 100%; }
 
@@ -298,7 +298,7 @@
         </button>
 
         <%= link_to admin_root_path, class: "sidebar-brand", data: { turbo: false } do %>
-          <div class="admin-brand-mark"><i class="bi bi-shield-fill-check"></i></div>
+          <div class="admin-brand-mark"><i class="bi bi-heart-pulse-fill"></i></div>
           <div class="admin-brand-text">
             <span class="admin-brand-name"><%= t("app.name") %></span>
             <span class="admin-brand-badge"><%= t("admin.layout.badge") %></span>

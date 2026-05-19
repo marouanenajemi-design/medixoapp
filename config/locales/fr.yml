@@ -1,8 +1,8 @@
 fr:
   app:
-    title: "ClinicFlow"
-    name: "ClinicFlow"
-    default_clinic_name: "ClinicFlow"
+    title: "MedixoApp"
+    name: "MedixoApp"
+    default_clinic_name: "MedixoApp"
   locales:
     en: "EN"
     fr: "FR"
@@ -291,7 +291,7 @@ fr:
     sessions:
       new:
         logo: "Bon retour"
-        title: "Connectez-vous à ClinicFlow"
+        title: "Connectez-vous à MedixoApp"
         subtitle: "Accédez au tableau de bord de votre cabinet et gérez vos rendez-vous facilement."
         submit: "Connexion"
         create_account: "Créer un compte"
@@ -301,7 +301,7 @@ fr:
     registrations:
       new:
         logo: "Commencer"
-        title: "Créez votre compte ClinicFlow"
+        title: "Créez votre compte MedixoApp"
         subtitle: "Mettez en place un système clair et professionnel pour votre cabinet en quelques étapes."
         password_hint: "Utilisez au moins 6 caractères."
         submit: "Créer le compte"
@@ -388,7 +388,7 @@ fr:
       title: "Panneau Admin"
       badge: "Super Admin"
       nav_label: "Gestion"
-      topbar_title: "ClinicFlow Admin"
+      topbar_title: "MedixoApp Admin"
       topbar_subtitle: "Panneau d'administration de la plateforme"
     navigation:
       dashboard: "Tableau de bord"
@@ -432,7 +432,7 @@ fr:
       extend_trial: "Ajouter 7 jours à l'essai de ce cabinet ?"
     dashboard:
       title: "Vue d'ensemble"
-      subtitle: "Surveillez les cabinets, utilisateurs et l'activité sur ClinicFlow."
+      subtitle: "Surveillez les cabinets, utilisateurs et l'activité sur MedixoApp."
       recent_users: "Inscriptions récentes"
       recent_clinics: "Cabinets récents"
       view_all: "Voir tout"
@@ -520,7 +520,7 @@ fr:
       new:
         page_title: "Connexion Super Admin"
         title: "Connexion Super Admin"
-        subtitle: "Connectez-vous pour accéder au panneau d'administration ClinicFlow."
+        subtitle: "Connectez-vous pour accéder au panneau d'administration MedixoApp."
         submit: "Connexion en tant qu'Admin"
         clinic_login_prompt: "Propriétaire d'un cabinet ?"
         back_to_clinic_login: "Connexion à votre cabinet →"

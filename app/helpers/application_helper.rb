@@ -1,4 +1,12 @@
 module ApplicationHelper
+  # Safe active-nav helper — compares request.path to avoid locale-query-param
+  # issues that cause stringify_keys errors with current_page?
+  def active_path(path)
+    request.path == path.to_s.split("?").first ? "active" : ""
+  rescue StandardError
+    ""
+  end
+
   def formatted_time(value, fallback: "")
     value.present? ? value.strftime("%H:%M") : fallback
   end

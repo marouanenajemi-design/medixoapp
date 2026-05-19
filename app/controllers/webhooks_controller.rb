@@ -42,7 +42,7 @@ class WebhooksController < ActionController::Base
 
     user.clinic.update(
       subscribed: true,
-      plan: "clinicflow-monthly",
+      plan: "medixoapp-monthly",
       billing_customer_id: attributes["customer_id"]&.to_s,
       billing_subscription_id: payload.dig("data", "id")&.to_s
     )

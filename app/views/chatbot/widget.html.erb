@@ -16,9 +16,9 @@
       }
 
       .widget-note {
-        background: #eff6ff;
-        border: 1px solid #dbeafe;
-        color: #1e3a8a;
+        background: #f0fdfa;
+        border: 1px solid #99f6e4;
+        color: #0d9488;
         border-radius: 16px;
         padding: 12px 14px;
         font-size: 0.9rem;
@@ -53,7 +53,7 @@
         border-radius: 14px;
         min-height: 48px;
         font-weight: 700;
-        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
         border: none;
       }
 
@@ -112,7 +112,7 @@
       </div>
 
       <div class="widget-card">
-        <div class="widget-title">ClinicFlow AI</div>
+        <div class="widget-title">MedixoApp AI</div>
         <div class="widget-subtitle">Ask about a medicine</div>
 
         <%= form_with url: chatbot_widget_path(locale: I18n.locale), method: :get, local: true, data: { turbo: false } do %>
