@@ -450,6 +450,18 @@ fr:
         active_subscriptions: "Cabinets payants"
         on_trial: "En période d'essai"
         no_access: "Sans accès"
+      revenue:
+        mrr: "Revenu mensuel"
+        arr: "ARR"
+        live: "En direct"
+        this_month: "ce mois-ci"
+      charts:
+        revenue_title: "Revenu mensuel récurrent"
+        revenue_subtitle: "Calculé à partir des abonnements actifs sur les 6 derniers mois"
+        plans_title: "Répartition des plans"
+        growth_title: "Nouveaux cabinets par mois"
+      activity:
+        title: "Activité récente"
     users:
       cannot_change_own_role: "Vous ne pouvez pas modifier votre propre rôle."
       cannot_delete_self: "Vous ne pouvez pas supprimer votre propre compte."
@@ -476,6 +488,16 @@ fr:
         subscribed: "Abonné"
         trialing: "Essai"
         expired: "Expiré"
+      plan_tier:
+        label: "Offre"
+        management_title: "Gestion du plan"
+        management_subtitle: "Modifier le niveau d'accès et les limites de ce cabinet"
+        update_button: "Mettre à jour"
+        updated: "Plan mis à jour vers %{plan} avec succès."
+        invalid: "Plan invalide. Choisissez Starter, Pro ou Clinic+."
+        starter: "Starter"
+        pro: "Pro"
+        clinic_plus: "Clinic+"
       index:
         title: "Cabinets"
         subtitle: "Consultez et gérez tous les cabinets sur la plateforme."

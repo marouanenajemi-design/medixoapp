@@ -58,7 +58,14 @@
           </div>
           <div class="detail-item">
             <div class="detail-label"><%= t("admin.tables.plan") %></div>
-            <div class="detail-value"><%= @clinic.plan.presence || "—" %></div>
+            <div class="detail-value">
+              <span class="admin-plan-badge admin-plan-badge--<%= @clinic.plan_tier %>">
+                <%= @clinic.plan_name %>
+              </span>
+              <span class="text-muted ms-2" style="font-size:0.85rem;">
+                €<%= PlanGating::PLANS[@clinic.plan_tier][:price] %>/mo
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -107,6 +114,72 @@
               <div class="detail-value" style="font-size:1.8rem;"><%= @appointments_count %></div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <%# ── Plan management ── %>
+    <div class="col-12">
+      <div class="content-card">
+        <div class="d-flex align-items-start justify-content-between gap-3 mb-4 flex-wrap">
+          <div>
+            <h2 class="section-title mb-1"><%= t("admin.clinics.plan_tier.management_title") %></h2>
+            <div class="text-muted" style="font-size:0.9rem;"><%= t("admin.clinics.plan_tier.management_subtitle") %></div>
+          </div>
+          <span class="admin-plan-badge admin-plan-badge--<%= @clinic.plan_tier %> admin-plan-badge--lg">
+            <i class="bi bi-<%= @clinic.plan_tier == 'clinic_plus' ? 'gem' : @clinic.plan_tier == 'pro' ? 'star-fill' : 'lightning' %>"></i>
+            <%= @clinic.plan_name %> Plan
+          </span>
+        </div>
+
+        <%= form_with url: update_plan_admin_clinic_path(@clinic), method: :patch,
+                      class: "d-flex align-items-end gap-3 flex-wrap mb-4" do |f| %>
+          <div style="flex:1;min-width:220px;">
+            <label class="form-label fw-bold text-muted"
+                   style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.5px;">
+              <%= t("admin.clinics.plan_tier.label") %>
+            </label>
+            <select name="plan_tier" class="form-select plan-tier-select">
+              <% PlanGating::PLANS.each do |tier, config| %>
+                <option value="<%= tier %>" <%= "selected" if @clinic.plan_tier == tier %>>
+                  <%= config[:name] %> — €<%= config[:price] %>/mo
+                </option>
+              <% end %>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap;min-height:48px;">
+            <i class="bi bi-check-lg me-1"></i>
+            <%= t("admin.clinics.plan_tier.update_button") %>
+          </button>
+        <% end %>
+
+        <div class="plan-compare-grid">
+          <% PlanGating::PLANS.each do |tier, config| %>
+            <div class="plan-compare-item <%= 'plan-compare-item--active' if @clinic.plan_tier == tier %>">
+              <div class="plan-compare-header">
+                <span class="admin-plan-badge admin-plan-badge--<%= tier %>"><%= config[:name] %></span>
+                <span class="plan-compare-price">€<%= config[:price] %>/mo</span>
+              </div>
+              <div class="plan-compare-limits">
+                <div class="plan-compare-limit">
+                  <i class="bi bi-person-badge"></i>
+                  <%= config[:doctor_limit] ? "#{config[:doctor_limit]} doctors" : "Unlimited doctors" %>
+                </div>
+                <div class="plan-compare-limit">
+                  <i class="bi bi-people"></i>
+                  <%= config[:patient_limit] ? "#{config[:patient_limit]} patients" : "Unlimited patients" %>
+                </div>
+                <div class="plan-compare-limit <%= config[:features].include?('analytics') ? 'limit-yes' : 'limit-no' %>">
+                  <i class="bi bi-bar-chart-line"></i>
+                  Analytics <%= config[:features].include?('analytics') ? '✓' : '✗' %>
+                </div>
+                <% if config[:features].include?('api') %>
+                  <div class="plan-compare-limit limit-yes">
+                    <i class="bi bi-code-slash"></i> API access ✓
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

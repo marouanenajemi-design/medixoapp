@@ -1,3 +1,14 @@
+<% content_for :head do %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script id="mx-admin-data" type="application/json">
+    {
+      "revenue": <%= @revenue_by_month.to_json %>,
+      "growth":  <%= @clinic_growth.to_json %>,
+      "plans":   <%= @plan_distribution.to_json %>
+    }
+  </script>
+<% end %>
+
 <div class="page-shell">
   <div class="page-header">
     <div>
@@ -6,74 +17,180 @@
     </div>
   </div>
 
-  <%# ── Platform stats row 1 ── %>
-  <div class="row g-4 mb-4">
+  <%# ── Revenue KPIs ── %>
+  <div class="row g-3 mb-4">
     <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
-        <div class="stat-label"><i class="bi bi-people me-1"></i> <%= t("admin.dashboard.stats.users") %></div>
-        <div class="stat-value"><%= @total_users %></div>
+      <div class="admin-metric-card admin-metric-card--teal h-100">
+        <div class="admin-metric-icon admin-metric-icon--teal">
+          <i class="bi bi-currency-euro"></i>
+        </div>
+        <div class="admin-metric-label"><%= t("admin.dashboard.revenue.mrr") %></div>
+        <div class="admin-metric-value">€<%= @mrr.to_s(:delimited) rescue @mrr %></div>
+        <div class="admin-metric-sub">
+          <%= t("admin.dashboard.revenue.arr") %>: <strong>€<%= @arr.to_s(:delimited) rescue @arr %></strong>
+        </div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
-        <div class="stat-label"><i class="bi bi-hospital me-1"></i> <%= t("admin.dashboard.stats.clinics") %></div>
-        <div class="stat-value"><%= @total_clinics %></div>
+      <div class="admin-metric-card admin-metric-card--green h-100">
+        <div class="admin-metric-icon admin-metric-icon--green">
+          <i class="bi bi-check2-circle"></i>
+        </div>
+        <div class="admin-metric-label"><%= t("admin.dashboard.stats.subscribed") %></div>
+        <div class="admin-metric-value"><%= @subscribed_clinics %></div>
+        <div class="admin-metric-sub"><%= t("admin.dashboard.stats.active_subscriptions") %></div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
-        <div class="stat-label"><i class="bi bi-person-badge me-1"></i> <%= t("admin.dashboard.stats.doctors") %></div>
-        <div class="stat-value"><%= @total_doctors %></div>
+      <div class="admin-metric-card admin-metric-card--amber h-100">
+        <div class="admin-metric-icon admin-metric-icon--amber">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
+        <div class="admin-metric-label"><%= t("admin.dashboard.stats.trialing") %></div>
+        <div class="admin-metric-value"><%= @trialing_clinics %></div>
+        <div class="admin-metric-sub"><%= t("admin.dashboard.stats.on_trial") %></div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
-        <div class="stat-label"><i class="bi bi-heart-pulse me-1"></i> <%= t("admin.dashboard.stats.patients") %></div>
-        <div class="stat-value"><%= @total_patients %></div>
-      </div>
-    </div>
-  </div>
-
-  <%# ── Subscription stats row 2 ── %>
-  <div class="row g-4 mb-4">
-    <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
-        <div class="stat-label"><i class="bi bi-check-circle me-1 text-success"></i> <%= t("admin.dashboard.stats.subscribed") %></div>
-        <div class="stat-value text-success"><%= @subscribed_clinics %></div>
-        <div class="stat-sub"><%= t("admin.dashboard.stats.active_subscriptions") %></div>
-      </div>
-    </div>
-    <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
-        <div class="stat-label"><i class="bi bi-hourglass-split me-1 text-warning"></i> <%= t("admin.dashboard.stats.trialing") %></div>
-        <div class="stat-value text-warning"><%= @trialing_clinics %></div>
-        <div class="stat-sub"><%= t("admin.dashboard.stats.on_trial") %></div>
-      </div>
-    </div>
-    <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
-        <div class="stat-label"><i class="bi bi-x-circle me-1 text-danger"></i> <%= t("admin.dashboard.stats.expired") %></div>
-        <div class="stat-value text-danger"><%= @expired_clinics %></div>
-        <div class="stat-sub"><%= t("admin.dashboard.stats.no_access") %></div>
-      </div>
-    </div>
-    <div class="col-6 col-lg-3">
-      <div class="stat-card h-100">
-        <div class="stat-label"><i class="bi bi-calendar-check me-1"></i> <%= t("admin.dashboard.stats.appointments") %></div>
-        <div class="stat-value"><%= @total_appointments %></div>
+      <div class="admin-metric-card admin-metric-card--rose h-100">
+        <div class="admin-metric-icon admin-metric-icon--rose">
+          <i class="bi bi-x-circle"></i>
+        </div>
+        <div class="admin-metric-label"><%= t("admin.dashboard.stats.expired") %></div>
+        <div class="admin-metric-value"><%= @expired_clinics %></div>
+        <div class="admin-metric-sub"><%= t("admin.dashboard.stats.no_access") %></div>
       </div>
     </div>
   </div>
 
+  <%# ── Platform counters ── %>
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+      <div class="admin-metric-card admin-metric-card--blue h-100">
+        <div class="admin-metric-icon admin-metric-icon--blue"><i class="bi bi-people"></i></div>
+        <div class="admin-metric-label"><%= t("admin.dashboard.stats.users") %></div>
+        <div class="admin-metric-value"><%= @total_users %></div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="admin-metric-card admin-metric-card--teal h-100">
+        <div class="admin-metric-icon admin-metric-icon--teal"><i class="bi bi-hospital"></i></div>
+        <div class="admin-metric-label"><%= t("admin.dashboard.stats.clinics") %></div>
+        <div class="admin-metric-value"><%= @total_clinics %></div>
+        <div class="admin-metric-sub">
+          <% if @new_clinics_this_month > 0 %>
+            <span class="admin-trend-badge admin-trend-badge--up">+<%= @new_clinics_this_month %> <%= t("admin.dashboard.revenue.this_month") %></span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="admin-metric-card admin-metric-card--slate h-100">
+        <div class="admin-metric-icon admin-metric-icon--slate"><i class="bi bi-person-badge"></i></div>
+        <div class="admin-metric-label"><%= t("admin.dashboard.stats.doctors") %></div>
+        <div class="admin-metric-value"><%= @total_doctors %></div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="admin-metric-card admin-metric-card--slate h-100">
+        <div class="admin-metric-icon admin-metric-icon--slate"><i class="bi bi-heart-pulse"></i></div>
+        <div class="admin-metric-label"><%= t("admin.dashboard.stats.patients") %></div>
+        <div class="admin-metric-value"><%= @total_patients %></div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── Charts row ── %>
+  <div class="row g-4 mb-4">
+    <%# Revenue chart %>
+    <div class="col-12 col-lg-8">
+      <div class="content-card h-100">
+        <div class="d-flex align-items-start justify-content-between mb-3 flex-wrap gap-2">
+          <div>
+            <h2 class="section-title mb-1" style="font-size:1.15rem;"><%= t("admin.dashboard.charts.revenue_title") %></h2>
+            <div class="text-muted" style="font-size:0.85rem;"><%= t("admin.dashboard.charts.revenue_subtitle") %></div>
+          </div>
+          <span class="admin-trend-badge admin-trend-badge--up" style="margin-top:4px;">
+            <i class="bi bi-arrow-up-right"></i> <%= t("admin.dashboard.revenue.live") %>
+          </span>
+        </div>
+        <div class="admin-chart-wrap">
+          <canvas id="adminRevenueChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <%# Plan distribution donut %>
+    <div class="col-12 col-lg-4">
+      <div class="content-card h-100">
+        <h2 class="section-title mb-3" style="font-size:1.15rem;"><%= t("admin.dashboard.charts.plans_title") %></h2>
+
+        <div class="admin-chart-wrap admin-chart-wrap--sm mb-3">
+          <canvas id="adminPlanChart"></canvas>
+        </div>
+
+        <div>
+          <% plan_colors = { "starter" => "#94a3b8", "pro" => "#14b8a6", "clinic_plus" => "#0f172a" } %>
+          <% total_for_pct = [@total_clinics, 1].max %>
+          <% @plan_distribution.each do |plan| %>
+            <div class="plan-dist-row">
+              <span class="admin-plan-badge admin-plan-badge--<%= plan[:tier] %>"><%= plan[:name] %></span>
+              <div class="plan-dist-bar-wrap">
+                <div class="plan-dist-bar plan-dist-bar--<%= plan[:tier] %>"
+                     style="width:<%= (plan[:count].to_f / total_for_pct * 100).round %>%;"></div>
+              </div>
+              <span class="plan-dist-count"><%= plan[:count] %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# Clinic growth chart + activity feed %>
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="content-card h-100">
+        <h2 class="section-title mb-3" style="font-size:1.15rem;"><%= t("admin.dashboard.charts.growth_title") %></h2>
+        <div class="admin-chart-wrap">
+          <canvas id="adminGrowthChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="content-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="section-title mb-0" style="font-size:1.15rem;"><%= t("admin.dashboard.activity.title") %></h2>
+        </div>
+        <% @recent_activity.each do |event| %>
+          <div class="admin-activity-row">
+            <div class="admin-activity-dot admin-activity-dot--<%= event[:type] %>"></div>
+            <div class="admin-activity-text">
+              <%= link_to event[:clinic].name, admin_clinic_path(event[:clinic]), class: "fw-semibold text-decoration-none" %>
+              <small><%= event[:label] %></small>
+            </div>
+            <div class="d-flex flex-column align-items-end gap-1">
+              <span class="admin-plan-badge admin-plan-badge--<%= event[:clinic].plan_tier %>"><%= event[:clinic].plan_name %></span>
+              <span class="admin-activity-time"><%= event[:time].strftime("%b %d") %></span>
+            </div>
+          </div>
+        <% end %>
+        <% if @recent_activity.empty? %>
+          <div class="empty-state"><%= t("admin.dashboard.no_clinics") %></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# ── Recent signups + recent clinics ── %>
   <div class="row g-4">
-    <%# ── Recent signups ── %>
     <div class="col-12 col-xl-6">
       <div class="content-card h-100">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h2 class="section-title mb-0"><%= t("admin.dashboard.recent_users") %></h2>
           <%= link_to t("admin.dashboard.view_all"), admin_users_path, class: "btn-outline-secondary btn btn-sm" %>
         </div>
-
         <% if @recent_users.any? %>
           <div class="table-responsive">
             <table class="table table-clean responsive-table">
@@ -119,21 +236,19 @@
       </div>
     </div>
 
-    <%# ── Recent clinics ── %>
     <div class="col-12 col-xl-6">
       <div class="content-card h-100">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h2 class="section-title mb-0"><%= t("admin.dashboard.recent_clinics") %></h2>
           <%= link_to t("admin.dashboard.view_all"), admin_clinics_path, class: "btn-outline-secondary btn btn-sm" %>
         </div>
-
         <% if @recent_clinics.any? %>
           <div class="table-responsive">
             <table class="table table-clean responsive-table">
               <thead>
                 <tr>
                   <th><%= t("admin.tables.clinic") %></th>
-                  <th><%= t("admin.tables.owner") %></th>
+                  <th><%= t("admin.tables.plan") %></th>
                   <th><%= t("admin.tables.status") %></th>
                 </tr>
               </thead>
@@ -143,8 +258,10 @@
                     <td data-label="<%= t("admin.tables.clinic") %>">
                       <%= link_to clinic.name, admin_clinic_path(clinic), class: "fw-semibold text-decoration-none" %>
                     </td>
-                    <td data-label="<%= t("admin.tables.owner") %>">
-                      <%= clinic.user.email %>
+                    <td data-label="<%= t("admin.tables.plan") %>">
+                      <span class="admin-plan-badge admin-plan-badge--<%= clinic.plan_tier %>">
+                        <%= clinic.plan_name %>
+                      </span>
                     </td>
                     <td data-label="<%= t("admin.tables.status") %>">
                       <%= render "admin/shared/clinic_status_badge", clinic: clinic %>
@@ -161,3 +278,129 @@
     </div>
   </div>
 </div>
+
+<script>
+(function () {
+  var chartRevenue, chartPlans, chartGrowth;
+
+  function destroyCharts() {
+    [chartRevenue, chartPlans, chartGrowth].forEach(function (c) { if (c) c.destroy(); });
+    chartRevenue = chartPlans = chartGrowth = null;
+  }
+
+  function initCharts() {
+    var el = document.getElementById("mx-admin-data");
+    if (!el) return;
+    var data;
+    try { data = JSON.parse(el.textContent); } catch (e) { return; }
+
+    var teal    = "rgba(20,184,166,1)";
+    var tealFg  = "rgba(20,184,166,0.15)";
+    var green   = "rgba(34,197,94,0.8)";
+    var slate   = "#94a3b8";
+    var dark    = "#0f172a";
+    var gridCol = "rgba(226,232,240,0.6)";
+
+    Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+
+    // Revenue line chart
+    var rCanvas = document.getElementById("adminRevenueChart");
+    if (rCanvas) {
+      chartRevenue = new Chart(rCanvas, {
+        type: "line",
+        data: {
+          labels: data.revenue.map(function (d) { return d.month; }),
+          datasets: [{
+            label: "MRR (€)",
+            data: data.revenue.map(function (d) { return d.revenue; }),
+            borderColor: teal,
+            backgroundColor: tealFg,
+            borderWidth: 3,
+            pointBackgroundColor: teal,
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: gridCol }, ticks: { color: slate, font: { size: 12 } } },
+            y: {
+              grid: { color: gridCol },
+              ticks: {
+                color: slate,
+                font: { size: 12 },
+                callback: function (v) { return "€" + v; }
+              },
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Plan donut
+    var pCanvas = document.getElementById("adminPlanChart");
+    if (pCanvas) {
+      chartPlans = new Chart(pCanvas, {
+        type: "doughnut",
+        data: {
+          labels: data.plans.map(function (d) { return d.name; }),
+          datasets: [{
+            data: data.plans.map(function (d) { return d.count; }),
+            backgroundColor: ["#94a3b8", "#14b8a6", "#0f172a"],
+            borderWidth: 0,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "70%",
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: { color: dark, font: { size: 12, weight: "600" }, padding: 14, boxWidth: 12 }
+            }
+          }
+        }
+      });
+    }
+
+    // Clinic growth bar
+    var gCanvas = document.getElementById("adminGrowthChart");
+    if (gCanvas) {
+      chartGrowth = new Chart(gCanvas, {
+        type: "bar",
+        data: {
+          labels: data.growth.map(function (d) { return d.month; }),
+          datasets: [{
+            label: "New Clinics",
+            data: data.growth.map(function (d) { return d.count; }),
+            backgroundColor: green,
+            borderRadius: 8,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: slate, font: { size: 12 } } },
+            y: { grid: { color: gridCol }, ticks: { color: slate, font: { size: 12 } }, beginAtZero: true, precision: 0 }
+          }
+        }
+      });
+    }
+  }
+
+  document.addEventListener("turbo:before-cache", destroyCharts);
+  document.addEventListener("turbo:load", initCharts);
+  document.addEventListener("DOMContentLoaded", initCharts);
+})();
+</script>

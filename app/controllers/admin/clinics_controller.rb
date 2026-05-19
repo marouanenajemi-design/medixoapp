@@ -1,5 +1,5 @@
 class Admin::ClinicsController < Admin::BaseController
-  before_action :set_clinic, only: [:show, :destroy, :toggle_subscription, :extend_trial]
+  before_action :set_clinic, only: [:show, :destroy, :toggle_subscription, :extend_trial, :update_plan]
 
   def index
     @clinics = Clinic.includes(:user).order(created_at: :desc)
@@ -21,6 +21,19 @@ class Admin::ClinicsController < Admin::BaseController
     current_end = @clinic.trial_ends_at.present? && @clinic.trial_ends_at.future? ? @clinic.trial_ends_at : Time.current
     @clinic.update!(trial_ends_at: current_end + 7.days)
     redirect_to admin_clinic_path(@clinic), notice: t("admin.clinics.trial_extended")
+  end
+
+  def update_plan
+    new_tier = params[:plan_tier].to_s
+
+    unless PlanGating::PLANS.key?(new_tier)
+      redirect_to admin_clinic_path(@clinic), alert: t("admin.clinics.plan_tier.invalid")
+      return
+    end
+
+    @clinic.update!(plan_tier: new_tier)
+    redirect_to admin_clinic_path(@clinic),
+      notice: t("admin.clinics.plan_tier.updated", plan: @clinic.plan_name)
   end
 
   def destroy

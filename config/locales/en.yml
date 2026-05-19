@@ -472,6 +472,18 @@ en:
         active_subscriptions: "Paying clinics"
         on_trial: "In trial period"
         no_access: "No access"
+      revenue:
+        mrr: "Monthly Revenue"
+        arr: "ARR"
+        live: "Live"
+        this_month: "this month"
+      charts:
+        revenue_title: "Monthly Recurring Revenue"
+        revenue_subtitle: "Calculated from active subscriptions over the last 6 months"
+        plans_title: "Plan Distribution"
+        growth_title: "New Clinics per Month"
+      activity:
+        title: "Recent Activity"
     users:
       cannot_change_own_role: "You cannot change your own admin role."
       cannot_delete_self: "You cannot delete your own account."
@@ -498,6 +510,16 @@ en:
         subscribed: "Subscribed"
         trialing: "Trialing"
         expired: "Expired"
+      plan_tier:
+        label: "Plan Tier"
+        management_title: "Plan Management"
+        management_subtitle: "Change this clinic's feature tier and usage limits"
+        update_button: "Update Plan"
+        updated: "Plan updated to %{plan} successfully."
+        invalid: "Invalid plan selected. Choose Starter, Pro, or Clinic+."
+        starter: "Starter"
+        pro: "Pro"
+        clinic_plus: "Clinic+"
       index:
         title: "Clinics"
         subtitle: "View and manage all clinics registered on the platform."

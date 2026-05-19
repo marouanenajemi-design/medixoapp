@@ -38,7 +38,9 @@
                   <%= link_to clinic.user.email, admin_user_path(clinic.user), class: "text-decoration-none text-muted" %>
                 </td>
                 <td data-label="<%= t("admin.tables.plan") %>">
-                  <%= clinic.plan.presence || "—" %>
+                  <span class="admin-plan-badge admin-plan-badge--<%= clinic.plan_tier %>">
+                    <%= clinic.plan_name %>
+                  </span>
                 </td>
                 <td data-label="<%= t("admin.tables.status") %>">
                   <%= render "admin/shared/clinic_status_badge", clinic: clinic %>

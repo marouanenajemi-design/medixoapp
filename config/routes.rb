@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       member do
         patch :toggle_subscription
         patch :extend_trial
+        patch :update_plan
       end
     end
 
