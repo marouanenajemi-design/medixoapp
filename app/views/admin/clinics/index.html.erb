@@ -1,0 +1,73 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("admin.clinics.index.title") %></h1>
+      <div class="page-subtitle"><%= t("admin.clinics.index.subtitle") %></div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <h2 class="section-title mb-0">
+        <%= t("admin.clinics.index.list_title") %>
+        <span class="text-muted fw-normal fs-6 ms-2">(<%= @clinics.count %>)</span>
+      </h2>
+    </div>
+
+    <% if @clinics.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("admin.tables.clinic") %></th>
+              <th><%= t("admin.tables.owner") %></th>
+              <th><%= t("admin.tables.plan") %></th>
+              <th><%= t("admin.tables.status") %></th>
+              <th><%= t("admin.tables.trial_ends") %></th>
+              <th><%= t("admin.clinics.show.doctors_count") %></th>
+              <th><%= t("admin.tables.actions") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @clinics.each do |clinic| %>
+              <tr>
+                <td data-label="<%= t("admin.tables.clinic") %>">
+                  <%= link_to clinic.name, admin_clinic_path(clinic), class: "fw-semibold text-decoration-none" %>
+                </td>
+                <td data-label="<%= t("admin.tables.owner") %>">
+                  <%= link_to clinic.user.email, admin_user_path(clinic.user), class: "text-decoration-none text-muted" %>
+                </td>
+                <td data-label="<%= t("admin.tables.plan") %>">
+                  <%= clinic.plan.presence || "—" %>
+                </td>
+                <td data-label="<%= t("admin.tables.status") %>">
+                  <%= render "admin/shared/clinic_status_badge", clinic: clinic %>
+                </td>
+                <td data-label="<%= t("admin.tables.trial_ends") %>">
+                  <%= clinic.trial_ends_at&.strftime("%b %d, %Y") || "—" %>
+                </td>
+                <td data-label="<%= t("admin.clinics.show.doctors_count") %>">
+                  <%= clinic.doctors.count %>
+                </td>
+                <td class="actions-cell" data-label="<%= t("admin.tables.actions") %>">
+                  <div class="action-group">
+                    <%= link_to t("admin.actions.view"), admin_clinic_path(clinic), class: "btn btn-sm btn-outline-secondary" %>
+                    <%= button_to(
+                          clinic.subscribed? ? t("admin.actions.deactivate") : t("admin.actions.activate"),
+                          toggle_subscription_admin_clinic_path(clinic),
+                          method: :patch,
+                          class: "btn btn-sm #{clinic.subscribed? ? 'btn-warning' : 'btn-success'}",
+                          data: { turbo_confirm: t("admin.confirmations.toggle_subscription") }
+                        ) %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("admin.clinics.index.empty") %></div>
+    <% end %>
+  </div>
+</div>

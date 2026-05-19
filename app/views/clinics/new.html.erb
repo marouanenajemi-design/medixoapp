@@ -1,0 +1,43 @@
+<div class="setup-shell">
+  <div class="setup-card">
+    <h2 class="mb-4"><%= t("clinics.new.title") %></h2>
+    <p class="text-muted mb-4"><%= t("clinics.new.subtitle") %></p>
+
+    <%= form_with model: @clinic, url: clinic_path, local: true, html: { multipart: true } do |f| %>
+      <% if @clinic.errors.any? %>
+        <div class="alert alert-danger rounded-4 form-errors">
+          <strong><%= form_errors_heading %></strong>
+          <ul class="mb-0 mt-2">
+            <% @clinic.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= f.label :name, t("clinics.fields.name"), class: "form-label" %>
+        <%= f.text_field :name, class: "form-control", placeholder: t("clinics.form.placeholders.name") %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :address, class: "form-label" %>
+        <%= f.text_field :address, class: "form-control", placeholder: t("clinics.form.placeholders.address") %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :phone, class: "form-label" %>
+        <%= f.text_field :phone, class: "form-control", placeholder: t("shared.placeholders.phone") %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :logo, "Clinic Logo", class: "form-label" %>
+        <%= f.file_field :logo, class: "form-control" %>
+      </div>
+
+      <div class="mt-4">
+        <%= f.submit t("shared.actions.create_clinic"), class: "btn btn-primary w-100" %>
+      </div>
+    <% end %>
+  </div>
+</div>

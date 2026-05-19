@@ -1,0 +1,525 @@
+en:
+  app:
+    title: "ClinicFlow"
+    name: "ClinicFlow"
+    default_clinic_name: "ClinicFlow"
+  locales:
+    en: "EN"
+    fr: "FR"
+  navigation:
+    dashboard: "Dashboard"
+    doctors: "Doctors"
+    patients: "Patients"
+    prescriptions: "Prescriptions"
+    appointments: "Appointments"
+    calendar: "Calendar"
+
+    chatbot: "Medicine Chatbot"
+
+    clinic_settings: "Clinic Settings"
+  layout:
+    navigation:
+      open: "Open navigation"
+      close: "Close navigation"
+    sidebar:
+      panel: "Clinic Panel"
+    topbar:
+      subtitle: "Doctor appointment dashboard"
+    auth:
+      badge: "Clinic management made simple"
+      title: "A modern way to manage doctors, patients, and appointments."
+      description: "Organize your clinic with a clean dashboard, faster scheduling, patient tracking, and a professional workflow designed for growing medical practices."
+      footer: "Built for clinics that want a clean, simple, and professional experience."
+      features:
+        scheduling:
+          title: "Smart Scheduling"
+          description: "Manage appointments clearly and avoid conflicts in your daily workflow."
+        patients:
+          title: "Patient Management"
+          description: "Keep patient information organized in one simple and secure place."
+        doctors:
+          title: "Doctor Profiles"
+          description: "Add specialties, working hours, and manage each doctor professionally."
+        dashboard:
+          title: "Clean Dashboard"
+          description: "See appointments, doctors, and patients instantly with a modern interface."
+  forms:
+    errors_heading: "Please fix these errors:"
+  flash:
+    clinics:
+      setup_required: "Please set up your clinic before continuing."
+      already_exists: "Your clinic is already set up."
+      created: "Clinic created successfully."
+      missing: "Please create your clinic first."
+      updated: "Clinic updated successfully."
+    doctors:
+      created: "Doctor added successfully."
+      updated: "Doctor updated successfully."
+      deleted: "Doctor deleted successfully."
+    patients:
+      created: "Patient added successfully."
+      updated: "Patient updated successfully."
+      deleted: "Patient deleted successfully."
+    appointments:
+      created: "Appointment created successfully."
+      updated: "Appointment updated successfully."
+      deleted: "Appointment deleted successfully."
+    prescriptions:
+      created: "Prescription created successfully."
+      updated: "Prescription updated successfully."
+      deleted: "Prescription deleted successfully."
+  shared:
+    actions:
+      edit: "Edit"
+      delete: "Delete"
+      print: "Print"
+      view: "View"
+      open: "Open"
+      remove: "Remove"
+      history: "History"
+      logout: "Logout"
+      show: "Show"
+      hide: "Hide"
+      add_doctor: "Add Doctor"
+      add_patient: "Add Patient"
+      add_medicine: "Add Medicine"
+      new_appointment: "New Appointment"
+      new_prescription: "New Prescription"
+      save_doctor: "Save Doctor"
+      save_patient: "Save Patient"
+      save_appointment: "Save Appointment"
+      save_prescription: "Save Prescription"
+      create_clinic: "Create Clinic"
+      update_clinic: "Update Clinic"
+    confirmations:
+      delete: "Are you sure?"
+    placeholders:
+      phone: "Phone number"
+    tables:
+      name: "Name"
+      phone: "Phone"
+      date: "Date"
+      time: "Time"
+      status: "Status"
+      actions: "Actions"
+      action: "Action"
+      patient: "Patient"
+      doctor: "Doctor"
+      notes: "Notes"
+  dashboard:
+    index:
+      title: "Dashboard"
+      subtitle: "Track doctors, patients, and appointments in one place."
+      recent_appointments: "Recent Appointments"
+
+      upcoming_appointments: "Upcoming Appointments"
+      empty_recent: "No recent appointments yet."
+      empty_upcoming: "No upcoming appointments scheduled."
+      status_breakdown:
+        title: "Appointment Status"
+        subtitle: "Current totals by status"
+      stats:
+        doctors: "Doctors"
+        patients: "Patients"
+        total_appointments: "Total Appointments"
+
+      empty: "No recent appointments yet."
+      stats:
+        doctors: "Doctors"
+        patients: "Patients"
+
+        today_appointments: "Today's Appointments"
+  doctors:
+    index:
+      title: "Doctors"
+      subtitle: "Manage doctor profiles, specialties, and working hours."
+      list_title: "Doctors List"
+      search_placeholder: "Search doctor by name..."
+      search_empty: "No doctors found for this search."
+      empty: "No doctors added yet."
+    new:
+      title: "Add Doctor"
+      subtitle: "Create a new doctor profile for your clinic."
+    edit:
+      title: "Edit Doctor"
+      subtitle: "Update doctor information and schedule."
+    form:
+      placeholders:
+        name: "Doctor full name"
+        specialty: "e.g. Cardiology"
+    fields:
+      specialty: "Specialty"
+      working_hours: "Working Hours"
+  patients:
+    index:
+      title: "Patients"
+      subtitle: "Manage patient records and contact details easily."
+      list_title: "Patients List"
+      search_placeholder: "Search patient by name..."
+      search_empty: "No patients found for this search."
+      empty: "No patients added yet."
+    new:
+      title: "Add Patient"
+      subtitle: "Create a patient profile and save contact details."
+    edit:
+      title: "Edit Patient"
+      subtitle: "Update patient information and notes."
+    history:
+      title: "Patient History"
+      back: "Back to Patients"
+      empty_appointments: "No appointments found for this patient."
+      empty_prescriptions: "No prescriptions found for this patient."
+    form:
+      gender_prompt: "Select gender"
+      placeholders:
+        name: "Patient full name"
+        age: "Age"
+        notes: "Write patient notes here..."
+    fields:
+      age: "Age"
+      gender: "Gender"
+    genders:
+      male: "Male"
+      female: "Female"
+  appointments:
+    statuses:
+      pending: "Pending"
+      confirmed: "Confirmed"
+      completed: "Completed"
+      cancelled: "Cancelled"
+    index:
+      title: "Appointments"
+      subtitle: "Track all bookings and appointment statuses clearly."
+      list_title: "Appointments List"
+      search_placeholder: "Search by patient, doctor, status, or date..."
+      search_empty: "No appointments found for this search."
+      empty: "No appointments added yet."
+    calendar:
+      title: "Calendar"
+      subtitle: "View all appointments in a clear calendar layout."
+      event_title: "%{patient} - Dr. %{doctor}"
+      buttons:
+        today: "Today"
+        month: "Month"
+        week: "Week"
+        day: "Day"
+    new:
+      title: "New Appointment"
+      subtitle: "Schedule a new patient appointment."
+    edit:
+      title: "Edit Appointment"
+      subtitle: "Update the appointment details and status."
+    form:
+      prompts:
+        doctor: "Select doctor"
+        patient: "Select patient"
+        status: "Select status"
+      placeholders:
+        notes: "Add appointment notes..."
+  prescriptions:
+    index:
+      title: "Prescriptions"
+      subtitle: "Create and manage medical prescriptions for patients."
+      empty: "No prescriptions added yet."
+    show:
+      title: "Prescription"
+      subtitle: "Review the prescription details before printing."
+      medicines: "Medicines"
+    new:
+      title: "New Prescription"
+      subtitle: "Create a prescription for a patient."
+    edit:
+      title: "Edit Prescription"
+      subtitle: "Update prescription details and medicines."
+    print:
+      title: "Prescription"
+      signature: "Signature"
+    form:
+      medicines: "Medicines"
+
+      medicines_hint: "Start with one medicine line. Leave a line completely blank to ignore it, or remove it if not needed."
+      medicine_item: "Medicine Item"
+      medicine_required_hint: "Medicine name is required when this line is used."
+
+      medicine_item: "Medicine Item"
+
+      prompts:
+        doctor: "Select doctor"
+        patient: "Select patient"
+      placeholders:
+        diagnosis: "Diagnosis..."
+        notes: "General notes..."
+        medicine: "Medicine name"
+        dosage: "e.g. 1 tab"
+        frequency: "3/day"
+        duration: "5 days"
+        instructions: "After meals, before sleep..."
+    fields:
+      diagnosis: "Diagnosis"
+      medicine: "Medicine"
+      dosage: "Dosage"
+      frequency: "Frequency"
+      duration: "Duration"
+      instructions: "Instructions"
+  clinics:
+    new:
+      title: "Create Your Clinic"
+      subtitle: "Add your clinic information to continue."
+    edit:
+      title: "Clinic Settings"
+      subtitle: "Update your clinic information, contact details, and logo."
+      current_logo: "Current Logo"
+    form:
+      placeholders:
+        name: "Enter clinic name"
+        address: "Enter clinic address"
+    fields:
+      name: "Clinic Name"
+      logo: "Clinic Logo"
+  auth:
+    labels:
+      email: "Email"
+      password: "Password"
+      password_confirmation: "Confirm password"
+      remember_me: "Remember me"
+    placeholders:
+      email: "Enter your email"
+      password: "Enter your password"
+      new_password: "Create a password"
+      password_confirmation: "Confirm your password"
+    sessions:
+      new:
+        logo: "Welcome back"
+        title: "Log in to ClinicFlow"
+        subtitle: "Access your clinic dashboard and manage your appointments with ease."
+        submit: "Log in"
+        create_account: "Register"
+        forgot_password: "Forgot your password?"
+        admin_prompt: "Are you a super admin?"
+        admin_login: "Admin login →"
+    registrations:
+      new:
+        logo: "Get started"
+        title: "Create your ClinicFlow account"
+        subtitle: "Build a clean and professional system for your clinic in just a few steps."
+        password_hint: "Use at least 6 characters."
+        submit: "Register"
+        login_link: "Already have an account? Log in"
+    passwords:
+      new:
+        logo: "Password recovery"
+        title: "Reset your password"
+        subtitle: "Enter your email address and we will send you reset instructions."
+        submit: "Send reset instructions"
+        back_to_login: "Back to login"
+  print_layout:
+    title: "Print Prescription"
+  activerecord:
+    attributes:
+      clinic:
+        name: "Clinic Name"
+        address: "Address"
+        phone: "Phone"
+        logo: "Clinic Logo"
+      doctor:
+        name: "Name"
+        specialty: "Specialty"
+        phone: "Phone"
+        work_start: "Work Start"
+        work_end: "Work End"
+      patient:
+        name: "Name"
+        phone: "Phone"
+        age: "Age"
+        gender: "Gender"
+        notes: "Notes"
+      appointment:
+        appointment_date: "Appointment Date"
+        appointment_time: "Appointment Time"
+        status: "Status"
+        notes: "Notes"
+      prescription:
+        prescription_date: "Prescription Date"
+        diagnosis: "Diagnosis"
+        notes: "Notes"
+      prescription_item:
+        medicine_name: "Medicine"
+        dosage: "Dosage"
+        frequency: "Frequency"
+        duration: "Duration"
+        instructions: "Instructions"
+
+
+  errors:
+    models:
+      appointment:
+        attributes:
+          appointment_time:
+            doctor_double_booked: "This doctor already has an appointment at this date and time."
+            outside_doctor_working_hours: "must be within the selected doctor's working hours"
+
+
+  chatbot:
+    title: "Medicine Information Chatbot"
+    subtitle: "Ask about a medicine name and get general informational guidance."
+    disclaimer_title: "Important safety disclaimer"
+    disclaimer_body: "This chatbot provides general informational content only. It is not a substitute for a doctor or pharmacist. It does not diagnose conditions, prescribe treatment, or provide personalized dosage. If you have urgent symptoms, contact local emergency services immediately."
+    form:
+      label: "Ask about a medicine"
+      placeholder: "Example: What is ibuprofen used for?"
+      submit: "Get information"
+      scope_hint: "General information only — no diagnosis or personalized dosing."
+    response:
+      title: "Chatbot response"
+      medicine_name: "Medicine"
+      description: "General description"
+      common_uses: "Common uses"
+      general_warnings: "General warnings"
+      common_side_effects: "Common side effects"
+    messages:
+      empty_query: "Please enter a medicine name question."
+      ask_medicine_name: "Please include a medicine name (for example: ibuprofen, paracetamol, cetirizine, or amoxicillin)."
+
+
+  admin:
+    access_denied: "Access denied. Super admin privileges required."
+    layout:
+      title: "Admin Panel"
+      badge: "Super Admin"
+      nav_label: "Management"
+      topbar_title: "ClinicFlow Admin"
+      topbar_subtitle: "Platform administration panel"
+    navigation:
+      dashboard: "Dashboard"
+      users: "Users"
+      clinics: "Clinics"
+      doctors: "Doctors"
+      patients: "Patients"
+      appointments: "Appointments"
+      back_to_app: "Back to App"
+    roles:
+      super_admin: "Super Admin"
+      user: "User"
+    tables:
+      email: "Email"
+      clinic: "Clinic"
+      owner: "Owner"
+      plan: "Plan"
+      status: "Status"
+      role: "Role"
+      joined: "Joined"
+      registered: "Registered"
+      actions: "Actions"
+      subscription: "Subscription"
+      trial_ends: "Trial Ends"
+      phone: "Phone"
+      hours: "Working Hours"
+    actions:
+      view: "View"
+      delete: "Delete"
+      make_admin: "Make Admin"
+      revoke_admin: "Revoke Admin"
+      activate: "Activate"
+      deactivate: "Deactivate"
+      extend_trial: "+ 7 Days Trial"
+      view_clinic: "View Clinic"
+    confirmations:
+      change_role: "Are you sure you want to change this user's role?"
+      delete_user: "This will permanently delete the user and their clinic. Are you sure?"
+      delete_clinic: "This will permanently delete this clinic and all its data. Are you sure?"
+      toggle_subscription: "Are you sure you want to change this clinic's subscription status?"
+      extend_trial: "Add 7 days to this clinic's trial?"
+    dashboard:
+      title: "Platform Overview"
+      subtitle: "Monitor all clinics, users, and activity across ClinicFlow."
+      recent_users: "Recent Signups"
+      recent_clinics: "Recent Clinics"
+      view_all: "View all"
+      no_users: "No users yet."
+      no_clinics: "No clinics yet."
+      stats:
+        users: "Total Users"
+        clinics: "Total Clinics"
+        doctors: "Total Doctors"
+        patients: "Total Patients"
+        appointments: "Appointments"
+        subscribed: "Subscribed"
+        trialing: "On Trial"
+        expired: "Expired"
+        active_subscriptions: "Paying clinics"
+        on_trial: "In trial period"
+        no_access: "No access"
+    users:
+      cannot_change_own_role: "You cannot change your own admin role."
+      cannot_delete_self: "You cannot delete your own account."
+      role_updated: "Role updated for %{email}."
+      deleted: "User %{email} has been deleted."
+      index:
+        title: "Users"
+        subtitle: "Manage all registered users and their admin privileges."
+        list_title: "All Users"
+        empty: "No users registered yet."
+      show:
+        account_details: "Account Details"
+        clinic_info: "Clinic Information"
+        joined: "Joined %{date}"
+        last_updated: "Last Updated"
+        no_clinic: "This user has not created a clinic yet."
+    clinics:
+      activated: "activated"
+      deactivated: "deactivated"
+      subscription_updated: "Subscription %{status} successfully."
+      trial_extended: "Trial extended by 7 days."
+      deleted: "Clinic \"%{name}\" has been deleted."
+      status:
+        subscribed: "Subscribed"
+        trialing: "Trialing"
+        expired: "Expired"
+      index:
+        title: "Clinics"
+        subtitle: "View and manage all clinics registered on the platform."
+        list_title: "All Clinics"
+        empty: "No clinics registered yet."
+      show:
+        details: "Clinic Details"
+        subscription: "Subscription & Billing"
+        usage: "Usage Stats"
+        address: "Address"
+        trial_ends: "Trial Ends"
+        billing_customer: "Billing Customer ID"
+        billing_subscription: "Billing Subscription ID"
+        created: "Created %{date}"
+        doctors_count: "Doctors"
+        patients_count: "Patients"
+        appointments_count: "Appointments"
+    doctors:
+      index:
+        title: "Doctors"
+        subtitle: "All doctors across every clinic on the platform."
+        list_title: "All Doctors"
+        empty: "No doctors registered yet."
+    patients:
+      index:
+        title: "Patients"
+        subtitle: "All patients across every clinic on the platform."
+        list_title: "All Patients"
+        empty: "No patients registered yet."
+    appointments:
+      index:
+        title: "Appointments"
+        subtitle: "All appointments across every clinic on the platform."
+        list_title: "All Appointments"
+        empty: "No appointments booked yet."
+    sessions:
+      sign_in_required: "Please sign in to access the admin panel."
+      signed_in: "Welcome back, Super Admin."
+      signed_out: "You have been signed out of the admin panel."
+      invalid_credentials: "Invalid email or password."
+      not_super_admin: "Access denied. This account does not have super admin privileges."
+      new:
+        page_title: "Super Admin Login"
+        title: "Super Admin Login"
+        subtitle: "Sign in to access the ClinicFlow administration panel."
+        submit: "Sign In as Admin"
+        clinic_login_prompt: "Clinic owner?"
+        back_to_clinic_login: "Sign in to your clinic →"

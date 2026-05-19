@@ -1,0 +1,76 @@
+<div class="print-header">
+  <div class="clinic-brand">
+    <% if @prescription.clinic.logo.attached? %>
+      <%= image_tag url_for(@prescription.clinic.logo), class: "clinic-logo" %>
+    <% end %>
+
+    <div>
+      <div class="clinic-name"><%= @prescription.clinic.name %></div>
+      <div class="clinic-info">
+        <%= @prescription.clinic.address %><br>
+        <%= t("shared.tables.phone") %>: <%= @prescription.clinic.phone %>
+      </div>
+    </div>
+  </div>
+
+  <div class="prescription-date">
+    <strong><%= t("shared.tables.date") %>:</strong><br>
+    <%= @prescription.prescription_date %>
+  </div>
+</div>
+
+<div class="patient-box">
+  <div><strong><%= t("shared.tables.patient") %>:</strong> <%= @prescription.patient.name %></div>
+  <div><strong><%= t("shared.tables.doctor") %>:</strong> <%= @prescription.doctor.name %></div>
+</div>
+
+<div class="diagnosis-box">
+  <strong><%= t("prescriptions.fields.diagnosis") %></strong>
+  <p><%= @prescription.diagnosis.presence || "-" %></p>
+</div>
+
+<h3 class="medicine-title"><%= t("prescriptions.print.title") %></h3>
+
+<table class="medicine-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th><%= t("prescriptions.fields.medicine") %></th>
+      <th><%= t("prescriptions.fields.dosage") %></th>
+      <th><%= t("prescriptions.fields.frequency") %></th>
+      <th><%= t("prescriptions.fields.duration") %></th>
+      <th><%= t("prescriptions.fields.instructions") %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% index = 1 %>
+    <% @prescription.prescription_items.each do |item| %>
+      <% next if item.medicine_name.blank? %>
+
+      <tr>
+        <td><%= index %></td>
+        <td><%= item.medicine_name %></td>
+        <td><%= item.dosage %></td>
+        <td><%= item.frequency %></td>
+        <td><%= item.duration %></td>
+        <td><%= item.instructions %></td>
+      </tr>
+
+      <% index += 1 %>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="notes-box">
+  <strong><%= t("shared.tables.notes") %></strong>
+  <p><%= @prescription.notes.presence || "-" %></p>
+</div>
+
+<div class="signature-box">
+  <div class="signature-line"></div>
+  <div class="signature-text">
+    <%= @prescription.doctor.name %><br>
+    <%= t("prescriptions.print.signature") %>
+  </div>
+</div>

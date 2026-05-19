@@ -1,0 +1,63 @@
+
+
+<div class="auth-logo"><%= t("app.name") %></div>
+<h1 class="page-title"><%= t("auth.sessions.new.title") %></h1>
+<p class="auth-subtitle">
+  <%= t("auth.sessions.new.subtitle") %>
+</p>
+
+<%= form_with model: resource, url: session_path(resource_name), local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :email, t("auth.labels.email"), class: "form-label" %>
+    <div class="input-icon-group">
+      <span class="input-icon"><i class="bi bi-envelope"></i></span>
+      <%= f.email_field :email,
+            autofocus: true,
+            autocomplete: "email",
+            class: "form-control input-with-icon",
+            placeholder: t("auth.placeholders.email") %>
+    </div>
+  </div>
+
+  <div class="mb-3" data-controller="password-toggle">
+    <%= f.label :password, t("auth.labels.password"), class: "form-label" %>
+    <div class="input-icon-group">
+      <span class="input-icon"><i class="bi bi-lock"></i></span>
+      <%= f.password_field :password,
+            autocomplete: "current-password",
+            class: "form-control input-with-icon",
+            placeholder: t("auth.placeholders.password"),
+            id: "login_password",
+            data: { password_toggle_target: "input" } %>
+      <button type="button"
+              class="password-toggle"
+              data-password-toggle-target="button"
+              data-show-text="<%= t("shared.actions.show") %>"
+              data-hide-text="<%= t("shared.actions.hide") %>"
+              data-action="password-toggle#toggle"><%= t("shared.actions.show") %></button>
+    </div>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+    <div class="remember-row">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me, t("auth.labels.remember_me"), class: "mb-0" %>
+    </div>
+  <% end %>
+
+  <div class="d-grid mb-3">
+    <%= f.submit t("auth.sessions.new.submit"), class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<div class="auth-links d-flex flex-column gap-2">
+  <%= link_to t("auth.sessions.new.create_account"), new_registration_path(resource_name) %>
+  <%= link_to t("auth.sessions.new.forgot_password"), new_password_path(resource_name) %>
+</div>
+
+<hr style="margin: 20px 0; border-color: #e2e8f0;">
+
+<div style="text-align: center; color: #94a3b8; font-size: 0.9rem;">
+  <%= t("auth.sessions.new.admin_prompt") %>
+  <%= link_to t("auth.sessions.new.admin_login"), admin_sign_in_path, style: "color: #7c3aed; font-weight: 600; text-decoration: none;", data: { turbo: false } %>
+</div>

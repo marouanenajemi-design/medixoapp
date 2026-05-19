@@ -1,0 +1,43 @@
+<%= form_with(model: @patient, local: true) do |f| %>
+  <% if @patient.errors.any? %>
+    <div class="alert alert-danger rounded-4 form-errors">
+      <strong><%= form_errors_heading %></strong>
+      <ul class="mb-0 mt-2">
+        <% @patient.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, class: "form-control", placeholder: t("patients.form.placeholders.name") %>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= f.label :phone, class: "form-label" %>
+      <%= f.text_field :phone, class: "form-control", placeholder: t("shared.placeholders.phone") %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= f.label :age, class: "form-label" %>
+      <%= f.number_field :age, class: "form-control", placeholder: t("patients.form.placeholders.age") %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= f.label :gender, class: "form-label" %>
+      <%= f.select :gender, patient_gender_options, { prompt: t("patients.form.gender_prompt") }, class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :notes, class: "form-label" %>
+    <%= f.text_area :notes, class: "form-control", rows: 5, placeholder: t("patients.form.placeholders.notes") %>
+  </div>
+
+  <div class="mt-4">
+    <%= f.submit t("shared.actions.save_patient"), class: "btn btn-primary" %>
+  </div>
+<% end %>

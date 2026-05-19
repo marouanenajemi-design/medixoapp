@@ -1,0 +1,213 @@
+================================================================================
+  CLINICFLOW — DOMAIN TRANSFER CHECKLIST
+  Step-by-step guide for seller and buyer
+================================================================================
+
+IMPORTANT: A domain transfer typically takes 5–7 business days to complete.
+Plan accordingly and keep the app running at the old host until DNS is confirmed
+at the new registrar.
+
+================================================================================
+  PART 1 — SELLER ACTIONS (at current registrar: Namecheap / GoDaddy)
+================================================================================
+
+  STEP 1 — Unlock the domain
+  ─────────────────────────
+  Namecheap:
+    1. Log in to Namecheap → Domain List
+    2. Click "Manage" next to your domain
+    3. Under "Domain Lock", toggle to OFF (Unlocked)
+
+  GoDaddy:
+    1. Log in → My Products → Domains
+    2. Click your domain → Additional Settings
+    3. Under "Domain Lock", click "Edit" → set to Unlocked
+    4. Save changes
+
+  [ ] Domain is now UNLOCKED
+
+  STEP 2 — Disable WHOIS Privacy Protection
+  ─────────────────────────────────────────
+  Some registrars require WHOIS to be public during transfer.
+
+  Namecheap:
+    Domain List → Manage → WhoisGuard → set to Disabled
+
+  GoDaddy:
+    Domains → Privacy → turn OFF Privacy Protection
+
+  Note: You can re-enable after the transfer is complete at the new registrar.
+
+  [ ] WHOIS Privacy Protection is DISABLED
+
+  STEP 3 — Get the EPP / Auth Code (Transfer Authorization Code)
+  ──────────────────────────────────────────────────────────────
+  This is the secret code that authorizes the transfer.
+
+  Namecheap:
+    Domain List → Manage → Sharing & Transfer → Auth Code → Send by Email
+    Check your registrar email inbox.
+
+  GoDaddy:
+    Domains → your domain → Additional Settings → Get Authorization Code
+    Code is emailed to your registrar contact email.
+
+  [ ] Auth/EPP code received: ________________________ (store securely)
+
+  STEP 4 — Send the Auth Code to the Buyer
+  ─────────────────────────────────────────
+  Send via:
+    - Flippa secure messaging (preferred)
+    - Signal or encrypted messaging app
+    - DO NOT send via plain email if possible
+
+  [ ] Auth code sent to buyer securely
+
+  STEP 5 — Verify Contact Email is Accessible
+  ────────────────────────────────────────────
+  The registrar will send a confirmation email to the domain contact address.
+  Make sure you have access to this inbox during the transfer window.
+
+  [ ] Registrar contact email is accessible
+
+  STEP 6 — Do NOT renew or modify the domain during transfer
+  ──────────────────────────────────────────────────────────
+  Any changes or renewals during the transfer process can cancel or delay it.
+
+  [ ] No changes made to domain during transfer period
+
+================================================================================
+  PART 2 — BUYER ACTIONS (at new registrar)
+================================================================================
+
+  STEP 1 — Choose a registrar
+  ────────────────────────────
+  Recommended:
+    - Namecheap (affordable, good interface): https://namecheap.com
+    - Cloudflare Registrar (at-cost pricing): https://cloudflare.com/registrar
+    - GoDaddy: https://godaddy.com
+
+  [ ] Chosen registrar: ____________________
+
+  STEP 2 — Initiate the domain transfer
+  ──────────────────────────────────────
+  Namecheap:
+    1. Go to namecheap.com/domains/transfer
+    2. Enter the domain name
+    3. Enter the EPP/Auth code from the seller
+    4. Add to cart and complete purchase
+       (Transfers usually include 1 year of renewal — ~$10–15 USD)
+
+  GoDaddy:
+    1. Go to godaddy.com/domains/domain-transfer
+    2. Enter domain, then the Auth code
+    3. Complete purchase
+
+  [ ] Transfer initiated at new registrar
+
+  STEP 3 — Approve the transfer (seller action)
+  ───────────────────────────────────────────────
+  The seller's registrar will send a confirmation email.
+  The seller must click "Approve Transfer" (or the transfer approves
+  automatically after 5 days if not rejected).
+
+  [ ] Transfer approved by seller
+
+  STEP 4 — Transfer completion (5–7 business days)
+  ─────────────────────────────────────────────────
+  You will receive a confirmation email when the domain is at your registrar.
+
+  [ ] Domain confirmed at new registrar
+
+  STEP 5 — Configure DNS records
+  ────────────────────────────────
+  Point the domain to your hosting provider.
+
+  For Heroku:
+    Type   Name   Value
+    CNAME  www    your-app.herokuapp.com
+    ALIAS  @      your-app.herokuapp.com   (or use a DNS proxy like Cloudflare)
+
+  For Render:
+    Follow: https://render.com/docs/custom-domains
+
+  For a VPS / custom server:
+    Type   Name   Value
+    A      @      <your server IP>
+    A      www    <your server IP>
+
+  [ ] DNS records updated
+
+  STEP 6 — Wait for DNS propagation
+  ──────────────────────────────────
+  DNS changes propagate in 15 minutes to 48 hours globally.
+  Check propagation at: https://dnschecker.org
+
+  [ ] DNS propagated globally
+
+  STEP 7 — Verify HTTPS certificate
+  ───────────────────────────────────
+  Heroku: heroku certs:auto:enable   (automatic via Let's Encrypt)
+  Render: Automatic via dashboard
+  Cloudflare: Enable "Full (strict)" SSL mode
+
+  Test at: https://your-domain.com
+  Verify no SSL warnings appear.
+
+  [ ] HTTPS working with valid certificate
+
+  STEP 8 — Update APP_HOST environment variable
+  ───────────────────────────────────────────────
+  Update the APP_HOST config var to your custom domain:
+    heroku config:set APP_HOST=clinicflow.com
+
+  [ ] APP_HOST updated to custom domain
+
+  STEP 9 — Update LemonSqueezy webhook URL
+  ─────────────────────────────────────────
+  In your LemonSqueezy dashboard, update the webhook URL:
+    Old: https://old-domain.com/webhooks/lemonsqueezy
+    New: https://your-domain.com/webhooks/lemonsqueezy
+
+  [ ] LemonSqueezy webhook URL updated
+
+  STEP 10 — Re-enable WHOIS privacy (optional)
+  ─────────────────────────────────────────────
+  At your new registrar, enable WHOIS privacy protection if desired.
+
+  [ ] WHOIS privacy re-enabled
+
+================================================================================
+  PART 3 — TROUBLESHOOTING
+================================================================================
+
+  Transfer rejected / failed:
+    - Confirm domain is unlocked
+    - Confirm domain was registered more than 60 days ago
+    - Confirm Auth code is correct and not expired (request a new one)
+    - Confirm no billing issues at current registrar
+
+  Domain not resolving after DNS update:
+    - Check propagation at https://dnschecker.org
+    - Verify correct record type (A vs CNAME)
+    - Check your hosting provider's required DNS format
+
+  SSL certificate not issuing:
+    - Confirm DNS is fully propagated before requesting SSL
+    - On Heroku: heroku certs:auto:enable
+    - Check Heroku dashboard for SSL status
+
+  App showing wrong domain in emails:
+    - Update APP_HOST environment variable
+    - Restart app: heroku restart
+
+================================================================================
+  CONTACT DURING TRANSFER
+================================================================================
+
+  Seller available via Flippa messaging during the transfer period.
+  Allow 24h response time for non-urgent questions.
+
+================================================================================
+  END OF DOMAIN TRANSFER CHECKLIST
+================================================================================

@@ -1,0 +1,17 @@
+one:
+  appointment_date: 2026-03-09
+  appointment_time: "09:30:00"
+  status: confirmed
+  notes: Routine review
+  doctor: one
+  patient: one
+  clinic: one
+
+two:
+  appointment_date: 2026-03-09
+  appointment_time: "10:15:00"
+  status: pending
+  notes: Skin consultation
+  doctor: two
+  patient: two
+  clinic: two

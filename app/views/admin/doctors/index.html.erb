@@ -1,0 +1,50 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("admin.doctors.index.title") %></h1>
+      <div class="page-subtitle"><%= t("admin.doctors.index.subtitle") %></div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <h2 class="section-title mb-0">
+        <%= t("admin.doctors.index.list_title") %>
+        <span class="text-muted fw-normal fs-6 ms-2">(<%= @doctors.count %>)</span>
+      </h2>
+    </div>
+
+    <% if @doctors.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("shared.tables.name") %></th>
+              <th><%= t("doctors.fields.specialty") %></th>
+              <th><%= t("shared.tables.phone") %></th>
+              <th><%= t("admin.tables.clinic") %></th>
+              <th><%= t("admin.tables.hours") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @doctors.each do |doctor| %>
+              <tr>
+                <td class="fw-semibold" data-label="<%= t("shared.tables.name") %>"><%= doctor.name %></td>
+                <td data-label="<%= t("doctors.fields.specialty") %>"><%= doctor.specialty %></td>
+                <td data-label="<%= t("shared.tables.phone") %>"><%= doctor.phone %></td>
+                <td data-label="<%= t("admin.tables.clinic") %>">
+                  <%= link_to doctor.clinic.name, admin_clinic_path(doctor.clinic), class: "text-decoration-none" %>
+                </td>
+                <td data-label="<%= t("admin.tables.hours") %>">
+                  <%= formatted_time(doctor.work_start) %> – <%= formatted_time(doctor.work_end) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("admin.doctors.index.empty") %></div>
+    <% end %>
+  </div>
+</div>

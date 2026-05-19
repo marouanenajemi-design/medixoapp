@@ -1,0 +1,47 @@
+<h1 class="admin-login-title"><%= t("admin.sessions.new.title") %></h1>
+<p class="admin-login-subtitle"><%= t("admin.sessions.new.subtitle") %></p>
+
+<%= form_with url: admin_sign_in_path, local: true, data: { turbo: false } do |f| %>
+  <div class="mb-3">
+    <label class="form-label"><%= t("auth.labels.email") %></label>
+    <div class="input-icon-group">
+      <span class="input-icon"><i class="bi bi-envelope"></i></span>
+      <%= f.email_field :email,
+            autofocus: true,
+            autocomplete: "email",
+            class: "form-control",
+            placeholder: t("auth.placeholders.email") %>
+    </div>
+  </div>
+
+  <div class="mb-4" data-controller="password-toggle">
+    <label class="form-label"><%= t("auth.labels.password") %></label>
+    <div class="input-icon-group">
+      <span class="input-icon"><i class="bi bi-lock"></i></span>
+      <%= f.password_field :password,
+            autocomplete: "current-password",
+            class: "form-control",
+            placeholder: t("auth.placeholders.password"),
+            id: "admin_login_password",
+            data: { password_toggle_target: "input" } %>
+      <button type="button"
+              class="password-toggle"
+              data-password-toggle-target="button"
+              data-show-text="<%= t("shared.actions.show") %>"
+              data-hide-text="<%= t("shared.actions.hide") %>"
+              data-action="password-toggle#toggle"><%= t("shared.actions.show") %></button>
+    </div>
+  </div>
+
+  <button type="submit" class="btn-admin">
+    <i class="bi bi-shield-lock-fill"></i>
+    <%= t("admin.sessions.new.submit") %>
+  </button>
+<% end %>
+
+<hr class="admin-divider">
+
+<div class="admin-cross-link">
+  <%= t("admin.sessions.new.clinic_login_prompt") %>
+  <%= link_to t("admin.sessions.new.back_to_clinic_login"), new_user_session_path %>
+</div>

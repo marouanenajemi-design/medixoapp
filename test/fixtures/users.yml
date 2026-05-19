@@ -1,0 +1,14 @@
+one:
+  email: owner-one@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+
+two:
+  email: owner-two@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+
+
+three:
+  email: clinicless@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+
+

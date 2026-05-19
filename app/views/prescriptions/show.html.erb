@@ -1,0 +1,65 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("prescriptions.show.title") %></h1>
+      <div class="page-subtitle"><%= t("prescriptions.show.subtitle") %></div>
+    </div>
+
+    <div class="page-actions">
+      <%= link_to t("shared.actions.print"), print_prescription_path(@prescription), class: "btn btn-primary", target: "_blank" %>
+      <%= link_to t("shared.actions.edit"), edit_prescription_path(@prescription), class: "btn btn-warning" %>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <strong><%= t("shared.tables.patient") %>:</strong> <%= @prescription.patient.name %>
+      </div>
+      <div class="col-md-4">
+        <strong><%= t("shared.tables.doctor") %>:</strong> <%= @prescription.doctor.name %>
+      </div>
+      <div class="col-md-4">
+        <strong><%= t("shared.tables.date") %>:</strong> <%= @prescription.prescription_date %>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <strong><%= t("prescriptions.fields.diagnosis") %>:</strong>
+      <p class="mb-0"><%= @prescription.diagnosis.presence || "-" %></p>
+    </div>
+
+    <div class="mb-4">
+      <strong><%= t("shared.tables.notes") %>:</strong>
+      <p class="mb-0"><%= @prescription.notes.presence || "-" %></p>
+    </div>
+
+    <h3 class="section-title"><%= t("prescriptions.show.medicines") %></h3>
+
+    <div class="table-responsive">
+      <table class="table table-clean responsive-table">
+        <thead>
+          <tr>
+            <th><%= t("prescriptions.fields.medicine") %></th>
+            <th><%= t("prescriptions.fields.dosage") %></th>
+            <th><%= t("prescriptions.fields.frequency") %></th>
+            <th><%= t("prescriptions.fields.duration") %></th>
+            <th><%= t("prescriptions.fields.instructions") %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @prescription.prescription_items.each do |item| %>
+            <% next if item.medicine_name.blank? %>
+            <tr>
+              <td data-label="<%= t("prescriptions.fields.medicine") %>"><%= item.medicine_name %></td>
+              <td data-label="<%= t("prescriptions.fields.dosage") %>"><%= item.dosage %></td>
+              <td data-label="<%= t("prescriptions.fields.frequency") %>"><%= item.frequency %></td>
+              <td data-label="<%= t("prescriptions.fields.duration") %>"><%= item.duration %></td>
+              <td data-label="<%= t("prescriptions.fields.instructions") %>"><%= item.instructions %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

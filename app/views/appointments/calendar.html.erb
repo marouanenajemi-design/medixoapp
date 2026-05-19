@@ -1,0 +1,36 @@
+<% calendar_events = (@appointments || []).map do |appointment|
+     {
+       title: t("appointments.calendar.event_title", patient: appointment.patient.name, doctor: appointment.doctor.name),
+       start: appointment_start_iso(appointment),
+       url: edit_appointment_path(appointment),
+       className: appointment.status
+     }
+   end %>
+<% calendar_button_text = {
+     today: t("appointments.calendar.buttons.today"),
+     month: t("appointments.calendar.buttons.month"),
+     week: t("appointments.calendar.buttons.week"),
+     day: t("appointments.calendar.buttons.day")
+   } %>
+
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("appointments.calendar.title") %></h1>
+      <div class="page-subtitle"><%= t("appointments.calendar.subtitle") %></div>
+    </div>
+
+    <div class="page-actions">
+      <%= link_to t("shared.actions.new_appointment"), new_appointment_path, class: "btn btn-primary action-btn" %>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div id="appointments-calendar"
+         data-controller="appointments-calendar"
+         data-appointments-calendar-locale-value="<%= I18n.locale %>"
+         data-appointments-calendar-events-value="<%= json_escape(calendar_events.to_json) %>"
+         data-appointments-calendar-button-text-value="<%= json_escape(calendar_button_text.to_json) %>"
+         data-appointments-calendar-new-url-value="<%= new_appointment_path %>"></div>
+  </div>
+</div>

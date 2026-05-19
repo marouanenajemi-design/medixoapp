@@ -1,0 +1,56 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("clinics.edit.title") %></h1>
+      <div class="page-subtitle"><%= t("clinics.edit.subtitle") %></div>
+    </div>
+  </div>
+
+  <div class="form-card responsive-form-card" style="max-width: 900px;">
+    <%= form_with model: @clinic, url: clinic_path, local: true, html: { multipart: true } do |f| %>
+      <% if @clinic.errors.any? %>
+        <div class="alert alert-danger rounded-4 form-errors">
+          <strong><%= form_errors_heading %></strong>
+          <ul class="mb-0 mt-2">
+            <% @clinic.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="settings-grid">
+        <div class="full">
+          <%= f.label :name, t("clinics.fields.name"), class: "form-label" %>
+          <%= f.text_field :name, class: "form-control", placeholder: t("clinics.form.placeholders.name") %>
+        </div>
+
+        <div class="full">
+          <%= f.label :address, class: "form-label" %>
+          <%= f.text_field :address, class: "form-control", placeholder: t("clinics.form.placeholders.address") %>
+        </div>
+
+        <div>
+          <%= f.label :phone, class: "form-label" %>
+          <%= f.text_field :phone, class: "form-control", placeholder: t("shared.placeholders.phone") %>
+        </div>
+
+        <div>
+          <%= f.label :logo, t("clinics.fields.logo"), class: "form-label" %>
+          <%= f.file_field :logo, class: "form-control" %>
+        </div>
+
+        <% if @clinic.logo.attached? %>
+          <div class="full mt-2">
+            <label class="form-label"><%= t("clinics.edit.current_logo") %></label><br>
+            <%= image_tag @clinic.logo, style: "width: 90px; height: 90px; object-fit: cover; border-radius: 16px; border: 1px solid #e5e7eb; padding: 4px; background: white;" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="mt-4">
+        <%= f.submit t("shared.actions.update_clinic"), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

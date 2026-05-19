@@ -1,0 +1,27 @@
+<div class="auth-logo"><%= t("app.name") %></div>
+<h1 class="page-title"><%= t("auth.passwords.new.title") %></h1>
+<p class="auth-subtitle">
+  <%= t("auth.passwords.new.subtitle") %>
+</p>
+
+<%= form_with model: resource, url: password_path(resource_name), local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :email, t("auth.labels.email"), class: "form-label" %>
+    <div class="input-icon-group">
+      <span class="input-icon"><i class="bi bi-envelope"></i></span>
+      <%= f.email_field :email,
+            autofocus: true,
+            autocomplete: "email",
+            class: "form-control input-with-icon",
+            placeholder: t("auth.placeholders.email") %>
+    </div>
+  </div>
+
+  <div class="d-grid mb-3">
+    <%= f.submit t("auth.passwords.new.submit"), class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<div class="auth-links">
+  <%= link_to t("auth.passwords.new.back_to_login"), new_session_path(resource_name) %>
+</div>

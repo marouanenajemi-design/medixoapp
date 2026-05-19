@@ -1,0 +1,7 @@
+<% if clinic.subscribed? %>
+  <span class="badge-soft badge-subscribed"><%= t("admin.clinics.status.subscribed") %></span>
+<% elsif clinic.trialing? %>
+  <span class="badge-soft badge-trialing"><%= t("admin.clinics.status.trialing") %> (<%= clinic.trial_days_left %>d)</span>
+<% else %>
+  <span class="badge-soft badge-expired"><%= t("admin.clinics.status.expired") %></span>
+<% end %>

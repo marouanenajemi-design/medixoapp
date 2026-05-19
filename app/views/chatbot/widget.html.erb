@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        background: #f8fafc;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #0f172a;
+      }
+
+      .widget-shell {
+        padding: 16px;
+      }
+
+      .widget-note {
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        color: #1e3a8a;
+        border-radius: 16px;
+        padding: 12px 14px;
+        font-size: 0.9rem;
+        margin-bottom: 14px;
+      }
+
+      .widget-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      }
+
+      .widget-title {
+        font-size: 1.1rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+
+      .widget-subtitle {
+        color: #64748b;
+        margin-bottom: 16px;
+      }
+
+      .form-control {
+        height: 50px;
+        border-radius: 14px;
+      }
+
+      .btn-primary {
+        border-radius: 14px;
+        min-height: 48px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        border: none;
+      }
+
+      .answer-box {
+        margin-top: 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 14px;
+        white-space: normal;
+        line-height: 1.55;
+      }
+
+      .answer-box > strong {
+        display: inline-block;
+        margin-bottom: 8px;
+      }
+
+      .answer-section {
+        margin-bottom: 14px;
+      }
+
+      .answer-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .answer-section-title {
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #0f172a;
+      }
+
+      .answer-box p,
+      .answer-box ul {
+        margin-bottom: 0;
+      }
+
+      .answer-box ul {
+        margin-top: 6px;
+        padding-left: 18px;
+      }
+
+      .answer-box li {
+        margin-bottom: 4px;
+      }
+
+      .answer-box li:last-child {
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="widget-shell">
+      <div class="widget-note">
+        General information only. For urgent symptoms, contact a doctor.
+      </div>
+
+      <div class="widget-card">
+        <div class="widget-title">ClinicFlow AI</div>
+        <div class="widget-subtitle">Ask about a medicine</div>
+
+        <%= form_with url: chatbot_widget_path(locale: I18n.locale), method: :get, local: true, data: { turbo: false } do %>
+          <div class="mb-3">
+            <%= text_field_tag :query, @query, class: "form-control", placeholder: "Example: What is ibuprofen used for?" %>
+          </div>
+
+          <%= submit_tag "Get information", class: "btn btn-primary w-100" %>
+        <% end %>
+
+       <% if @chatbot_response.present? %>
+  <% response_data =
+      if @chatbot_response.is_a?(Hash)
+        @chatbot_response.respond_to?(:with_indifferent_access) ? @chatbot_response.with_indifferent_access : @chatbot_response
+      else
+        nil
+      end
+  %>
+
+  <div class="answer-box">
+    <strong>Answer:</strong>
+
+    <% if response_data.present? && response_data[:error].present? %>
+      <div class="mt-2 text-danger">
+        <%= response_data[:error] %>
+      </div>
+
+    <% elsif response_data.present? %>
+      <div class="mt-2">
+        <% if response_data[:medicine_name].present? %>
+          <div class="answer-section">
+            <div class="answer-section-title">Medicine</div>
+            <p><%= response_data[:medicine_name] %></p>
+          </div>
+        <% end %>
+
+        <% if response_data[:description].present? %>
+          <div class="answer-section">
+            <div class="answer-section-title">Description</div>
+            <p><%= response_data[:description] %></p>
+          </div>
+        <% end %>
+
+        <% if response_data[:common_uses].present? %>
+          <div class="answer-section">
+            <div class="answer-section-title">Common uses</div>
+            <ul>
+              <% Array(response_data[:common_uses]).each do |item| %>
+                <li><%= item %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <% if response_data[:general_warnings].present? %>
+          <div class="answer-section">
+            <div class="answer-section-title">Warnings</div>
+            <ul>
+              <% Array(response_data[:general_warnings]).each do |item| %>
+                <li><%= item %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <% if response_data[:medicine_name].blank? &&
+              response_data[:description].blank? &&
+              response_data[:common_uses].blank? &&
+              response_data[:general_warnings].blank? %>
+          <div class="mt-2 text-muted">
+            No structured information was found for this medicine.
+          </div>
+        <% end %>
+      </div>
+
+    <% else %>
+      <div class="mt-2"><%= @chatbot_response.to_s %></div>
+    <% end %>
+  </div>
+<% end %>
+      </div>
+    </div>
+  </body>
+</html>

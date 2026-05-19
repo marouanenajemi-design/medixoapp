@@ -1,0 +1,77 @@
+<div class="auth-logo"><%= t("app.name") %></div>
+<h1 class="page-title"><%= t("auth.registrations.new.title") %></h1>
+<p class="auth-subtitle">
+  <%= t("auth.registrations.new.subtitle") %>
+</p>
+
+<%= form_with model: resource, url: registration_path(resource_name), local: true do |f| %>
+  <% if resource.errors.any? %>
+    <div class="alert alert-danger rounded-4">
+      <strong><%= form_errors_heading %></strong>
+      <ul class="mb-0 mt-2">
+        <% resource.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :email, t("auth.labels.email"), class: "form-label" %>
+    <div class="input-icon-group">
+      <span class="input-icon"><i class="bi bi-envelope"></i></span>
+      <%= f.email_field :email,
+            autofocus: true,
+            autocomplete: "email",
+            class: "form-control input-with-icon",
+            placeholder: t("auth.placeholders.email") %>
+    </div>
+  </div>
+
+  <div class="mb-3" data-controller="password-toggle">
+    <%= f.label :password, t("auth.labels.password"), class: "form-label" %>
+    <div class="input-icon-group">
+      <span class="input-icon"><i class="bi bi-lock"></i></span>
+      <%= f.password_field :password,
+            autocomplete: "new-password",
+            class: "form-control input-with-icon",
+            placeholder: t("auth.placeholders.new_password"),
+            id: "signup_password",
+            data: { password_toggle_target: "input" } %>
+      <button type="button"
+              class="password-toggle"
+              data-password-toggle-target="button"
+              data-show-text="<%= t("shared.actions.show") %>"
+              data-hide-text="<%= t("shared.actions.hide") %>"
+              data-action="password-toggle#toggle"><%= t("shared.actions.show") %></button>
+    </div>
+    <small class="mini-note d-block mt-2"><%= t("auth.registrations.new.password_hint") %></small>
+  </div>
+
+  <div class="mb-3" data-controller="password-toggle">
+    <%= f.label :password_confirmation, t("auth.labels.password_confirmation"), class: "form-label" %>
+    <div class="input-icon-group">
+      <span class="input-icon"><i class="bi bi-shield-lock"></i></span>
+      <%= f.password_field :password_confirmation,
+            autocomplete: "new-password",
+            class: "form-control input-with-icon",
+            placeholder: t("auth.placeholders.password_confirmation"),
+            id: "signup_password_confirmation",
+            data: { password_toggle_target: "input" } %>
+      <button type="button"
+              class="password-toggle"
+              data-password-toggle-target="button"
+              data-show-text="<%= t("shared.actions.show") %>"
+              data-hide-text="<%= t("shared.actions.hide") %>"
+              data-action="password-toggle#toggle"><%= t("shared.actions.show") %></button>
+    </div>
+  </div>
+
+  <div class="d-grid mb-3">
+    <%= f.submit t("auth.registrations.new.submit"), class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<div class="auth-links">
+  <%= link_to t("auth.registrations.new.login_link"), new_session_path(resource_name) %>
+</div>

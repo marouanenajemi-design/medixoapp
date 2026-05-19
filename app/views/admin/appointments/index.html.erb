@@ -1,0 +1,54 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("admin.appointments.index.title") %></h1>
+      <div class="page-subtitle"><%= t("admin.appointments.index.subtitle") %></div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <h2 class="section-title mb-0">
+        <%= t("admin.appointments.index.list_title") %>
+        <span class="text-muted fw-normal fs-6 ms-2">(<%= @appointments.count %>)</span>
+      </h2>
+    </div>
+
+    <% if @appointments.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("shared.tables.patient") %></th>
+              <th><%= t("shared.tables.doctor") %></th>
+              <th><%= t("admin.tables.clinic") %></th>
+              <th><%= t("shared.tables.date") %></th>
+              <th><%= t("shared.tables.time") %></th>
+              <th><%= t("shared.tables.status") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @appointments.each do |appt| %>
+              <tr>
+                <td class="fw-semibold" data-label="<%= t("shared.tables.patient") %>"><%= appt.patient.name %></td>
+                <td data-label="<%= t("shared.tables.doctor") %>"><%= appt.doctor.name %></td>
+                <td data-label="<%= t("admin.tables.clinic") %>">
+                  <%= link_to appt.clinic.name, admin_clinic_path(appt.clinic), class: "text-decoration-none" %>
+                </td>
+                <td data-label="<%= t("shared.tables.date") %>"><%= appt.appointment_date %></td>
+                <td data-label="<%= t("shared.tables.time") %>"><%= formatted_time(appt.appointment_time) %></td>
+                <td data-label="<%= t("shared.tables.status") %>">
+                  <span class="badge-soft <%= appointment_status_badge_class(appt.status) %>">
+                    <%= appointment_status_label(appt.status) %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("admin.appointments.index.empty") %></div>
+    <% end %>
+  </div>
+</div>

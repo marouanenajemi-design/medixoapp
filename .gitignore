@@ -1,0 +1,59 @@
+# See https://help.github.com/articles/ignoring-files for more about ignoring files.
+
+# Bundler
+/.bundle
+
+# Environment files
+/.env*
+!/.env*.erb
+/.env.local
+/.env.production
+
+# Logs
+/log/*
+!/log/.keep
+
+# Temp files
+/tmp/*
+!/tmp/.keep
+!/tmp/pids/
+!/tmp/pids/.keep
+!/tmp/storage/
+!/tmp/storage/.keep
+
+# Uploaded files (user data — never ship)
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+
+# Compiled assets
+/public/assets
+/public/packs
+/public/packs-test
+
+# Master key — NEVER commit or deliver
+/config/master.key
+/config/master.key.bak
+/config/credentials.yml.enc.bak
+
+# Credential backups
+*.key.bak
+*.enc.bak
+
+# Heroku CLI (not part of source)
+/heroku/
+/heroku-linux-x64.tar.gz
+/heroku_build.log
+/heroku_push.log
+
+# IDE / editor
+/.ruby-lsp/
+/.idea/
+/.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Node
+/node_modules/
+yarn-error.log

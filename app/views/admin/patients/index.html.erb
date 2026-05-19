@@ -1,0 +1,54 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("admin.patients.index.title") %></h1>
+      <div class="page-subtitle"><%= t("admin.patients.index.subtitle") %></div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <h2 class="section-title mb-0">
+        <%= t("admin.patients.index.list_title") %>
+        <span class="text-muted fw-normal fs-6 ms-2">(<%= @patients.count %>)</span>
+      </h2>
+    </div>
+
+    <% if @patients.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("shared.tables.name") %></th>
+              <th><%= t("shared.tables.phone") %></th>
+              <th><%= t("patients.fields.gender") %></th>
+              <th><%= t("patients.fields.age") %></th>
+              <th><%= t("admin.tables.clinic") %></th>
+              <th><%= t("admin.tables.registered") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @patients.each do |patient| %>
+              <tr>
+                <td class="fw-semibold" data-label="<%= t("shared.tables.name") %>"><%= patient.name %></td>
+                <td data-label="<%= t("shared.tables.phone") %>"><%= patient.phone %></td>
+                <td data-label="<%= t("patients.fields.gender") %>">
+                  <%= patient_gender_label(patient.gender) if patient.gender.present? %>
+                </td>
+                <td data-label="<%= t("patients.fields.age") %>"><%= patient.age || "—" %></td>
+                <td data-label="<%= t("admin.tables.clinic") %>">
+                  <%= link_to patient.clinic.name, admin_clinic_path(patient.clinic), class: "text-decoration-none" %>
+                </td>
+                <td data-label="<%= t("admin.tables.registered") %>">
+                  <%= patient.created_at.strftime("%b %d, %Y") %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("admin.patients.index.empty") %></div>
+    <% end %>
+  </div>
+</div>

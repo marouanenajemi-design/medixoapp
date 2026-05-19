@@ -1,0 +1,50 @@
+<%= form_with(model: @appointment, local: true) do |f| %>
+  <% if @appointment.errors.any? %>
+    <div class="alert alert-danger rounded-4 form-errors">
+      <strong><%= form_errors_heading %></strong>
+      <ul class="mb-0 mt-2">
+        <% @appointment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= f.label :doctor_id, t("shared.tables.doctor"), class: "form-label" %>
+      <%= f.collection_select :doctor_id, @doctors, :id, :name, { prompt: t("appointments.form.prompts.doctor") }, class: "form-select" %>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <%= f.label :patient_id, t("shared.tables.patient"), class: "form-label" %>
+      <%= f.collection_select :patient_id, @patients, :id, :name, { prompt: t("appointments.form.prompts.patient") }, class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <%= f.label :appointment_date, class: "form-label" %>
+      <%= f.date_field :appointment_date, class: "form-control" %>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <%= f.label :appointment_time, class: "form-label" %>
+      <%= f.time_field :appointment_time, class: "form-control" %>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <%= f.label :status, class: "form-label" %>
+      <%= f.select :status, appointment_status_options, { prompt: t("appointments.form.prompts.status") }, class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :notes, class: "form-label" %>
+    <%= f.text_area :notes, class: "form-control", rows: 5, placeholder: t("appointments.form.placeholders.notes") %>
+  </div>
+
+  <div class="mt-4">
+    <%= f.submit t("shared.actions.save_appointment"), class: "btn btn-primary" %>
+  </div>
+<% end %>

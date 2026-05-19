@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= t("print_layout.title") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #111;
+        margin: 40px;
+      }
+
+      .print-wrapper {
+        max-width: 900px;
+        margin: auto;
+      }
+
+      /* HEADER */
+      .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+
+      .clinic-brand {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .clinic-logo {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      .clinic-name {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .clinic-info {
+        font-size: 14px;
+        color: #555;
+      }
+
+      .prescription-date {
+        text-align: right;
+        font-size: 15px;
+      }
+
+      /* PATIENT */
+      .patient-box {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        font-size: 16px;
+      }
+
+      /* DIAGNOSIS */
+      .diagnosis-box {
+        margin-bottom: 25px;
+      }
+
+      /* TABLE */
+      .medicine-title {
+        margin-bottom: 10px;
+      }
+
+      .medicine-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 25px;
+      }
+
+      .medicine-table th {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        padding: 10px;
+      }
+
+      .medicine-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+      }
+
+      /* NOTES */
+      .notes-box {
+        margin-top: 20px;
+      }
+
+      /* SIGNATURE */
+      .signature-box {
+        margin-top: 70px;
+        text-align: right;
+      }
+
+      .signature-line {
+        width: 220px;
+        border-bottom: 2px solid #111;
+        margin-left: auto;
+        margin-bottom: 8px;
+      }
+
+      .signature-text {
+        font-size: 14px;
+      }
+
+      /* PRINT */
+      .print-actions {
+        margin-bottom: 20px;
+      }
+
+      .print-actions button {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 10px;
+        background: #2563eb;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .print-actions button:hover {
+        background: #1d4ed8;
+      }
+
+      @media print {
+        .print-actions {
+          display: none;
+        }
+
+        body {
+          margin: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="print-wrapper">
+      <div class="print-actions">
+        <button onclick="window.print()"><%= t("shared.actions.print") %></button>
+      </div>
+
+      <%= yield %>
+    </div>
+  </body>
+</html>

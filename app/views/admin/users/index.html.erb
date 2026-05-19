@@ -1,0 +1,87 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("admin.users.index.title") %></h1>
+      <div class="page-subtitle"><%= t("admin.users.index.subtitle") %></div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <h2 class="section-title mb-0">
+        <%= t("admin.users.index.list_title") %>
+        <span class="text-muted fw-normal fs-6 ms-2">(<%= @users.count %>)</span>
+      </h2>
+    </div>
+
+    <% if @users.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("admin.tables.email") %></th>
+              <th><%= t("admin.tables.clinic") %></th>
+              <th><%= t("admin.tables.subscription") %></th>
+              <th><%= t("admin.tables.role") %></th>
+              <th><%= t("admin.tables.joined") %></th>
+              <th><%= t("admin.tables.actions") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @users.each do |user| %>
+              <tr>
+                <td data-label="<%= t("admin.tables.email") %>">
+                  <%= link_to user.email, admin_user_path(user), class: "fw-semibold text-decoration-none" %>
+                </td>
+                <td data-label="<%= t("admin.tables.clinic") %>">
+                  <% if user.clinic %>
+                    <%= link_to user.clinic.name, admin_clinic_path(user.clinic), class: "text-decoration-none" %>
+                  <% else %>
+                    <span class="text-muted">—</span>
+                  <% end %>
+                </td>
+                <td data-label="<%= t("admin.tables.subscription") %>">
+                  <% if user.clinic %>
+                    <%= render "admin/shared/clinic_status_badge", clinic: user.clinic %>
+                  <% else %>
+                    <span class="text-muted">—</span>
+                  <% end %>
+                </td>
+                <td data-label="<%= t("admin.tables.role") %>">
+                  <% if user.super_admin? %>
+                    <span class="badge-soft badge-admin"><i class="bi bi-shield-fill me-1"></i><%= t("admin.roles.super_admin") %></span>
+                  <% else %>
+                    <span class="badge-soft badge-user"><%= t("admin.roles.user") %></span>
+                  <% end %>
+                </td>
+                <td data-label="<%= t("admin.tables.joined") %>">
+                  <%= user.created_at.strftime("%b %d, %Y") %>
+                </td>
+                <td class="actions-cell" data-label="<%= t("admin.tables.actions") %>">
+                  <div class="action-group">
+                    <%= link_to t("admin.actions.view"), admin_user_path(user), class: "btn btn-sm btn-outline-secondary" %>
+                    <% if user != current_user %>
+                      <%= button_to(
+                        user.super_admin? ? t("admin.actions.revoke_admin") : t("admin.actions.make_admin"),
+                        toggle_super_admin_admin_user_path(user),
+                        method: :patch,
+                        class: "btn btn-sm #{user.super_admin? ? 'btn-warning' : 'btn-success'}",
+                        data: { turbo_confirm: t("admin.confirmations.change_role") }
+                      ) %>
+                      <%= button_to t("admin.actions.delete"), admin_user_path(user),
+                            method: :delete,
+                            class: "btn btn-sm btn-danger",
+                            data: { turbo_confirm: t("admin.confirmations.delete_user") } %>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("admin.users.index.empty") %></div>
+    <% end %>
+  </div>
+</div>

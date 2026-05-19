@@ -1,0 +1,114 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <div class="text-muted small mb-1">
+        <%= link_to t("admin.navigation.clinics"), admin_clinics_path, class: "text-decoration-none text-muted" %>
+        <i class="bi bi-chevron-right mx-1" style="font-size:0.7rem;"></i>
+        <%= @clinic.name %>
+      </div>
+      <h1 class="page-title"><%= @clinic.name %></h1>
+      <div class="d-flex align-items-center gap-2 mt-1">
+        <%= render "admin/shared/clinic_status_badge", clinic: @clinic %>
+        <span class="text-muted small"><%= t("admin.clinics.show.created", date: @clinic.created_at.strftime("%B %d, %Y")) %></span>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <%= button_to(
+            @clinic.subscribed? ? t("admin.actions.deactivate") : t("admin.actions.activate"),
+            toggle_subscription_admin_clinic_path(@clinic),
+            method: :patch,
+            class: "btn btn-sm #{@clinic.subscribed? ? 'btn-warning' : 'btn-success'}",
+            data: { turbo_confirm: t("admin.confirmations.toggle_subscription") }
+          ) %>
+      <%= button_to t("admin.actions.extend_trial"), extend_trial_admin_clinic_path(@clinic),
+            method: :patch,
+            class: "btn btn-sm btn-outline-secondary",
+            data: { turbo_confirm: t("admin.confirmations.extend_trial") } %>
+      <%= button_to t("admin.actions.delete"), admin_clinic_path(@clinic),
+            method: :delete,
+            class: "btn btn-sm btn-danger",
+            data: { turbo_confirm: t("admin.confirmations.delete_clinic") } %>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <%# ── Clinic details ── %>
+    <div class="col-12 col-lg-6">
+      <div class="content-card h-100">
+        <h2 class="section-title"><%= t("admin.clinics.show.details") %></h2>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.tables.clinic") %></div>
+            <div class="detail-value"><%= @clinic.name %></div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.tables.phone") %></div>
+            <div class="detail-value"><%= @clinic.phone %></div>
+          </div>
+          <div class="detail-item" style="grid-column: 1 / -1;">
+            <div class="detail-label"><%= t("admin.clinics.show.address") %></div>
+            <div class="detail-value"><%= @clinic.address %></div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.tables.owner") %></div>
+            <div class="detail-value">
+              <%= link_to @clinic.user.email, admin_user_path(@clinic.user), class: "text-decoration-none" %>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.tables.plan") %></div>
+            <div class="detail-value"><%= @clinic.plan.presence || "—" %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# ── Subscription & stats ── %>
+    <div class="col-12 col-lg-6">
+      <div class="content-card h-100">
+        <h2 class="section-title"><%= t("admin.clinics.show.subscription") %></h2>
+        <div class="detail-grid mb-4">
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.tables.status") %></div>
+            <div class="detail-value"><%= render "admin/shared/clinic_status_badge", clinic: @clinic %></div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.clinics.show.trial_ends") %></div>
+            <div class="detail-value"><%= @clinic.trial_ends_at&.strftime("%b %d, %Y") || "—" %></div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.clinics.show.billing_customer") %></div>
+            <div class="detail-value" style="font-size:0.9rem;word-break:break-all;"><%= @clinic.billing_customer_id.presence || "—" %></div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.clinics.show.billing_subscription") %></div>
+            <div class="detail-value" style="font-size:0.9rem;word-break:break-all;"><%= @clinic.billing_subscription_id.presence || "—" %></div>
+          </div>
+        </div>
+
+        <h2 class="section-title" style="font-size:1.2rem;"><%= t("admin.clinics.show.usage") %></h2>
+        <div class="row g-3">
+          <div class="col-4">
+            <div class="detail-item text-center">
+              <div class="detail-label"><%= t("admin.clinics.show.doctors_count") %></div>
+              <div class="detail-value" style="font-size:1.8rem;"><%= @doctors_count %></div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="detail-item text-center">
+              <div class="detail-label"><%= t("admin.clinics.show.patients_count") %></div>
+              <div class="detail-value" style="font-size:1.8rem;"><%= @patients_count %></div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="detail-item text-center">
+              <div class="detail-label"><%= t("admin.clinics.show.appointments_count") %></div>
+              <div class="detail-value" style="font-size:1.8rem;"><%= @appointments_count %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

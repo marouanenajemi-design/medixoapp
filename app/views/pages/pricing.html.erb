@@ -1,0 +1,59 @@
+
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">ClinicFlow Subscription</h1>
+      <div class="page-subtitle">
+        <% if current_user&.clinic&.trialing? %>
+          Your free trial is active. <strong><%= current_user.clinic.trial_days_left %> day(s)</strong> left.
+        <% else %>
+          Your free trial has ended. Subscribe to continue using ClinicFlow.
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-card" style="max-width: 760px; margin: 0 auto;">
+    <div class="text-center mb-4">
+      <div style="display:inline-block;background:#dbeafe;color:#1d4ed8;padding:8px 14px;border-radius:999px;font-weight:700;">
+        Simple One Plan
+      </div>
+    </div>
+
+    <h2 class="fw-bold mb-3 text-center">ClinicFlow Monthly</h2>
+
+    <div class="text-center mb-3" style="font-size: 2.6rem; font-weight: 800;">
+      €29<span style="font-size: 1rem; color: #64748b;"> / month</span>
+    </div>
+
+    <p class="text-muted text-center mb-4">
+      One complete plan for clinics that need doctors, patients, appointments,
+      prescriptions, history, and daily management in one place.
+    </p>
+
+    <div class="row">
+      <div class="col-md-10 mx-auto">
+        <ul class="list-unstyled mb-4" style="line-height: 2;">
+          <li>✔ Unlimited doctors</li>
+          <li>✔ Unlimited patients</li>
+          <li>✔ Appointment calendar</li>
+          <li>✔ Prescription management</li>
+          <li>✔ Patient history</li>
+          <li>✔ Clinic logo and settings</li>
+          <li>✔ Secure login</li>
+          <li>✔ 7-day free trial</li>
+        </ul>
+      </div>
+    </div>
+
+    <%= link_to "Subscribe Now",
+          "https://clinicflow-saas.lemonsqueezy.com/checkout/buy/508d92eb-5487-4a44-925d-75a4ecf204a4",
+          class: "btn btn-primary w-100",
+          target: "_blank",
+          rel: "noopener" %>
+
+    <div class="mt-4 text-center text-muted" style="font-size: 0.95rem;">
+      Cancel anytime. Secure checkout powered by Lemon Squeezy.
+    </div>
+  </div>
+</div>

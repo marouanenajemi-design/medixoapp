@@ -1,0 +1,109 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <div class="text-muted small mb-1">
+        <%= link_to t("admin.navigation.users"), admin_users_path, class: "text-decoration-none text-muted" %>
+        <i class="bi bi-chevron-right mx-1" style="font-size:0.7rem;"></i>
+        <%= @user.email %>
+      </div>
+      <h1 class="page-title"><%= @user.email %></h1>
+      <div class="d-flex align-items-center gap-2 mt-1">
+        <% if @user.super_admin? %>
+          <span class="badge-soft badge-admin"><i class="bi bi-shield-fill me-1"></i><%= t("admin.roles.super_admin") %></span>
+        <% else %>
+          <span class="badge-soft badge-user"><%= t("admin.roles.user") %></span>
+        <% end %>
+        <span class="text-muted small"><%= t("admin.users.show.joined", date: @user.created_at.strftime("%B %d, %Y")) %></span>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <% if @user != current_user %>
+        <%= button_to(
+          @user.super_admin? ? t("admin.actions.revoke_admin") : t("admin.actions.make_admin"),
+          toggle_super_admin_admin_user_path(@user),
+          method: :patch,
+          class: "btn btn-sm #{@user.super_admin? ? 'btn-warning' : 'btn-success'}",
+          data: { turbo_confirm: t("admin.confirmations.change_role") }
+        ) %>
+        <%= button_to t("admin.actions.delete"), admin_user_path(@user),
+              method: :delete,
+              class: "btn btn-sm btn-danger",
+              data: { turbo_confirm: t("admin.confirmations.delete_user") } %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <%# ── Account details ── %>
+    <div class="col-12 col-lg-5">
+      <div class="content-card h-100">
+        <h2 class="section-title"><%= t("admin.users.show.account_details") %></h2>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.tables.email") %></div>
+            <div class="detail-value" style="font-size:0.95rem;word-break:break-all;"><%= @user.email %></div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.tables.role") %></div>
+            <div class="detail-value">
+              <% if @user.super_admin? %>
+                <span class="badge-soft badge-admin"><%= t("admin.roles.super_admin") %></span>
+              <% else %>
+                <span class="badge-soft badge-user"><%= t("admin.roles.user") %></span>
+              <% end %>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.tables.joined") %></div>
+            <div class="detail-value"><%= @user.created_at.strftime("%b %d, %Y") %></div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label"><%= t("admin.users.show.last_updated") %></div>
+            <div class="detail-value"><%= @user.updated_at.strftime("%b %d, %Y") %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# ── Clinic details ── %>
+    <div class="col-12 col-lg-7">
+      <div class="content-card h-100">
+        <h2 class="section-title"><%= t("admin.users.show.clinic_info") %></h2>
+        <% if @clinic %>
+          <div class="detail-grid mb-4">
+            <div class="detail-item">
+              <div class="detail-label"><%= t("admin.tables.clinic") %></div>
+              <div class="detail-value"><%= link_to @clinic.name, admin_clinic_path(@clinic), class: "text-decoration-none" %></div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label"><%= t("admin.tables.status") %></div>
+              <div class="detail-value"><%= render "admin/shared/clinic_status_badge", clinic: @clinic %></div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label"><%= t("admin.tables.plan") %></div>
+              <div class="detail-value"><%= @clinic.plan.presence || "—" %></div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label"><%= t("admin.clinics.show.trial_ends") %></div>
+              <div class="detail-value"><%= @clinic.trial_ends_at&.strftime("%b %d, %Y") || "—" %></div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label"><%= t("admin.tables.phone") %></div>
+              <div class="detail-value"><%= @clinic.phone %></div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label"><%= t("admin.clinics.show.doctors_count") %></div>
+              <div class="detail-value"><%= @clinic.doctors.count %></div>
+            </div>
+          </div>
+          <div class="d-flex gap-2">
+            <%= link_to t("admin.actions.view_clinic"), admin_clinic_path(@clinic), class: "btn btn-sm btn-primary" %>
+          </div>
+        <% else %>
+          <div class="empty-state"><%= t("admin.users.show.no_clinic") %></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

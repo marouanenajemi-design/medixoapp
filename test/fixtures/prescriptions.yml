@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  prescription_date: 2026-03-10
+  diagnosis: MyText
+  notes: MyText
+  clinic: one
+  doctor: one
+  patient: one
+
+two:
+  prescription_date: 2026-03-10
+  diagnosis: MyText
+  notes: MyText
+  clinic: two
+  doctor: two
+  patient: two

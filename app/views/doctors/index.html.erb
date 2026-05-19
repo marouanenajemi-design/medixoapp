@@ -1,0 +1,72 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("doctors.index.title") %></h1>
+      <div class="page-subtitle"><%= t("doctors.index.subtitle") %></div>
+    </div>
+
+    <div class="page-actions">
+      <%= link_to t("shared.actions.add_doctor"), new_doctor_path, class: "btn btn-primary action-btn" %>
+    </div>
+  </div>
+
+  <div class="content-card" data-controller="filter-list">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <h2 class="section-title mb-0"><%= t("doctors.index.list_title") %></h2>
+
+      <div class="search-box">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="<%= t("doctors.index.search_placeholder") %>"
+          data-filter-list-target="input"
+          data-action="input->filter-list#filter"
+        >
+      </div>
+    </div>
+
+    <% if @doctors.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("shared.tables.name") %></th>
+              <th><%= t("doctors.fields.specialty") %></th>
+              <th><%= t("shared.tables.phone") %></th>
+              <th><%= t("doctors.fields.working_hours") %></th>
+              <th><%= t("shared.tables.actions") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @doctors.each do |doctor| %>
+              <tr data-filter-list-target="row" data-filter-list-searchable-value="<%= doctor.name.downcase %>">
+                <td class="fw-semibold" data-label="<%= t("shared.tables.name") %>"><%= doctor.name %></td>
+                <td data-label="<%= t("doctors.fields.specialty") %>"><%= doctor.specialty %></td>
+                <td data-label="<%= t("shared.tables.phone") %>"><%= doctor.phone %></td>
+                <td data-label="<%= t("doctors.fields.working_hours") %>">
+                  <%= formatted_time(doctor.work_start) %> -
+                  <%= formatted_time(doctor.work_end) %>
+                </td>
+                <td class="actions-cell" data-label="<%= t("shared.tables.actions") %>">
+                  <div class="action-group">
+                    <%= link_to t("shared.actions.edit"), edit_doctor_path(doctor), class: "btn btn-sm btn-warning" %>
+                    <%= button_to t("shared.actions.delete"), doctor_path(doctor),
+                          method: :delete,
+                          class: "btn btn-sm btn-danger",
+                          data: { turbo_confirm: t("shared.confirmations.delete") } %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" style="display:none;" data-filter-list-target="empty">
+        <%= t("doctors.index.search_empty") %>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("doctors.index.empty") %></div>
+    <% end %>
+  </div>
+</div>

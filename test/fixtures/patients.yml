@@ -1,0 +1,15 @@
+one:
+  name: John Smith
+  phone: "555-3000"
+  age: 30
+  gender: Male
+  notes: Follow-up patient
+  clinic: one
+
+two:
+  name: Jane Doe
+  phone: "555-4000"
+  age: 42
+  gender: Female
+  notes: New patient
+  clinic: two

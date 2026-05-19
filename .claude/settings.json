@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bundle exec *)",
+      "Bash(unzip -l /home/liam/clinicflow_final_delivery.zip)",
+      "Bash(rm -f /home/liam/clinicflow_final_delivery_20260515.zip)",
+      "Bash(zip -r clinicflow_final_delivery_20260515.zip clinic_saas --exclude clinic_saas/.git --exclude clinic_saas/.git/* --exclude clinic_saas/.claude --exclude clinic_saas/.claude/* --exclude clinic_saas/.ruby-lsp --exclude clinic_saas/.ruby-lsp/* --exclude clinic_saas/.idea --exclude clinic_saas/.idea/* --exclude clinic_saas/.vscode --exclude clinic_saas/.vscode/* --exclude clinic_saas/log/* --exclude clinic_saas/tmp/* --exclude clinic_saas/storage/* --exclude clinic_saas/node_modules --exclude clinic_saas/node_modules/* --exclude clinic_saas/config/master.key --exclude clinic_saas/config/master.key.bak --exclude clinic_saas/config/credentials.yml.enc.bak --exclude clinic_saas/*.bak --exclude clinic_saas/**/*.bak --exclude clinic_saas/.env --exclude clinic_saas/.env.* --exclude clinic_saas/heroku --exclude clinic_saas/heroku/* --exclude clinic_saas/heroku-linux-x64.tar.gz --exclude clinic_saas/build_delivery.sh --exclude clinic_saas/DELIVERY_CHECKLIST.txt --exclude clinic_saas/DOMAIN_TRANSFER_CHECKLIST.txt --exclude clinic_saas/FLIPPA_BUYER_MESSAGE.txt --exclude clinic_saas/README_DELIVERY.txt --exclude clinic_saas/heroku_*.log --exclude clinic_saas/clinicflow_final_delivery*.zip)"
+    ],
+    "additionalDirectories": [
+      "/home/liam"
+    ]
+  }
+}

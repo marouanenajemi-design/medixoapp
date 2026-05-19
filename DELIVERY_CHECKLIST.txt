@@ -1,0 +1,182 @@
+================================================================================
+  CLINICFLOW — BUYER DELIVERY CHECKLIST
+  Complete this checklist before and after receiving the package
+================================================================================
+
+SELLER: Marouane Najemi
+BUYER:  [Buyer Name]
+DATE:   [Delivery Date]
+PLATFORM: Flippa
+
+================================================================================
+  SECTION A — WHAT THE BUYER RECEIVES
+================================================================================
+
+  [ ] Full Ruby on Rails source code (ZIP archive)
+  [ ] README_DELIVERY.txt (this document's companion — full setup guide)
+  [ ] DELIVERY_CHECKLIST.txt (this file)
+  [ ] DOMAIN_TRANSFER_CHECKLIST.txt (domain handover guide)
+  [ ] Database schema and all migrations
+  [ ] Seed data file for initial setup
+  [ ] Gemfile and Gemfile.lock (exact dependency versions)
+  [ ] Procfile (Heroku process configuration)
+  [ ] Dockerfile (container deployment option)
+  [ ] All view templates, controllers, models
+  [ ] Asset files (stylesheets, JavaScript, images)
+  [ ] Multilingual locale files (English + French)
+  [ ] Domain name transfer (EPP/Auth code provided separately)
+
+================================================================================
+  SECTION B — WHAT IS NOT INCLUDED (AND WHY)
+================================================================================
+
+  [ ] config/master.key
+      Reason: Industry standard — each deployment generates its own key.
+              See README_DELIVERY.txt Section 10 for instructions.
+
+  [ ] .env files / API keys
+      Reason: All secrets are loaded from environment variables.
+              See README_DELIVERY.txt Section 3 for the full list.
+
+  [ ] Heroku account access
+      Reason: Not included in sale. Buyer deploys to their own account.
+
+  [ ] GitHub repository access
+      Reason: Not included in sale. Source code delivered as ZIP.
+
+  [ ] Uploaded user/patient files
+      Reason: Patient data is private and was not part of the sale.
+
+  [ ] Production database dump
+      Reason: Contains personal health data — cannot be transferred legally.
+
+================================================================================
+  SECTION C — SELLER PRE-DELIVERY CHECKLIST
+================================================================================
+
+  Complete these steps BEFORE sending the ZIP to the buyer.
+
+  SECURITY
+  [ ] Verified config/master.key is NOT in the ZIP
+  [ ] Verified config/master.key.bak is NOT in the ZIP
+  [ ] Verified config/credentials.yml.enc.bak is NOT in the ZIP
+  [ ] Verified tmp/local_secret.txt is NOT in the ZIP
+  [ ] Verified heroku/ directory is NOT in the ZIP (275 MB, personal Heroku CLI)
+  [ ] Verified heroku-linux-x64.tar.gz is NOT in the ZIP
+  [ ] Verified heroku_build.log is NOT in the ZIP
+  [ ] Verified heroku_push.log is NOT in the ZIP
+  [ ] Verified storage/ uploaded files are NOT in the ZIP
+  [ ] Verified .ruby-lsp/ is NOT in the ZIP
+  [ ] Verified log/development.log is NOT in the ZIP (or is empty)
+  [ ] Verified no hardcoded API keys exist in source code
+
+  CLEANUP
+  [ ] Ran: rm -rf tmp/cache tmp/pids tmp/sockets tmp/storage log/*.log
+  [ ] Ran: rm -f tmp/local_secret.txt tmp/restart.txt
+  [ ] Source code verified to boot locally (bin/rails server)
+  [ ] db/schema.rb is current (matches all migrations)
+  [ ] README_DELIVERY.txt is included and accurate
+
+  DOMAIN
+  [ ] Domain unlocked at registrar
+  [ ] EPP/Auth code obtained
+  [ ] Private WHOIS protection temporarily disabled (required for transfer)
+  [ ] Auth code sent to buyer via secure channel (not email)
+
+================================================================================
+  SECTION D — BUYER SETUP CHECKLIST
+================================================================================
+
+  Complete these steps after receiving the package.
+
+  ENVIRONMENT SETUP
+  [ ] Installed Ruby 3.2.3 (rbenv recommended)
+  [ ] Installed PostgreSQL 14+
+  [ ] Installed Bundler: gem install bundler
+  [ ] Ran: bundle install
+
+  DATABASE
+  [ ] Created PostgreSQL user and database
+  [ ] Ran: bundle exec rails db:migrate
+  [ ] (Optional) Ran: bundle exec rails db:seed
+
+  CREDENTIALS (REQUIRED)
+  [ ] Removed any existing config/credentials.yml.enc
+  [ ] Generated new master key: EDITOR="nano" bundle exec rails credentials:edit
+  [ ] Saved RAILS_MASTER_KEY value securely
+  [ ] Confirmed config/master.key is in .gitignore
+
+  ENVIRONMENT VARIABLES
+  [ ] Set RAILS_MASTER_KEY
+  [ ] Set SECRET_KEY_BASE  (bundle exec rails secret)
+  [ ] Set DATABASE_URL or CLINIC_SAAS_DATABASE_PASSWORD
+  [ ] Set APP_HOST
+  [ ] Set LEMON_SQUEEZY_WEBHOOK_SECRET (from new LemonSqueezy account)
+  [ ] Set SMTP_ADDRESS, SMTP_USERNAME, SMTP_PASSWORD, SMTP_DOMAIN
+
+  LOCAL TEST
+  [ ] App starts with: bin/rails server
+  [ ] Can register a new user at http://localhost:3000
+  [ ] Can create a clinic, add doctors, patients, appointments
+  [ ] Calendar view loads at /calendar
+  [ ] Chatbot responds at /chatbot
+
+  PRODUCTION DEPLOYMENT (HEROKU EXAMPLE)
+  [ ] Created Heroku app
+  [ ] Added Heroku Postgres add-on
+  [ ] Set all Config Vars in Heroku dashboard
+  [ ] Ran: git push heroku main
+  [ ] Ran: heroku run rails db:migrate
+  [ ] App is live and HTTPS is enforced
+  [ ] Tested registration and login on live URL
+
+  BILLING (LEMONSQUEEZY)
+  [ ] Created LemonSqueezy account
+  [ ] Created product and pricing plan
+  [ ] Configured webhook: POST https://your-domain.com/webhooks/lemonsqueezy
+  [ ] Enabled events: subscription_created, subscription_updated,
+                      subscription_cancelled, subscription_expired
+  [ ] Set LEMON_SQUEEZY_WEBHOOK_SECRET from dashboard
+  [ ] Tested with LemonSqueezy's "Send test event" feature
+
+  EMAIL
+  [ ] Configured SMTP provider (SendGrid recommended)
+  [ ] Verified password reset email is delivered
+  [ ] Verified confirmation email is delivered (if enabled)
+
+  DOMAIN
+  [ ] Domain transfer initiated at new registrar
+  [ ] Received and confirmed domain at new registrar
+  [ ] Updated DNS records to point to your hosting platform
+  [ ] Verified HTTPS certificate is issued (Let's Encrypt / Heroku SSL)
+  [ ] Updated APP_HOST environment variable to match new domain
+  [ ] Tested app at custom domain
+
+  SECURITY HARDENING
+  [ ] Enabled 2FA on Heroku account
+  [ ] Enabled 2FA on LemonSqueezy account
+  [ ] Enabled 2FA on SMTP provider account
+  [ ] Enabled 2FA on domain registrar
+  [ ] Rotated all credentials (generated your own keys — never reuse seller's)
+  [ ] Set up Heroku access logging or alerting
+  [ ] Verified production logs do not expose PII
+
+================================================================================
+  SECTION E — SUPPORT PERIOD
+================================================================================
+
+  The seller provides [X days] of post-sale technical support via Flippa
+  messaging for questions about the source code setup.
+
+  Support covers:
+    - Setup questions for items documented in README_DELIVERY.txt
+    - Clarification on code structure and features
+
+  Support does NOT cover:
+    - Customisation or new feature development
+    - Third-party service setup (Heroku, SendGrid, LemonSqueezy)
+    - Hosting or infrastructure configuration beyond what is documented
+
+================================================================================
+  END OF DELIVERY CHECKLIST
+================================================================================

@@ -1,0 +1,526 @@
+fr:
+  app:
+    title: "ClinicFlow"
+    name: "ClinicFlow"
+    default_clinic_name: "ClinicFlow"
+  locales:
+    en: "EN"
+    fr: "FR"
+  navigation:
+    dashboard: "Tableau de bord"
+    doctors: "Médecins"
+    patients: "Patients"
+    prescriptions: "Ordonnances"
+    appointments: "Rendez-vous"
+    calendar: "Calendrier"
+
+    chatbot: "Assistant médicaments"
+
+
+    clinic_settings: "Paramètres du cabinet"
+  layout:
+    navigation:
+      open: "Ouvrir la navigation"
+      close: "Fermer la navigation"
+    sidebar:
+      panel: "Espace cabinet"
+    topbar:
+      subtitle: "Tableau de bord des rendez-vous"
+    auth:
+      badge: "La gestion du cabinet en toute simplicité"
+      title: "Une manière moderne de gérer médecins, patients et rendez-vous."
+      description: "Organisez votre cabinet avec un tableau de bord clair, une planification plus rapide, le suivi des patients et un flux de travail professionnel conçu pour les cabinets en croissance."
+      footer: "Conçu pour les cabinets qui recherchent une expérience simple, claire et professionnelle."
+      features:
+        scheduling:
+          title: "Planification intelligente"
+          description: "Gérez les rendez-vous clairement et évitez les conflits au quotidien."
+        patients:
+          title: "Gestion des patients"
+          description: "Gardez les informations des patients bien organisées dans un espace simple et sécurisé."
+        doctors:
+          title: "Profils médecins"
+          description: "Ajoutez les spécialités, horaires de travail et gérez chaque médecin de façon professionnelle."
+        dashboard:
+          title: "Tableau de bord clair"
+          description: "Consultez instantanément les rendez-vous, médecins et patients dans une interface moderne."
+  forms:
+    errors_heading: "Veuillez corriger ces erreurs :"
+  flash:
+    clinics:
+      setup_required: "Veuillez configurer votre cabinet avant de continuer."
+      already_exists: "Votre cabinet est déjà configuré."
+      created: "Cabinet créé avec succès."
+      missing: "Veuillez d'abord créer votre cabinet."
+      updated: "Cabinet mis à jour avec succès."
+    doctors:
+      created: "Médecin ajouté avec succès."
+      updated: "Médecin mis à jour avec succès."
+      deleted: "Médecin supprimé avec succès."
+    patients:
+      created: "Patient ajouté avec succès."
+      updated: "Patient mis à jour avec succès."
+      deleted: "Patient supprimé avec succès."
+    appointments:
+      created: "Rendez-vous créé avec succès."
+      updated: "Rendez-vous mis à jour avec succès."
+      deleted: "Rendez-vous supprimé avec succès."
+    prescriptions:
+      created: "Ordonnance créée avec succès."
+      updated: "Ordonnance mise à jour avec succès."
+      deleted: "Ordonnance supprimée avec succès."
+  shared:
+    actions:
+      edit: "Modifier"
+      delete: "Supprimer"
+      print: "Imprimer"
+      view: "Voir"
+      open: "Ouvrir"
+      remove: "Retirer"
+      history: "Historique"
+      logout: "Déconnexion"
+      show: "Afficher"
+      hide: "Masquer"
+      add_doctor: "Ajouter un médecin"
+      add_patient: "Ajouter un patient"
+      add_medicine: "Ajouter un médicament"
+      new_appointment: "Nouveau rendez-vous"
+      new_prescription: "Nouvelle ordonnance"
+      save_doctor: "Enregistrer le médecin"
+      save_patient: "Enregistrer le patient"
+      save_appointment: "Enregistrer le rendez-vous"
+      save_prescription: "Enregistrer l'ordonnance"
+      create_clinic: "Créer le cabinet"
+      update_clinic: "Mettre à jour le cabinet"
+    confirmations:
+      delete: "Êtes-vous sûr ?"
+    placeholders:
+      phone: "Numéro de téléphone"
+    tables:
+      name: "Nom"
+      phone: "Téléphone"
+      date: "Date"
+      time: "Heure"
+      status: "Statut"
+      actions: "Actions"
+      action: "Action"
+      patient: "Patient"
+      doctor: "Médecin"
+      notes: "Notes"
+  dashboard:
+    index:
+      title: "Tableau de bord"
+      subtitle: "Suivez médecins, patients et rendez-vous au même endroit."
+      recent_appointments: "Rendez-vous récents"
+
+      upcoming_appointments: "Rendez-vous à venir"
+      empty_recent: "Aucun rendez-vous récent pour le moment."
+      empty_upcoming: "Aucun rendez-vous à venir planifié."
+      status_breakdown:
+        title: "Statut des rendez-vous"
+        subtitle: "Totaux actuels par statut"
+      stats:
+        doctors: "Médecins"
+        patients: "Patients"
+        total_appointments: "Total des rendez-vous"
+
+      empty: "Aucun rendez-vous récent pour le moment."
+      stats:
+        doctors: "Médecins"
+        patients: "Patients"
+
+        today_appointments: "Rendez-vous du jour"
+  doctors:
+    index:
+      title: "Médecins"
+      subtitle: "Gérez les profils, spécialités et horaires des médecins."
+      list_title: "Liste des médecins"
+      search_placeholder: "Rechercher un médecin par nom..."
+      search_empty: "Aucun médecin trouvé pour cette recherche."
+      empty: "Aucun médecin ajouté pour le moment."
+    new:
+      title: "Ajouter un médecin"
+      subtitle: "Créez un nouveau profil médecin pour votre cabinet."
+    edit:
+      title: "Modifier le médecin"
+      subtitle: "Mettez à jour les informations et l'horaire du médecin."
+    form:
+      placeholders:
+        name: "Nom complet du médecin"
+        specialty: "ex. Cardiologie"
+    fields:
+      specialty: "Spécialité"
+      working_hours: "Horaires de travail"
+  patients:
+    index:
+      title: "Patients"
+      subtitle: "Gérez facilement les dossiers patients et leurs coordonnées."
+      list_title: "Liste des patients"
+      search_placeholder: "Rechercher un patient par nom..."
+      search_empty: "Aucun patient trouvé pour cette recherche."
+      empty: "Aucun patient ajouté pour le moment."
+    new:
+      title: "Ajouter un patient"
+      subtitle: "Créez un profil patient et enregistrez ses coordonnées."
+    edit:
+      title: "Modifier le patient"
+      subtitle: "Mettez à jour les informations et notes du patient."
+    history:
+      title: "Historique du patient"
+      back: "Retour aux patients"
+      empty_appointments: "Aucun rendez-vous trouvé pour ce patient."
+      empty_prescriptions: "Aucune ordonnance trouvée pour ce patient."
+    form:
+      gender_prompt: "Sélectionnez le genre"
+      placeholders:
+        name: "Nom complet du patient"
+        age: "Âge"
+        notes: "Ajoutez ici les notes du patient..."
+    fields:
+      age: "Âge"
+      gender: "Genre"
+    genders:
+      male: "Homme"
+      female: "Femme"
+  appointments:
+    statuses:
+      pending: "En attente"
+      confirmed: "Confirmé"
+      completed: "Terminé"
+      cancelled: "Annulé"
+    index:
+      title: "Rendez-vous"
+      subtitle: "Suivez clairement toutes les réservations et statuts des rendez-vous."
+      list_title: "Liste des rendez-vous"
+      search_placeholder: "Rechercher par patient, médecin, statut ou date..."
+      search_empty: "Aucun rendez-vous trouvé pour cette recherche."
+      empty: "Aucun rendez-vous ajouté pour le moment."
+    calendar:
+      title: "Calendrier"
+      subtitle: "Visualisez tous les rendez-vous dans une vue calendrier claire."
+      event_title: "%{patient} - Dr %{doctor}"
+      buttons:
+        today: "Aujourd'hui"
+        month: "Mois"
+        week: "Semaine"
+        day: "Jour"
+    new:
+      title: "Nouveau rendez-vous"
+      subtitle: "Planifiez un nouveau rendez-vous patient."
+    edit:
+      title: "Modifier le rendez-vous"
+      subtitle: "Mettez à jour les détails et le statut du rendez-vous."
+    form:
+      prompts:
+        doctor: "Sélectionnez un médecin"
+        patient: "Sélectionnez un patient"
+        status: "Sélectionnez un statut"
+      placeholders:
+        notes: "Ajoutez des notes sur le rendez-vous..."
+  prescriptions:
+    index:
+      title: "Ordonnances"
+      subtitle: "Créez et gérez les ordonnances médicales des patients."
+      empty: "Aucune ordonnance ajoutée pour le moment."
+    show:
+      title: "Ordonnance"
+      subtitle: "Vérifiez les détails de l'ordonnance avant impression."
+      medicines: "Médicaments"
+    new:
+      title: "Nouvelle ordonnance"
+      subtitle: "Créez une ordonnance pour un patient."
+    edit:
+      title: "Modifier l'ordonnance"
+      subtitle: "Mettez à jour les détails et médicaments de l'ordonnance."
+    print:
+      title: "Ordonnance"
+      signature: "Signature"
+    form:
+      medicines: "Médicaments"
+
+      medicines_hint: "Commencez avec une ligne de médicament. Laissez une ligne complètement vide pour l'ignorer, ou retirez-la si elle n'est pas nécessaire."
+      medicine_item: "Élément médicament"
+      medicine_required_hint: "Le nom du médicament est requis si cette ligne est utilisée."
+
+      medicine_item: "Élément médicament"
+
+      prompts:
+        doctor: "Sélectionnez un médecin"
+        patient: "Sélectionnez un patient"
+      placeholders:
+        diagnosis: "Diagnostic..."
+        notes: "Notes générales..."
+        medicine: "Nom du médicament"
+        dosage: "ex. 1 comprimé"
+        frequency: "3/jour"
+        duration: "5 jours"
+        instructions: "Après les repas, avant le coucher..."
+    fields:
+      diagnosis: "Diagnostic"
+      medicine: "Médicament"
+      dosage: "Dosage"
+      frequency: "Fréquence"
+      duration: "Durée"
+      instructions: "Instructions"
+  clinics:
+    new:
+      title: "Créez votre cabinet"
+      subtitle: "Ajoutez les informations de votre cabinet pour continuer."
+    edit:
+      title: "Paramètres du cabinet"
+      subtitle: "Mettez à jour les informations, coordonnées et le logo de votre cabinet."
+      current_logo: "Logo actuel"
+    form:
+      placeholders:
+        name: "Entrez le nom du cabinet"
+        address: "Entrez l'adresse du cabinet"
+    fields:
+      name: "Nom du cabinet"
+      logo: "Logo du cabinet"
+  auth:
+    labels:
+      email: "E-mail"
+      password: "Mot de passe"
+      password_confirmation: "Confirmez le mot de passe"
+      remember_me: "Se souvenir de moi"
+    placeholders:
+      email: "Saisissez votre e-mail"
+      password: "Saisissez votre mot de passe"
+      new_password: "Créez un mot de passe"
+      password_confirmation: "Confirmez votre mot de passe"
+    sessions:
+      new:
+        logo: "Bon retour"
+        title: "Connectez-vous à ClinicFlow"
+        subtitle: "Accédez au tableau de bord de votre cabinet et gérez vos rendez-vous facilement."
+        submit: "Connexion"
+        create_account: "Créer un compte"
+        forgot_password: "Mot de passe oublié ?"
+        admin_prompt: "Vous êtes super administrateur ?"
+        admin_login: "Connexion admin →"
+    registrations:
+      new:
+        logo: "Commencer"
+        title: "Créez votre compte ClinicFlow"
+        subtitle: "Mettez en place un système clair et professionnel pour votre cabinet en quelques étapes."
+        password_hint: "Utilisez au moins 6 caractères."
+        submit: "Créer le compte"
+        login_link: "Vous avez déjà un compte ? Connectez-vous"
+    passwords:
+      new:
+        logo: "Récupération du mot de passe"
+        title: "Réinitialisez votre mot de passe"
+        subtitle: "Saisissez votre adresse e-mail et nous vous enverrons les instructions de réinitialisation."
+        submit: "Envoyer les instructions"
+        back_to_login: "Retour à la connexion"
+  print_layout:
+    title: "Imprimer l'ordonnance"
+  activerecord:
+    attributes:
+      clinic:
+        name: "Nom du cabinet"
+        address: "Adresse"
+        phone: "Téléphone"
+        logo: "Logo du cabinet"
+      doctor:
+        name: "Nom"
+        specialty: "Spécialité"
+        phone: "Téléphone"
+        work_start: "Début"
+        work_end: "Fin"
+      patient:
+        name: "Nom"
+        phone: "Téléphone"
+        age: "Âge"
+        gender: "Genre"
+        notes: "Notes"
+      appointment:
+        appointment_date: "Date du rendez-vous"
+        appointment_time: "Heure du rendez-vous"
+        status: "Statut"
+        notes: "Notes"
+      prescription:
+        prescription_date: "Date de l'ordonnance"
+        diagnosis: "Diagnostic"
+        notes: "Notes"
+      prescription_item:
+        medicine_name: "Médicament"
+        dosage: "Dosage"
+        frequency: "Fréquence"
+        duration: "Durée"
+        instructions: "Instructions"
+
+
+  errors:
+    models:
+      appointment:
+        attributes:
+          appointment_time:
+            doctor_double_booked: "Ce médecin a déjà un rendez-vous à cette date et à cette heure."
+            outside_doctor_working_hours: "doit être comprise dans les heures de travail du médecin sélectionné"
+
+
+  chatbot:
+    title: "Assistant d'information sur les médicaments"
+    subtitle: "Posez une question sur un nom de médicament pour obtenir des informations générales."
+    disclaimer_title: "Avertissement de sécurité important"
+    disclaimer_body: "Ce chatbot fournit uniquement des informations générales. Il ne remplace pas un médecin ou un pharmacien. Il ne pose pas de diagnostic, ne prescrit pas de traitement et ne fournit pas de posologie personnalisée. En cas de symptômes urgents, contactez immédiatement les services d'urgence locaux."
+    form:
+      label: "Question sur un médicament"
+      placeholder: "Exemple : À quoi sert l'ibuprofène ?"
+      submit: "Obtenir des informations"
+      scope_hint: "Informations générales uniquement — pas de diagnostic ni de posologie personnalisée."
+    response:
+      title: "Réponse du chatbot"
+      medicine_name: "Médicament"
+      description: "Description générale"
+      common_uses: "Usages courants"
+      general_warnings: "Avertissements généraux"
+      common_side_effects: "Effets secondaires courants"
+    messages:
+      empty_query: "Veuillez saisir une question avec un nom de médicament."
+      ask_medicine_name: "Veuillez inclure un nom de médicament (par exemple : ibuprofène, paracétamol, cétirizine ou amoxicilline)."
+
+
+  admin:
+    access_denied: "Accès refusé. Droits super administrateur requis."
+    layout:
+      title: "Panneau Admin"
+      badge: "Super Admin"
+      nav_label: "Gestion"
+      topbar_title: "ClinicFlow Admin"
+      topbar_subtitle: "Panneau d'administration de la plateforme"
+    navigation:
+      dashboard: "Tableau de bord"
+      users: "Utilisateurs"
+      clinics: "Cabinets"
+      doctors: "Médecins"
+      patients: "Patients"
+      appointments: "Rendez-vous"
+      back_to_app: "Retour à l'app"
+    roles:
+      super_admin: "Super Admin"
+      user: "Utilisateur"
+    tables:
+      email: "Email"
+      clinic: "Cabinet"
+      owner: "Propriétaire"
+      plan: "Offre"
+      status: "Statut"
+      role: "Rôle"
+      joined: "Inscrit le"
+      registered: "Enregistré le"
+      actions: "Actions"
+      subscription: "Abonnement"
+      trial_ends: "Fin de l'essai"
+      phone: "Téléphone"
+      hours: "Horaires"
+    actions:
+      view: "Voir"
+      delete: "Supprimer"
+      make_admin: "Rendre Admin"
+      revoke_admin: "Révoquer Admin"
+      activate: "Activer"
+      deactivate: "Désactiver"
+      extend_trial: "+ 7 jours d'essai"
+      view_clinic: "Voir le cabinet"
+    confirmations:
+      change_role: "Êtes-vous sûr de vouloir modifier le rôle de cet utilisateur ?"
+      delete_user: "Ceci supprimera définitivement l'utilisateur et son cabinet. Confirmer ?"
+      delete_clinic: "Ceci supprimera définitivement ce cabinet et toutes ses données. Confirmer ?"
+      toggle_subscription: "Modifier le statut d'abonnement de ce cabinet ?"
+      extend_trial: "Ajouter 7 jours à l'essai de ce cabinet ?"
+    dashboard:
+      title: "Vue d'ensemble"
+      subtitle: "Surveillez les cabinets, utilisateurs et l'activité sur ClinicFlow."
+      recent_users: "Inscriptions récentes"
+      recent_clinics: "Cabinets récents"
+      view_all: "Voir tout"
+      no_users: "Aucun utilisateur."
+      no_clinics: "Aucun cabinet."
+      stats:
+        users: "Utilisateurs"
+        clinics: "Cabinets"
+        doctors: "Médecins"
+        patients: "Patients"
+        appointments: "Rendez-vous"
+        subscribed: "Abonnés"
+        trialing: "En essai"
+        expired: "Expirés"
+        active_subscriptions: "Cabinets payants"
+        on_trial: "En période d'essai"
+        no_access: "Sans accès"
+    users:
+      cannot_change_own_role: "Vous ne pouvez pas modifier votre propre rôle."
+      cannot_delete_self: "Vous ne pouvez pas supprimer votre propre compte."
+      role_updated: "Rôle mis à jour pour %{email}."
+      deleted: "Utilisateur %{email} supprimé."
+      index:
+        title: "Utilisateurs"
+        subtitle: "Gérez tous les utilisateurs inscrits et leurs privilèges."
+        list_title: "Tous les utilisateurs"
+        empty: "Aucun utilisateur inscrit."
+      show:
+        account_details: "Détails du compte"
+        clinic_info: "Informations du cabinet"
+        joined: "Inscrit le %{date}"
+        last_updated: "Dernière mise à jour"
+        no_clinic: "Cet utilisateur n'a pas encore créé de cabinet."
+    clinics:
+      activated: "activé"
+      deactivated: "désactivé"
+      subscription_updated: "Abonnement %{status} avec succès."
+      trial_extended: "Essai prolongé de 7 jours."
+      deleted: "Cabinet \"%{name}\" supprimé."
+      status:
+        subscribed: "Abonné"
+        trialing: "Essai"
+        expired: "Expiré"
+      index:
+        title: "Cabinets"
+        subtitle: "Consultez et gérez tous les cabinets sur la plateforme."
+        list_title: "Tous les cabinets"
+        empty: "Aucun cabinet enregistré."
+      show:
+        details: "Détails du cabinet"
+        subscription: "Abonnement & facturation"
+        usage: "Statistiques d'utilisation"
+        address: "Adresse"
+        trial_ends: "Fin d'essai"
+        billing_customer: "ID client facturation"
+        billing_subscription: "ID abonnement facturation"
+        created: "Créé le %{date}"
+        doctors_count: "Médecins"
+        patients_count: "Patients"
+        appointments_count: "Rendez-vous"
+    doctors:
+      index:
+        title: "Médecins"
+        subtitle: "Tous les médecins de tous les cabinets."
+        list_title: "Tous les médecins"
+        empty: "Aucun médecin enregistré."
+    patients:
+      index:
+        title: "Patients"
+        subtitle: "Tous les patients de tous les cabinets."
+        list_title: "Tous les patients"
+        empty: "Aucun patient enregistré."
+    appointments:
+      index:
+        title: "Rendez-vous"
+        subtitle: "Tous les rendez-vous de tous les cabinets."
+        list_title: "Tous les rendez-vous"
+        empty: "Aucun rendez-vous enregistré."
+    sessions:
+      sign_in_required: "Veuillez vous connecter pour accéder au panneau admin."
+      signed_in: "Bienvenue, Super Admin."
+      signed_out: "Vous avez été déconnecté du panneau admin."
+      invalid_credentials: "Email ou mot de passe invalide."
+      not_super_admin: "Accès refusé. Ce compte n'a pas les privilèges super administrateur."
+      new:
+        page_title: "Connexion Super Admin"
+        title: "Connexion Super Admin"
+        subtitle: "Connectez-vous pour accéder au panneau d'administration ClinicFlow."
+        submit: "Connexion en tant qu'Admin"
+        clinic_login_prompt: "Propriétaire d'un cabinet ?"
+        back_to_clinic_login: "Connexion à votre cabinet →"

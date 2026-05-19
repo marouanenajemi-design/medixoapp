@@ -1,0 +1,15 @@
+one:
+  name: Dr. Adams
+  specialty: Cardiology
+  phone: "555-1000"
+  work_start: "09:00:00"
+  work_end: "17:00:00"
+  clinic: one
+
+two:
+  name: Dr. Baker
+  specialty: Dermatology
+  phone: "555-2000"
+  work_start: "10:00:00"
+  work_end: "18:00:00"
+  clinic: two

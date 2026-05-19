@@ -1,0 +1,51 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("prescriptions.index.title") %></h1>
+      <div class="page-subtitle"><%= t("prescriptions.index.subtitle") %></div>
+    </div>
+
+    <div class="page-actions">
+      <%= link_to t("shared.actions.new_prescription"), new_prescription_path, class: "btn btn-primary action-btn" %>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <% if @prescriptions.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("shared.tables.patient") %></th>
+              <th><%= t("shared.tables.doctor") %></th>
+              <th><%= t("shared.tables.date") %></th>
+              <th><%= t("shared.tables.actions") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @prescriptions.each do |prescription| %>
+              <tr>
+                <td class="fw-semibold" data-label="<%= t("shared.tables.patient") %>"><%= prescription.patient.name %></td>
+                <td data-label="<%= t("shared.tables.doctor") %>"><%= prescription.doctor.name %></td>
+                <td data-label="<%= t("shared.tables.date") %>"><%= prescription.prescription_date %></td>
+                <td class="actions-cell" data-label="<%= t("shared.tables.actions") %>">
+                  <div class="action-group">
+                    <%= link_to t("shared.actions.view"), prescription_path(prescription), class: "btn btn-sm btn-primary" %>
+                    <%= link_to t("shared.actions.edit"), edit_prescription_path(prescription), class: "btn btn-sm btn-warning" %>
+                    <%= link_to t("shared.actions.print"), print_prescription_path(prescription), class: "btn btn-sm btn-outline-secondary", target: "_blank" %>
+                    <%= link_to t("shared.actions.delete"),
+                          prescription_path(prescription),
+                          data: { turbo_method: :delete, turbo_confirm: t("shared.confirmations.delete") },
+                          class: "btn btn-sm btn-danger" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("prescriptions.index.empty") %></div>
+    <% end %>
+  </div>
+</div>

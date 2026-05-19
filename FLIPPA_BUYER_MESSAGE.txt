@@ -1,0 +1,146 @@
+================================================================================
+  FLIPPA BUYER MESSAGE — DELIVERY NOTIFICATION
+  Copy and paste this into Flippa messaging. Customize fields in [brackets].
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+
+Subject: ClinicFlow — Your Source Code & Domain Delivery Package is Ready
+
+Hi [Buyer Name],
+
+Congratulations on your purchase of ClinicFlow, and thank you for choosing to
+acquire this project. I want to make sure this handover is as smooth and
+professional as possible.
+
+─── WHAT'S IN YOUR DELIVERY PACKAGE ───────────────────────────────────────────
+
+I've prepared a complete delivery ZIP that includes:
+
+  ✓ Full Ruby on Rails 7.1 source code
+  ✓ All database migrations and schema
+  ✓ README_DELIVERY.txt — step-by-step setup guide
+  ✓ DELIVERY_CHECKLIST.txt — complete buyer setup checklist
+  ✓ DOMAIN_TRANSFER_CHECKLIST.txt — domain transfer walkthrough
+  ✓ Gemfile.lock (exact dependency versions, reproducible builds)
+  ✓ Procfile for Heroku deployment
+  ✓ Dockerfile for containerized deployment
+
+─── DOWNLOAD LINK ──────────────────────────────────────────────────────────────
+
+  [Insert secure download link here — Google Drive / Dropbox / WeTransfer]
+
+  Link expires: [Date — recommend 14 days]
+
+  Please download and verify the contents as soon as possible.
+
+─── IMPORTANT — MASTER KEY ─────────────────────────────────────────────────────
+
+The Rails master.key is intentionally NOT included in this package — this is
+industry-standard practice and not an oversight.
+
+You will generate your own fresh master key during setup. The README_DELIVERY.txt
+(Section 10) contains the exact commands. This ensures you have full, independent
+ownership of all encryption keys from day one.
+
+─── DOMAIN TRANSFER ────────────────────────────────────────────────────────────
+
+I have initiated the domain transfer process:
+
+  Domain:    [your-domain.com]
+  Registrar: [Namecheap / GoDaddy]
+  Status:    Domain unlocked ✓
+
+I will send the EPP/Auth code in a separate message via Flippa.
+Please check the DOMAIN_TRANSFER_CHECKLIST.txt in the package for complete
+transfer instructions at your end.
+
+Note: Transfers typically take 5–7 business days. The app will remain live
+on the current host until you have confirmed the domain is at your registrar
+and DNS is updated.
+
+─── THIRD-PARTY SERVICES TO SET UP ────────────────────────────────────────────
+
+You will need to create accounts for the following services
+(all have free tiers or trials):
+
+  1. Hosting:     Heroku (heroku.com) — or Render / Railway / Fly.io
+  2. Database:    Heroku Postgres (included) or Supabase / Render Postgres
+  3. Email:       SendGrid (sendgrid.com) — free up to 100 emails/day
+  4. Billing:     LemonSqueezy (lemonsqueezy.com)
+
+All configuration values are documented in README_DELIVERY.txt Section 3
+(Environment Variables Reference).
+
+─── WHAT I CANNOT TRANSFER ─────────────────────────────────────────────────────
+
+Per the terms of the Flippa listing, the sale includes source code and domain
+only. The following are NOT included:
+
+  ✗ Heroku account access
+  ✗ GitHub repository access
+  ✗ Production database (contains private patient data — legally cannot transfer)
+  ✗ My SendGrid / LemonSqueezy accounts
+  ✗ Any personal API keys
+
+You will set up fresh accounts and generate your own credentials.
+This is the correct and secure way to take ownership of a SaaS.
+
+─── SUPPORT ────────────────────────────────────────────────────────────────────
+
+I'm offering [X days] of post-sale technical support via Flippa messaging.
+
+I'm happy to answer any questions about:
+  - The codebase structure and how features work
+  - Setup steps in the README_DELIVERY.txt
+  - Understanding how the billing webhook works
+  - General Rails questions about this project
+
+Please allow up to 24 hours for responses.
+
+─── RECOMMENDED FIRST STEPS ────────────────────────────────────────────────────
+
+  1. Download and extract the ZIP
+  2. Read README_DELIVERY.txt fully before starting
+  3. Follow DELIVERY_CHECKLIST.txt Section D in order
+  4. Start with local setup first, then deploy to production
+  5. Reply here once you've confirmed the download works
+
+I want to make sure you're set up for success. Don't hesitate to ask questions.
+
+Best regards,
+[Your Name]
+
+────────────────────────────────────────────────────────────────────────────────
+
+================================================================================
+  SEPARATE MESSAGE — EPP/AUTH CODE DELIVERY
+  Send this in a separate Flippa message after the main delivery message.
+================================================================================
+
+Hi [Buyer Name],
+
+As discussed, here is the domain transfer information:
+
+  Domain:        [your-domain.com]
+  Current Reg:   [Namecheap / GoDaddy]
+  EPP/Auth Code: [PASTE CODE HERE]
+
+To initiate the transfer:
+  1. Log in to your preferred registrar (Namecheap or Cloudflare recommended)
+  2. Start a domain transfer and enter the domain name
+  3. When prompted, enter the Auth code above
+  4. Complete the purchase (includes 1-year renewal, ~$10–15)
+  5. I will confirm/approve the transfer from my end within 24 hours
+
+Please see DOMAIN_TRANSFER_CHECKLIST.txt for detailed step-by-step instructions.
+
+Note: Auth codes expire after 5–7 days. If it expires before you use it,
+let me know and I'll generate a new one.
+
+Best regards,
+[Your Name]
+
+================================================================================
+  END OF BUYER MESSAGE TEMPLATES
+================================================================================

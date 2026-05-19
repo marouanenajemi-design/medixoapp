@@ -1,0 +1,146 @@
+<%= form_with(model: @prescription, local: true, data: { controller: "prescription-items" }) do |f| %>
+  <% if @prescription.errors.any? %>
+    <div class="alert alert-danger rounded-4 form-errors">
+      <strong><%= form_errors_heading %></strong>
+      <ul class="mb-0 mt-2">
+        <% @prescription.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <%= f.label :prescription_date, class: "form-label" %>
+      <%= f.date_field :prescription_date, class: "form-control" %>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <%= f.label :doctor_id, t("shared.tables.doctor"), class: "form-label" %>
+      <%= f.collection_select :doctor_id, @doctors, :id, :name, { prompt: t("prescriptions.form.prompts.doctor") }, class: "form-select" %>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <%= f.label :patient_id, t("shared.tables.patient"), class: "form-label" %>
+      <%= f.collection_select :patient_id, @patients, :id, :name, { prompt: t("prescriptions.form.prompts.patient") }, class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :diagnosis, class: "form-label" %>
+    <%= f.text_area :diagnosis, class: "form-control", rows: 3, placeholder: t("prescriptions.form.placeholders.diagnosis") %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :notes, class: "form-label" %>
+    <%= f.text_area :notes, class: "form-control", rows: 3, placeholder: t("prescriptions.form.placeholders.notes") %>
+  </div>
+
+  <div class="mb-3">
+    <h3 class="section-title mb-0"><%= t("prescriptions.form.medicines") %></h3>
+
+    <p class="text-muted small mt-2 mb-0"><%= t("prescriptions.form.medicines_hint") %></p>
+
+  </div>
+
+  <div id="prescription-items-wrapper" data-prescription-items-target="wrapper" data-action="click->prescription-items#handleWrapperClick">
+    <%= f.fields_for :prescription_items do |item_form| %>
+      <div class="content-card mb-3 prescription-item-block">
+        <%= item_form.hidden_field :id if item_form.object.persisted? %>
+        <%= item_form.hidden_field :_destroy, class: "destroy-flag" %>
+
+        <% if item_form.object.errors.any? %>
+          <div class="alert alert-danger py-2 px-3 mb-3">
+            <ul class="mb-0 ps-3">
+              <% item_form.object.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0 fw-bold"><%= t("prescriptions.form.medicine_item") %></h5>
+          <button type="button" class="btn btn-sm btn-danger remove-medicine-btn"><%= t("shared.actions.remove") %></button>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <%= item_form.label :medicine_name, t("prescriptions.fields.medicine"), class: "form-label" %>
+            <%= item_form.text_field :medicine_name, class: "form-control", placeholder: t("prescriptions.form.placeholders.medicine") %>
+
+            <div class="form-text"><%= t("prescriptions.form.medicine_required_hint") %></div>
+
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <%= item_form.label :dosage, class: "form-label" %>
+            <%= item_form.text_field :dosage, class: "form-control", placeholder: t("prescriptions.form.placeholders.dosage") %>
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <%= item_form.label :frequency, class: "form-label" %>
+            <%= item_form.text_field :frequency, class: "form-control", placeholder: t("prescriptions.form.placeholders.frequency") %>
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <%= item_form.label :duration, class: "form-label" %>
+            <%= item_form.text_field :duration, class: "form-control", placeholder: t("prescriptions.form.placeholders.duration") %>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <%= item_form.label :instructions, class: "form-label" %>
+          <%= item_form.text_area :instructions, class: "form-control", rows: 2, placeholder: t("prescriptions.form.placeholders.instructions") %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <template id="medicine-template" data-prescription-items-target="template">
+    <div class="content-card mb-3 prescription-item-block">
+      <input type="hidden" name="prescription[prescription_items_attributes][NEW_RECORD][_destroy]" value="false" class="destroy-flag">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0 fw-bold"><%= t("prescriptions.form.medicine_item") %></h5>
+        <button type="button" class="btn btn-sm btn-danger remove-medicine-btn"><%= t("shared.actions.remove") %></button>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label" for="prescription_prescription_items_attributes_NEW_RECORD_medicine_name"><%= t("prescriptions.fields.medicine") %></label>
+          <input class="form-control" placeholder="<%= t("prescriptions.form.placeholders.medicine") %>" type="text" name="prescription[prescription_items_attributes][NEW_RECORD][medicine_name]" id="prescription_prescription_items_attributes_NEW_RECORD_medicine_name">
+        </div>
+
+        <div class="col-md-2 mb-3">
+          <label class="form-label" for="prescription_prescription_items_attributes_NEW_RECORD_dosage"><%= t("prescriptions.fields.dosage") %></label>
+          <input class="form-control" placeholder="<%= t("prescriptions.form.placeholders.dosage") %>" type="text" name="prescription[prescription_items_attributes][NEW_RECORD][dosage]" id="prescription_prescription_items_attributes_NEW_RECORD_dosage">
+        </div>
+
+        <div class="col-md-2 mb-3">
+          <label class="form-label" for="prescription_prescription_items_attributes_NEW_RECORD_frequency"><%= t("prescriptions.fields.frequency") %></label>
+          <input class="form-control" placeholder="<%= t("prescriptions.form.placeholders.frequency") %>" type="text" name="prescription[prescription_items_attributes][NEW_RECORD][frequency]" id="prescription_prescription_items_attributes_NEW_RECORD_frequency">
+        </div>
+
+        <div class="col-md-2 mb-3">
+          <label class="form-label" for="prescription_prescription_items_attributes_NEW_RECORD_duration"><%= t("prescriptions.fields.duration") %></label>
+          <input class="form-control" placeholder="<%= t("prescriptions.form.placeholders.duration") %>" type="text" name="prescription[prescription_items_attributes][NEW_RECORD][duration]" id="prescription_prescription_items_attributes_NEW_RECORD_duration">
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label" for="prescription_prescription_items_attributes_NEW_RECORD_instructions"><%= t("prescriptions.fields.instructions") %></label>
+        <textarea class="form-control" rows="2" placeholder="<%= t("prescriptions.form.placeholders.instructions") %>" name="prescription[prescription_items_attributes][NEW_RECORD][instructions]" id="prescription_prescription_items_attributes_NEW_RECORD_instructions"></textarea>
+      </div>
+    </div>
+  </template>
+
+  <div class="mt-4 d-flex gap-3 align-items-center">
+    <button type="button" id="add-medicine-btn" class="btn btn-outline-primary" data-action="prescription-items#add">
+      <%= t("shared.actions.add_medicine") %>
+    </button>
+
+    <%= f.submit t("shared.actions.save_prescription"), class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,86 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("appointments.index.title") %></h1>
+      <div class="page-subtitle"><%= t("appointments.index.subtitle") %></div>
+    </div>
+
+    <div class="page-actions">
+      <%= link_to t("shared.actions.new_appointment"), new_appointment_path, class: "btn btn-primary action-btn" %>
+    </div>
+  </div>
+
+  <div class="content-card" data-controller="filter-list">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <h2 class="section-title mb-0"><%= t("appointments.index.list_title") %></h2>
+
+      <div class="search-box">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="<%= t("appointments.index.search_placeholder") %>"
+          data-filter-list-target="input"
+          data-action="input->filter-list#filter"
+        >
+      </div>
+    </div>
+
+    <% if @appointments.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("shared.tables.patient") %></th>
+              <th><%= t("shared.tables.doctor") %></th>
+              <th><%= t("shared.tables.date") %></th>
+              <th><%= t("shared.tables.time") %></th>
+              <th><%= t("shared.tables.status") %></th>
+              <th><%= t("shared.tables.actions") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @appointments.each do |appointment| %>
+              <% badge_class =
+                case appointment.status
+                when "confirmed" then "badge-confirmed"
+                when "pending" then "badge-pending"
+                when "completed" then "badge-completed"
+                when "cancelled" then "badge-cancelled"
+                else "badge-completed"
+                end
+              %>
+
+              <tr
+                data-filter-list-target="row"
+                data-filter-list-searchable-value="<%= [appointment.patient.name, appointment.doctor.name, appointment_status_label(appointment.status), appointment.appointment_date].join(' ').downcase %>"
+              >
+                <td class="fw-semibold" data-label="<%= t("shared.tables.patient") %>"><%= appointment.patient.name %></td>
+                <td data-label="<%= t("shared.tables.doctor") %>"><%= appointment.doctor.name %></td>
+                <td data-label="<%= t("shared.tables.date") %>"><%= appointment.appointment_date %></td>
+                <td data-label="<%= t("shared.tables.time") %>"><%= formatted_time(appointment.appointment_time) %></td>
+                <td data-label="<%= t("shared.tables.status") %>">
+                  <span class="badge-soft <%= badge_class %>"><%= appointment_status_label(appointment.status) %></span>
+                </td>
+                <td class="actions-cell" data-label="<%= t("shared.tables.actions") %>">
+                  <div class="action-group">
+                    <%= link_to t("shared.actions.edit"), edit_appointment_path(appointment), class: "btn btn-sm btn-warning" %>
+                    <%= button_to t("shared.actions.delete"), appointment_path(appointment),
+                          method: :delete,
+                          class: "btn btn-sm btn-danger",
+                          data: { turbo_confirm: t("shared.confirmations.delete") } %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" style="display:none;" data-filter-list-target="empty">
+        <%= t("appointments.index.search_empty") %>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("appointments.index.empty") %></div>
+    <% end %>
+  </div>
+</div>
