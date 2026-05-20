@@ -34,7 +34,12 @@ Rails.application.routes.draw do
   get "calendar", to: "appointments#calendar"
   devise_for :users
 
-  root "dashboard#index"
+  # Authenticated users → dashboard; public → landing page
+  authenticated :user do
+    root to: "dashboard#index", as: :authenticated_root
+  end
+  root to: "pages#home"
+  get "home", to: "pages#home", as: :landing
 
   get "dashboard",  to: "dashboard#index"
   get "chatbot",    to: "chatbot#index"

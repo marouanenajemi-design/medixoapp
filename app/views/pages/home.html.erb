@@ -1,0 +1,461 @@
+<%# ═══════════════════════════════════════════
+    HERO
+═══════════════════════════════════════════ %>
+<section class="l-hero">
+  <div class="lc">
+    <div class="l-hero-grid">
+
+      <%# ── Left: copy ── %>
+      <div>
+        <div class="l-hero-badge">
+          <%= t("landing.hero.badge") %>
+        </div>
+        <h1 class="anim-fade-up">
+          <%= t("landing.hero.headline").gsub("modern", "<span class='hl'>modern</span>").html_safe %>
+        </h1>
+        <p class="l-hero-sub anim-fade-up anim-delay-1">
+          <%= t("landing.hero.subheadline") %>
+        </p>
+        <div class="l-hero-ctas anim-fade-up anim-delay-2">
+          <%= link_to t("landing.hero.cta_primary"), new_user_registration_path,
+                class: "l-btn l-btn-md l-btn-primary" %>
+          <a href="#features" class="l-btn l-btn-md l-btn-ghost-white">
+            <i class="bi bi-play-circle"></i>
+            <%= t("landing.hero.cta_secondary") %>
+          </a>
+        </div>
+        <div class="l-hero-trust anim-fade-up anim-delay-3">
+          <span><%= t("landing.hero.trust_trial") %></span>
+          <span><%= t("landing.hero.trust_card") %></span>
+          <span><%= t("landing.hero.trust_setup") %></span>
+        </div>
+      </div>
+
+      <%# ── Right: dashboard mockup ── %>
+      <div class="l-mockup-wrap anim-fade-up anim-delay-2">
+        <div class="l-mockup-glow"></div>
+        <div class="l-mockup">
+          <%# Browser chrome %>
+          <div class="l-mockup-bar">
+            <div class="l-mockup-dot"></div>
+            <div class="l-mockup-dot"></div>
+            <div class="l-mockup-dot"></div>
+            <div class="l-mockup-url">app.medixoapp.com/dashboard</div>
+          </div>
+          <div class="l-mockup-body">
+            <%# Sidebar %>
+            <div class="l-mockup-sidebar">
+              <div class="l-mockup-brand">
+                <div class="l-mockup-brand-icon"><i class="bi bi-heart-pulse-fill"></i></div>
+                <div class="l-mockup-brand-name">MedixoApp</div>
+              </div>
+              <div class="l-mockup-nav-item active">
+                <span class="l-mockup-nav-icon">⚡</span> Dashboard
+              </div>
+              <div class="l-mockup-nav-item">
+                <span class="l-mockup-nav-icon">👤</span> Doctors
+              </div>
+              <div class="l-mockup-nav-item">
+                <span class="l-mockup-nav-icon">👥</span> Patients
+              </div>
+              <div class="l-mockup-nav-item">
+                <span class="l-mockup-nav-icon">📅</span> Calendar
+              </div>
+              <div class="l-mockup-nav-item">
+                <span class="l-mockup-nav-icon">🌐</span> Bookings
+              </div>
+              <div class="l-mockup-nav-item">
+                <span class="l-mockup-nav-icon">📊</span> Analytics
+              </div>
+            </div>
+            <%# Main %>
+            <div class="l-mockup-main">
+              <div class="l-mockup-title">Dashboard</div>
+              <div class="l-mockup-stats">
+                <div class="l-mockup-stat">
+                  <div class="l-mockup-stat-label">Doctors</div>
+                  <div class="l-mockup-stat-val teal">4</div>
+                </div>
+                <div class="l-mockup-stat">
+                  <div class="l-mockup-stat-label">Patients</div>
+                  <div class="l-mockup-stat-val">128</div>
+                </div>
+                <div class="l-mockup-stat">
+                  <div class="l-mockup-stat-label">Appointments</div>
+                  <div class="l-mockup-stat-val">312</div>
+                </div>
+                <div class="l-mockup-stat">
+                  <div class="l-mockup-stat-label">Today</div>
+                  <div class="l-mockup-stat-val amber">7</div>
+                </div>
+              </div>
+              <div class="l-mockup-table-title">Recent Appointments</div>
+              <div class="l-mockup-row">
+                <div class="l-mockup-avatar">SB</div>
+                <div class="l-mockup-row-info">
+                  <div class="l-mockup-row-name">Sara Benali</div>
+                  <div class="l-mockup-row-sub">Dr. Karim — 09:30</div>
+                </div>
+                <div class="l-mockup-badge confirmed">Confirmed</div>
+              </div>
+              <div class="l-mockup-row">
+                <div class="l-mockup-avatar">JM</div>
+                <div class="l-mockup-row-info">
+                  <div class="l-mockup-row-name">Jacques Martin</div>
+                  <div class="l-mockup-row-sub">Dr. Leila — 11:00</div>
+                </div>
+                <div class="l-mockup-badge pending">Pending</div>
+              </div>
+              <div class="l-mockup-row">
+                <div class="l-mockup-avatar">AH</div>
+                <div class="l-mockup-row-info">
+                  <div class="l-mockup-row-name">Amina Hassan</div>
+                  <div class="l-mockup-row-sub">Dr. Karim — 14:00</div>
+                </div>
+                <div class="l-mockup-badge online">🌐 Online</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%# ═══════════════════════════════════════════
+    STATS BAR
+═══════════════════════════════════════════ %>
+<section class="l-stats">
+  <div class="lc">
+    <div class="l-stats-grid">
+      <div class="l-stat-item">
+        <div class="l-stat-val"><span><%= t("landing.stats.val_clinics") %></span></div>
+        <div class="l-stat-label"><%= t("landing.stats.label_clinics") %></div>
+      </div>
+      <div class="l-stat-item">
+        <div class="l-stat-val"><span><%= t("landing.stats.val_patients") %></span></div>
+        <div class="l-stat-label"><%= t("landing.stats.label_patients") %></div>
+      </div>
+      <div class="l-stat-item">
+        <div class="l-stat-val"><span><%= t("landing.stats.val_uptime") %></span></div>
+        <div class="l-stat-label"><%= t("landing.stats.label_uptime") %></div>
+      </div>
+      <div class="l-stat-item">
+        <div class="l-stat-val"><span><%= t("landing.stats.val_languages") %></span></div>
+        <div class="l-stat-label"><%= t("landing.stats.label_languages") %></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ═══════════════════════════════════════════
+    FEATURES
+═══════════════════════════════════════════ %>
+<section class="l-section" id="features">
+  <div class="lc">
+    <div class="l-section-header center">
+      <div class="l-eyebrow"><%= t("landing.nav.features") %></div>
+      <h2 class="l-section-title"><%= t("landing.features.title") %></h2>
+      <p class="l-section-sub"><%= t("landing.features.subtitle") %></p>
+    </div>
+
+    <div class="l-features-grid">
+      <div class="l-feat-card">
+        <div class="l-feat-icon"><i class="bi bi-globe2"></i></div>
+        <div class="l-feat-title"><%= t("landing.features.booking_title") %></div>
+        <p class="l-feat-desc"><%= t("landing.features.booking_desc") %></p>
+      </div>
+      <div class="l-feat-card">
+        <div class="l-feat-icon"><i class="bi bi-person-badge"></i></div>
+        <div class="l-feat-title"><%= t("landing.features.doctors_title") %></div>
+        <p class="l-feat-desc"><%= t("landing.features.doctors_desc") %></p>
+      </div>
+      <div class="l-feat-card">
+        <div class="l-feat-icon"><i class="bi bi-people"></i></div>
+        <div class="l-feat-title"><%= t("landing.features.patients_title") %></div>
+        <p class="l-feat-desc"><%= t("landing.features.patients_desc") %></p>
+      </div>
+      <div class="l-feat-card">
+        <div class="l-feat-icon"><i class="bi bi-calendar-check"></i></div>
+        <div class="l-feat-title"><%= t("landing.features.calendar_title") %></div>
+        <p class="l-feat-desc"><%= t("landing.features.calendar_desc") %></p>
+      </div>
+      <div class="l-feat-card">
+        <div class="l-feat-icon"><i class="bi bi-file-earmark-medical"></i></div>
+        <div class="l-feat-title"><%= t("landing.features.prescriptions_title") %></div>
+        <p class="l-feat-desc"><%= t("landing.features.prescriptions_desc") %></p>
+      </div>
+      <div class="l-feat-card">
+        <div class="l-feat-icon"><i class="bi bi-bar-chart-line"></i></div>
+        <div class="l-feat-title"><%= t("landing.features.analytics_title") %></div>
+        <p class="l-feat-desc"><%= t("landing.features.analytics_desc") %></p>
+      </div>
+      <div class="l-feat-card">
+        <div class="l-feat-icon"><i class="bi bi-translate"></i></div>
+        <div class="l-feat-title"><%= t("landing.features.bilingual_title") %></div>
+        <p class="l-feat-desc"><%= t("landing.features.bilingual_desc") %></p>
+      </div>
+      <div class="l-feat-card">
+        <div class="l-feat-icon"><i class="bi bi-clipboard-check"></i></div>
+        <div class="l-feat-title"><%= t("landing.features.workflow_title") %></div>
+        <p class="l-feat-desc"><%= t("landing.features.workflow_desc") %></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ═══════════════════════════════════════════
+    BOOKING FLOW
+═══════════════════════════════════════════ %>
+<section class="l-section l-section-alt">
+  <div class="lc">
+    <div class="l-section-header center">
+      <div class="l-eyebrow"><%= t("landing.nav.features") %></div>
+      <h2 class="l-section-title"><%= t("landing.flow.title") %></h2>
+      <p class="l-section-sub"><%= t("landing.flow.subtitle") %></p>
+    </div>
+
+    <div class="l-flow-grid">
+      <div class="l-flow-card">
+        <div class="l-flow-num">1</div>
+        <div class="l-flow-icon"><i class="bi bi-person-badge"></i></div>
+        <div class="l-flow-label"><%= t("landing.flow.step1_label") %></div>
+        <p class="l-flow-desc"><%= t("landing.flow.step1_desc") %></p>
+      </div>
+      <div class="l-flow-card">
+        <div class="l-flow-num">2</div>
+        <div class="l-flow-icon"><i class="bi bi-calendar3"></i></div>
+        <div class="l-flow-label"><%= t("landing.flow.step2_label") %></div>
+        <p class="l-flow-desc"><%= t("landing.flow.step2_desc") %></p>
+      </div>
+      <div class="l-flow-card">
+        <div class="l-flow-num">3</div>
+        <div class="l-flow-icon"><i class="bi bi-clock"></i></div>
+        <div class="l-flow-label"><%= t("landing.flow.step3_label") %></div>
+        <p class="l-flow-desc"><%= t("landing.flow.step3_desc") %></p>
+      </div>
+      <div class="l-flow-card">
+        <div class="l-flow-num">4</div>
+        <div class="l-flow-icon"><i class="bi bi-envelope-check"></i></div>
+        <div class="l-flow-label"><%= t("landing.flow.step4_label") %></div>
+        <p class="l-flow-desc"><%= t("landing.flow.step4_desc") %></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ═══════════════════════════════════════════
+    DASHBOARD SHOWCASE
+═══════════════════════════════════════════ %>
+<section class="l-section">
+  <div class="lc">
+    <div class="l-showcase-grid">
+
+      <%# Left: copy %>
+      <div>
+        <div class="l-eyebrow"><%= t("landing.nav.features") %></div>
+        <h2 class="l-section-title"><%= t("landing.dashboard.title") %></h2>
+        <p class="l-section-sub"><%= t("landing.dashboard.subtitle") %></p>
+        <ul class="l-showcase-check-list">
+          <li><%= t("landing.dashboard.feature1") %></li>
+          <li><%= t("landing.dashboard.feature2") %></li>
+          <li><%= t("landing.dashboard.feature3") %></li>
+          <li><%= t("landing.dashboard.feature4") %></li>
+          <li><%= t("landing.dashboard.feature5") %></li>
+        </ul>
+        <div class="mt-4">
+          <%= link_to t("landing.hero.cta_primary"), new_user_registration_path,
+                class: "l-btn l-btn-md l-btn-primary" %>
+        </div>
+      </div>
+
+      <%# Right: polished mockup %>
+      <div class="l-dash-mockup">
+        <div class="l-dash-header">
+          <div>
+            <div class="l-dash-header-title">MedixoApp Dashboard</div>
+            <div class="l-dash-header-sub">Smart medical management platform</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);"></div>
+          </div>
+        </div>
+        <div class="l-dash-body">
+          <div class="l-dash-stats">
+            <div class="l-dash-stat">
+              <div class="l-dash-stat-val c-teal">4</div>
+              <div class="l-dash-stat-lbl"><%= t("landing.dashboard.stat4_label") %></div>
+            </div>
+            <div class="l-dash-stat">
+              <div class="l-dash-stat-val">312</div>
+              <div class="l-dash-stat-lbl"><%= t("landing.dashboard.stat1_label") %></div>
+            </div>
+            <div class="l-dash-stat">
+              <div class="l-dash-stat-val">128</div>
+              <div class="l-dash-stat-lbl"><%= t("landing.dashboard.stat2_label") %></div>
+            </div>
+            <div class="l-dash-stat">
+              <div class="l-dash-stat-val c-amber">3</div>
+              <div class="l-dash-stat-lbl"><%= t("landing.dashboard.stat3_label") %></div>
+            </div>
+          </div>
+
+          <div class="l-dash-table-hd">Recent Appointments</div>
+          <div class="l-dash-row">
+            <div class="l-dash-av">SB</div>
+            <div class="l-dash-row-name">Sara Benali</div>
+            <div class="l-dash-row-time">09:30</div>
+            <div class="l-dash-pill conf">Confirmed</div>
+          </div>
+          <div class="l-dash-row">
+            <div class="l-dash-av">JM</div>
+            <div class="l-dash-row-name">Jacques Martin</div>
+            <div class="l-dash-row-time">11:00</div>
+            <div class="l-dash-pill pend">Pending</div>
+          </div>
+          <div class="l-dash-row">
+            <div class="l-dash-av">AH</div>
+            <div class="l-dash-row-name">Amina Hassan</div>
+            <div class="l-dash-row-time">14:00</div>
+            <div class="l-dash-pill onl">🌐 Online</div>
+          </div>
+          <div class="l-dash-row">
+            <div class="l-dash-av">YK</div>
+            <div class="l-dash-row-name">Younes Karimi</div>
+            <div class="l-dash-row-time">15:30</div>
+            <div class="l-dash-pill conf">Confirmed</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%# ═══════════════════════════════════════════
+    PRICING
+═══════════════════════════════════════════ %>
+<section class="l-section l-section-alt" id="pricing">
+  <div class="lc">
+    <div class="l-section-header center">
+      <div class="l-eyebrow"><%= t("landing.nav.pricing") %></div>
+      <h2 class="l-section-title"><%= t("landing.pricing.title") %></h2>
+      <p class="l-section-sub"><%= t("landing.pricing.subtitle") %></p>
+    </div>
+
+    <div class="l-pricing-grid">
+
+      <%# ── Starter ── %>
+      <div class="l-plan-card">
+        <div class="l-plan-icon starter"><i class="bi bi-lightning-charge-fill"></i></div>
+        <div class="l-plan-name"><%= t("landing.pricing.starter_name") %></div>
+        <div class="l-plan-price">
+          <span class="l-plan-price-val">€<%= t("landing.pricing.starter_price") %></span>
+          <span class="l-plan-price-mo"><%= t("landing.pricing.per_month") %></span>
+        </div>
+        <p class="l-plan-desc"><%= t("landing.pricing.starter_desc") %></p>
+        <ul class="l-plan-features">
+          <li><%= t("landing.pricing.starter_f1") %></li>
+          <li><%= t("landing.pricing.starter_f2") %></li>
+          <li><%= t("landing.pricing.starter_f3") %></li>
+          <li><%= t("landing.pricing.starter_f4") %></li>
+          <li><%= t("landing.pricing.starter_f5") %></li>
+          <li><%= t("landing.pricing.starter_f6") %></li>
+        </ul>
+        <%= link_to t("landing.pricing.cta"), new_user_registration_path,
+              class: "l-btn l-btn-md l-btn-outline w-100 justify-content-center" %>
+        <p class="l-plan-trial"><%= t("landing.pricing.trial_note") %></p>
+      </div>
+
+      <%# ── Pro ── %>
+      <div class="l-plan-card popular">
+        <div class="l-plan-popular-badge"><%= t("landing.pricing.badge_popular") %></div>
+        <div class="l-plan-icon pro"><i class="bi bi-star-fill"></i></div>
+        <div class="l-plan-name"><%= t("landing.pricing.pro_name") %></div>
+        <div class="l-plan-price">
+          <span class="l-plan-price-val">€<%= t("landing.pricing.pro_price") %></span>
+          <span class="l-plan-price-mo"><%= t("landing.pricing.per_month") %></span>
+        </div>
+        <p class="l-plan-desc"><%= t("landing.pricing.pro_desc") %></p>
+        <ul class="l-plan-features">
+          <li><%= t("landing.pricing.pro_f1") %></li>
+          <li><%= t("landing.pricing.pro_f2") %></li>
+          <li><%= t("landing.pricing.pro_f3") %></li>
+          <li><%= t("landing.pricing.pro_f4") %></li>
+          <li><%= t("landing.pricing.pro_f5") %></li>
+          <li><%= t("landing.pricing.pro_f6") %></li>
+        </ul>
+        <%= link_to t("landing.pricing.cta"), new_user_registration_path,
+              class: "l-btn l-btn-md l-btn-primary w-100 justify-content-center" %>
+        <p class="l-plan-trial"><%= t("landing.pricing.trial_note") %></p>
+      </div>
+
+      <%# ── Clinic+ ── %>
+      <div class="l-plan-card">
+        <div class="l-plan-icon clinic"><i class="bi bi-gem"></i></div>
+        <div class="l-plan-name"><%= t("landing.pricing.enterprise_name") %></div>
+        <div class="l-plan-price">
+          <span class="l-plan-price-val">€<%= t("landing.pricing.enterprise_price") %></span>
+          <span class="l-plan-price-mo"><%= t("landing.pricing.per_month") %></span>
+        </div>
+        <p class="l-plan-desc"><%= t("landing.pricing.enterprise_desc") %></p>
+        <ul class="l-plan-features">
+          <li><%= t("landing.pricing.enterprise_f1") %></li>
+          <li><%= t("landing.pricing.enterprise_f2") %></li>
+          <li><%= t("landing.pricing.enterprise_f3") %></li>
+          <li><%= t("landing.pricing.enterprise_f4") %></li>
+          <li><%= t("landing.pricing.enterprise_f5") %></li>
+          <li><%= t("landing.pricing.enterprise_f6") %></li>
+        </ul>
+        <%= link_to t("landing.pricing.cta"), new_user_registration_path,
+              class: "l-btn l-btn-md l-btn-outline w-100 justify-content-center" %>
+        <p class="l-plan-trial"><%= t("landing.pricing.trial_note") %></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%# ═══════════════════════════════════════════
+    FAQ
+═══════════════════════════════════════════ %>
+<section class="l-section" id="faq">
+  <div class="lc">
+    <div class="l-section-header center">
+      <div class="l-eyebrow">FAQ</div>
+      <h2 class="l-section-title"><%= t("landing.faq.title") %></h2>
+    </div>
+
+    <div class="l-faq-list">
+      <% 6.times do |i| %>
+        <% n = i + 1 %>
+        <div class="l-faq-item">
+          <button class="l-faq-btn" type="button">
+            <%= t("landing.faq.q#{n}") %>
+            <span class="l-faq-arrow"><i class="bi bi-plus"></i></span>
+          </button>
+          <div class="l-faq-body">
+            <%= t("landing.faq.a#{n}") %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# ═══════════════════════════════════════════
+    FINAL CTA
+═══════════════════════════════════════════ %>
+<section class="l-cta-section">
+  <div class="lc l-cta-inner">
+    <h2 class="l-cta-title"><%= t("landing.cta.title") %></h2>
+    <p class="l-cta-sub"><%= t("landing.cta.subtitle") %></p>
+    <%= link_to t("landing.cta.button"), new_user_registration_path,
+          class: "l-btn l-btn-lg",
+          style: "background:white;color:#0d9488;font-weight:800;box-shadow:0 8px 28px rgba(0,0,0,.25);" %>
+    <p class="l-cta-note"><%= t("landing.cta.note") %></p>
+  </div>
+</section>
