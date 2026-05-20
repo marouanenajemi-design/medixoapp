@@ -1,0 +1,191 @@
+<% content_for :page_title, @page_title %>
+
+<%# ── Embed booking data for JS ── %>
+<script id="mx-booking-meta" type="application/json">
+  {
+    "slotsUrl": "<%= clinic_booking_slots_path(@clinic.slug, locale: nil) %>",
+    "locale":   "<%= I18n.locale %>"
+  }
+</script>
+
+<div data-controller="booking">
+  <%# ── Clinic header ── %>
+  <div class="booking-clinic-header">
+    <% if @clinic.logo.attached? %>
+      <%= image_tag @clinic.logo, class: "booking-clinic-logo", alt: @clinic.name %>
+    <% else %>
+      <div class="booking-clinic-logo-placeholder">
+        <i class="bi bi-hospital-fill"></i>
+      </div>
+    <% end %>
+    <div>
+      <h1 class="booking-clinic-name"><%= @clinic.name %></h1>
+      <div class="booking-clinic-meta">
+        <% if @clinic.address.present? %>
+          <span><i class="bi bi-geo-alt"></i> <%= @clinic.address %></span>
+        <% end %>
+        <% if @clinic.phone.present? %>
+          <span><i class="bi bi-telephone"></i> <%= @clinic.phone %></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <% if flash[:alert] %>
+    <div class="booking-alert booking-alert--danger mb-4"><%= flash[:alert] %></div>
+  <% end %>
+
+  <% if @doctors.empty? %>
+    <div class="booking-step">
+      <div class="booking-step-body" style="text-align:center;padding:48px 24px;">
+        <div style="font-size:2.5rem;margin-bottom:12px;">🏥</div>
+        <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-bottom:6px;">
+          <%= t("bookings.show.no_doctors_title") %>
+        </div>
+        <div style="color:#64748b;font-size:0.92rem;"><%= t("bookings.show.no_doctors_sub") %></div>
+      </div>
+    </div>
+  <% else %>
+
+  <%= form_with url: clinic_booking_path(@clinic.slug), method: :post,
+                data: { booking_target: "form", action: "submit->booking#submitForm" } do |f| %>
+
+    <%= hidden_field_tag :doctor_id,        "", data: { booking_target: "doctorId" } %>
+    <%= hidden_field_tag :appointment_date, "", data: { booking_target: "dateInput" } %>
+    <%= hidden_field_tag :appointment_time, "", data: { booking_target: "timeInput" } %>
+
+    <%# ═══ Step 1: Doctor ═══ %>
+    <div class="booking-step" data-booking-target="step1">
+      <div class="booking-step-header" data-action="click->booking#backToStep" data-step="1">
+        <div class="booking-step-num">1</div>
+        <div class="booking-step-title"><%= t("bookings.show.step1_title") %></div>
+        <span class="booking-step-summary" data-booking-target="step1Summary" style="display:none;"></span>
+        <button type="button" class="booking-step-edit" data-booking-target="step1Edit" style="display:none;">
+          <%= t("bookings.show.change") %>
+        </button>
+      </div>
+      <div class="booking-step-body" data-booking-target="step1Body">
+        <div class="booking-doctors-grid">
+          <% @doctors.each do |doctor| %>
+            <div class="booking-doctor-card"
+                 data-action="click->booking#selectDoctor"
+                 data-doctor-id="<%= doctor.id %>"
+                 data-doctor-name="<%= doctor.name %>"
+                 data-doctor-specialty="<%= doctor.specialty %>"
+                 data-booking-target="doctorCard">
+              <div class="booking-doctor-avatar">
+                <%= doctor.name.split.map { |n| n[0] }.first(2).join.upcase %>
+              </div>
+              <div class="booking-doctor-name"><%= doctor.name %></div>
+              <div class="booking-doctor-specialty"><%= doctor.specialty %></div>
+              <% if doctor.work_start.present? && doctor.work_end.present? %>
+                <div class="booking-doctor-hours">
+                  <i class="bi bi-clock"></i>
+                  <%= doctor.work_start.strftime("%H:%M") %> – <%= doctor.work_end.strftime("%H:%M") %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%# ═══ Step 2: Date ═══ %>
+    <div class="booking-step booking-step--hidden" data-booking-target="step2">
+      <div class="booking-step-header" data-action="click->booking#backToStep" data-step="2">
+        <div class="booking-step-num">2</div>
+        <div class="booking-step-title"><%= t("bookings.show.step2_title") %></div>
+        <span class="booking-step-summary" data-booking-target="step2Summary" style="display:none;"></span>
+        <button type="button" class="booking-step-edit" data-booking-target="step2Edit" style="display:none;">
+          <%= t("bookings.show.change") %>
+        </button>
+      </div>
+      <div class="booking-step-body" data-booking-target="step2Body">
+        <div class="booking-calendar">
+          <div class="booking-cal-header">
+            <button type="button" class="booking-cal-nav"
+                    data-action="click->booking#prevMonth"
+                    data-booking-target="prevMonthBtn">&lsaquo;</button>
+            <span class="booking-cal-title" data-booking-target="calTitle"></span>
+            <button type="button" class="booking-cal-nav"
+                    data-action="click->booking#nextMonth">&rsaquo;</button>
+          </div>
+          <div class="booking-cal-grid" data-booking-target="calGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <%# ═══ Step 3: Time ═══ %>
+    <div class="booking-step booking-step--hidden" data-booking-target="step3">
+      <div class="booking-step-header" data-action="click->booking#backToStep" data-step="3">
+        <div class="booking-step-num">3</div>
+        <div class="booking-step-title"><%= t("bookings.show.step3_title") %></div>
+        <span class="booking-step-summary" data-booking-target="step3Summary" style="display:none;"></span>
+        <button type="button" class="booking-step-edit" data-booking-target="step3Edit" style="display:none;">
+          <%= t("bookings.show.change") %>
+        </button>
+      </div>
+      <div class="booking-step-body" data-booking-target="step3Body">
+        <div class="booking-loading" data-booking-target="slotsLoader">
+          <div class="booking-spinner"></div>
+          <%= t("bookings.show.loading_slots") %>
+        </div>
+        <div class="booking-slots-grid" data-booking-target="slotsGrid"></div>
+      </div>
+    </div>
+
+    <%# ═══ Step 4: Patient details ═══ %>
+    <div class="booking-step booking-step--hidden" data-booking-target="step4">
+      <div class="booking-step-header">
+        <div class="booking-step-num">4</div>
+        <div class="booking-step-title"><%= t("bookings.show.step4_title") %></div>
+      </div>
+      <div class="booking-step-body">
+        <div class="booking-form-grid">
+          <div class="booking-form-field">
+            <label class="booking-label"><%= t("bookings.show.fields.name") %> *</label>
+            <input type="text" name="patient_name" class="booking-input"
+                   placeholder="<%= t("bookings.show.fields.name_placeholder") %>"
+                   required autocomplete="name">
+          </div>
+          <div class="booking-form-field">
+            <label class="booking-label"><%= t("bookings.show.fields.email") %> *</label>
+            <input type="email" name="patient_email" class="booking-input"
+                   placeholder="<%= t("bookings.show.fields.email_placeholder") %>"
+                   required autocomplete="email">
+          </div>
+          <div class="booking-form-field">
+            <label class="booking-label"><%= t("bookings.show.fields.phone") %> *</label>
+            <input type="tel" name="patient_phone" class="booking-input"
+                   placeholder="<%= t("bookings.show.fields.phone_placeholder") %>"
+                   required autocomplete="tel">
+          </div>
+          <div class="booking-form-field">
+            <label class="booking-label"><%= t("bookings.show.fields.reason") %></label>
+            <input type="text" name="reason" class="booking-input"
+                   placeholder="<%= t("bookings.show.fields.reason_placeholder") %>">
+          </div>
+        </div>
+
+        <div style="margin-top:20px;padding:14px 18px;background:#f0fdf9;border-radius:12px;border:1px solid rgba(20,184,166,0.2);">
+          <div style="font-size:0.82rem;color:#64748b;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;">
+            <%= t("bookings.show.summary_label") %>
+          </div>
+          <div style="font-size:0.9rem;color:#0f172a;font-weight:600;" data-booking-target="summaryText"></div>
+        </div>
+
+        <button type="submit" class="booking-submit-btn" data-booking-target="submitBtn">
+          <i class="bi bi-calendar-check"></i>
+          <%= t("bookings.show.submit") %>
+        </button>
+
+        <div style="font-size:0.78rem;color:#94a3b8;text-align:center;margin-top:12px;">
+          <i class="bi bi-shield-check"></i>
+          <%= t("bookings.show.privacy_note") %>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+  <% end %>
+</div>

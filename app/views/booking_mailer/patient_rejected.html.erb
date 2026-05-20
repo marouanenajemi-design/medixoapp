@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { margin:0; padding:0; background:#f8fafc; font-family: Inter, system-ui, sans-serif; color:#0f172a; }
+    .wrap { max-width:560px; margin:32px auto; background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 8px 24px rgba(15,23,42,0.08); }
+    .header { background:linear-gradient(135deg,#475569,#64748b); padding:28px 32px; }
+    .header-brand { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+    .brand-icon { width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,0.2); display:inline-flex; align-items:center; justify-content:center; color:white; font-size:1.1rem; }
+    .brand-name { color:white; font-size:1rem; font-weight:800; }
+    .header-title { color:white; font-size:1.2rem; font-weight:800; margin:0; }
+    .header-sub { color:rgba(255,255,255,0.8); font-size:0.88rem; margin:6px 0 0; }
+    .body { padding:28px 32px; }
+    .greeting { font-size:1rem; font-weight:700; color:#0f172a; margin:0 0 8px; }
+    .intro { font-size:0.92rem; color:#475569; margin:0 0 20px; line-height:1.6; }
+    .next-steps-box { background:#f1f5f9; border-radius:12px; padding:16px 20px; margin:0 0 20px; }
+    .next-steps-label { font-size:0.72rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.4px; margin:0 0 6px; }
+    .next-steps-text { font-size:0.88rem; color:#334155; line-height:1.6; margin:0; }
+    .closing { font-size:0.88rem; color:#64748b; margin:0; line-height:1.6; }
+    .footer { background:#f8fafc; padding:18px 32px; text-align:center; font-size:0.78rem; color:#94a3b8; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="header-brand">
+      <div class="brand-icon">&#9829;</div>
+      <span class="brand-name">MedixoApp</span>
+    </div>
+    <h1 class="header-title"><%= t("booking_mailer.patient_rejected.subject") %></h1>
+    <p class="header-sub"><%= @clinic.name %></p>
+  </div>
+
+  <div class="body">
+    <p class="greeting"><%= t("booking_mailer.patient_rejected.greeting", name: @patient_name) %></p>
+    <p class="intro"><%= t("booking_mailer.patient_rejected.intro", clinic: @clinic.name) %></p>
+
+    <div class="next-steps-box">
+      <div class="next-steps-label">Next steps</div>
+      <p class="next-steps-text"><%= t("booking_mailer.patient_rejected.next_steps") %></p>
+    </div>
+
+    <p class="closing"><%= t("booking_mailer.patient_rejected.closing") %></p>
+  </div>
+
+  <div class="footer">
+    MedixoApp &middot; <%= @clinic.name %> &middot; This is an automated notification.
+  </div>
+</div>
+</body>
+</html>

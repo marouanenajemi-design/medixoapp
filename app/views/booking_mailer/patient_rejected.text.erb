@@ -1,0 +1,13 @@
+MedixoApp — <%= t("booking_mailer.patient_rejected.subject") %>
+<%= "=" * 50 %>
+
+<%= t("booking_mailer.patient_rejected.greeting", name: @patient_name) %>
+
+<%= t("booking_mailer.patient_rejected.intro", clinic: @clinic.name) %>
+
+<%= t("booking_mailer.patient_rejected.next_steps") %>
+
+<%= t("booking_mailer.patient_rejected.closing") %>
+
+---
+MedixoApp · <%= @clinic.name %> · Automated notification

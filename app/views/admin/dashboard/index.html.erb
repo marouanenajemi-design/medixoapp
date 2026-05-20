@@ -10,6 +10,17 @@
 <% end %>
 
 <div class="page-shell">
+  <% unless smtp_configured? %>
+    <div class="alert alert-warning mb-4 d-flex align-items-center gap-3">
+      <i class="bi bi-envelope-exclamation-fill fs-5"></i>
+      <div>
+        <strong>SMTP not configured.</strong>
+        Booking notification emails will not be delivered.
+        Set <code>SMTP_USER_NAME</code> and <code>SMTP_PASSWORD</code> environment variables to enable email delivery.
+      </div>
+    </div>
+  <% end %>
+
   <div class="page-header">
     <div>
       <h1 class="page-title"><%= t("admin.dashboard.title") %></h1>

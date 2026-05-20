@@ -1426,6 +1426,27 @@ textarea.form-control {
   flex-shrink: 0;
 }
 
+.sidebar-notif-badge {
+  margin-left: auto;
+  background: #ef4444;
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 800;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
 /* ═══════════════════════════════════════════════════════
    PLAN TIER BADGE — dashboard + analytics
    ═══════════════════════════════════════════════════════ */

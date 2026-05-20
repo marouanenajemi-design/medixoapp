@@ -11,7 +11,11 @@
       "Bash(bin/rails db:migrate)",
       "Bash(bin/rails db:seed)",
       "Bash(bin/rails runner ' *)",
-      "Bash(bin/rails runner *)"
+      "Bash(bin/rails runner *)",
+      "Bash(grep -v \"^$\\\\|warning:\")",
+      "Bash(bin/rails server *)",
+      "Bash(curl -s http://localhost:3001/book/khadija-clinic -H 'Accept: text/html' -c /tmp/cookies.txt)",
+      "Bash(kill %1)"
     ],
     "additionalDirectories": [
       "/home/liam"

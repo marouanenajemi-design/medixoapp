@@ -1,0 +1,22 @@
+MedixoApp — <%= t("booking_mailer.patient_confirmed.subject") %>
+<%= "=" * 50 %>
+
+<%= t("booking_mailer.patient_confirmed.greeting", name: @patient_name) %>
+
+<%= t("booking_mailer.patient_confirmed.intro", clinic: @clinic.name) %>
+
+<%= t("booking_mailer.patient_confirmed.label_doctor") %>:  <%= @doctor.name %><% if @doctor.specialty.present? %> — <%= @doctor.specialty %><% end %>
+
+<%= t("booking_mailer.patient_confirmed.label_date") %>:    <%= @appointment.appointment_date.strftime("%A, %B %d, %Y") %>
+<%= t("booking_mailer.patient_confirmed.label_time") %>:    <%= @appointment.appointment_time.strftime("%H:%M") %>
+<% if @clinic.address.present? %>
+<%= t("booking_mailer.patient_confirmed.label_address") %>: <%= @clinic.address %>
+<% end %>
+<% if @clinic.phone.present? %>
+<%= t("booking_mailer.patient_confirmed.label_phone") %>:   <%= @clinic.phone %>
+<% end %>
+
+<%= t("booking_mailer.patient_confirmed.closing") %>
+
+---
+MedixoApp · <%= @clinic.name %> · Automated notification

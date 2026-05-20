@@ -158,6 +158,37 @@
     </div>
   </div>
 
+  <%# ── Online booking card ── %>
+  <div class="content-card mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(20,184,166,0.12);color:#0d9488;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;">
+          <i class="bi bi-globe2"></i>
+        </div>
+        <div>
+          <div style="font-size:0.95rem;font-weight:700;color:#0f172a;"><%= t("dashboard.index.booking.title") %></div>
+          <div style="font-size:0.82rem;color:#64748b;margin-top:2px;">
+            /book/<strong><%= current_clinic.slug %></strong>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex gap-2 flex-wrap align-items-center">
+        <% pending_count = current_clinic.pending_online_bookings_count %>
+        <% if pending_count > 0 %>
+          <span style="background:#fef3c7;color:#92400e;font-size:0.8rem;font-weight:700;padding:4px 12px;border-radius:999px;">
+            <i class="bi bi-hourglass-split"></i> <%= pending_count %> <%= t("dashboard.index.booking.pending") %>
+          </span>
+        <% end %>
+        <%= link_to appointments_path, class: "btn btn-sm btn-outline-secondary" do %>
+          <i class="bi bi-inbox"></i> <%= t("dashboard.index.booking.view_requests") %>
+        <% end %>
+        <%= link_to clinic_booking_path(current_clinic.slug), target: "_blank", class: "btn btn-sm btn-primary" do %>
+          <i class="bi bi-box-arrow-up-right"></i> <%= t("dashboard.index.booking.open_page") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
   <%# ── Status breakdown ── %>
   <div class="content-card mb-4">
     <div class="card-toolbar d-flex justify-content-between align-items-center gap-3 flex-wrap">

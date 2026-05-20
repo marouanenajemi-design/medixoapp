@@ -4,6 +4,7 @@ class Patient < ApplicationRecord
   has_many :prescriptions, dependent: :destroy
 
   validates :name, :phone, presence: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   validates :age,
             numericality: {
               only_integer: true,

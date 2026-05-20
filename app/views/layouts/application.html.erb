@@ -70,6 +70,13 @@
               <span class="sidebar-plan-badge">PRO</span>
             <% end %>
           <% end %>
+          <%= link_to appointments_path, class: active_path(appointments_path) + " position-relative" do %>
+            <i class="bi bi-globe2"></i> <%= t("navigation.online_bookings") %>
+            <% pending_count = current_clinic.pending_online_bookings_count %>
+            <% if pending_count > 0 %>
+              <span class="sidebar-notif-badge"><%= pending_count %></span>
+            <% end %>
+          <% end %>
           <%= link_to edit_clinic_path, class: active_path(edit_clinic_path) do %>
             <i class="bi bi-gear"></i> <%= t("navigation.clinic_settings") %>
           <% end %>

@@ -15,8 +15,7 @@ fr:
     calendar: "Calendrier"
 
     chatbot: "Assistant médicaments"
-
-
+    online_bookings: "Réservations en ligne"
     clinic_settings: "Paramètres du cabinet"
   layout:
     navigation:
@@ -65,6 +64,8 @@ fr:
       created: "Rendez-vous créé avec succès."
       updated: "Rendez-vous mis à jour avec succès."
       deleted: "Rendez-vous supprimé avec succès."
+      approved: "Rendez-vous confirmé pour %{patient}."
+      rejected: "Rendez-vous annulé pour %{patient}."
     prescriptions:
       created: "Ordonnance créée avec succès."
       updated: "Ordonnance mise à jour avec succès."
@@ -123,13 +124,14 @@ fr:
         doctors: "Médecins"
         patients: "Patients"
         total_appointments: "Total des rendez-vous"
+        today_appointments: "Aujourd'hui"
+      booking:
+        title: "Page de réservation en ligne"
+        pending: "en attente"
+        view_requests: "Voir les demandes"
+        open_page: "Ouvrir la page"
 
       empty: "Aucun rendez-vous récent pour le moment."
-      stats:
-        doctors: "Médecins"
-        patients: "Patients"
-
-        today_appointments: "Rendez-vous du jour"
   doctors:
     index:
       title: "Médecins"
@@ -195,6 +197,14 @@ fr:
       search_placeholder: "Rechercher par patient, médecin, statut ou date..."
       search_empty: "Aucun rendez-vous trouvé pour cette recherche."
       empty: "Aucun rendez-vous ajouté pour le moment."
+      online_requests: "Demandes de réservation en ligne"
+      pending: "en attente"
+      reason: "Motif"
+      approve: "Confirmer"
+      reject: "Refuser"
+      confirm_reject: "Annuler cette demande de réservation ?"
+      booking_page: "Page de réservation"
+      share_booking_link: "Partager le lien de réservation"
     calendar:
       title: "Calendrier"
       subtitle: "Visualisez tous les rendez-vous dans une vue calendrier claire."
@@ -546,3 +556,65 @@ fr:
         submit: "Connexion en tant qu'Admin"
         clinic_login_prompt: "Propriétaire d'un cabinet ?"
         back_to_clinic_login: "Connexion à votre cabinet →"
+
+  bookings:
+    layout:
+      title: "Prendre un rendez-vous"
+      footer_tagline: "Réservation de rendez-vous en ligne"
+    show:
+      title: "Prendre un rendez-vous chez %{clinic}"
+      no_doctors_title: "Aucun médecin disponible"
+      no_doctors_sub: "Ce cabinet n'a pas encore ajouté de médecins. Revenez bientôt."
+      step1_title: "Choisir un médecin"
+      step2_title: "Choisir une date"
+      step3_title: "Choisir un horaire"
+      step4_title: "Vos coordonnées"
+      change: "Modifier"
+      loading_slots: "Chargement des créneaux disponibles…"
+      summary_label: "Votre rendez-vous"
+      submit: "Confirmer la réservation"
+      privacy_note: "Vos informations sont partagées uniquement avec le cabinet."
+      fields:
+        name: "Nom complet"
+        name_placeholder: "ex. Fatima Benali"
+        email: "Adresse e-mail"
+        email_placeholder: "vous@exemple.com"
+        phone: "Numéro de téléphone"
+        phone_placeholder: "+33 6 00 00 00 00"
+        reason: "Motif de consultation"
+        reason_placeholder: "Description brève (facultatif)"
+    confirmation:
+      title: "Réservation confirmée"
+      heading: "Demande envoyée !"
+      body: "Votre demande de rendez-vous a bien été transmise au cabinet. Ils la confirmeront prochainement."
+      pending_notice: "En attente de confirmation du cabinet"
+      email_reply: "Nous répondrons à votre demande par e-mail après l'examen de votre rendez-vous par la clinique."
+    errors:
+      name_required: "Le nom complet est requis."
+      email_required: "L'adresse e-mail est requise."
+      phone_required: "Le numéro de téléphone est requis."
+      doctor_required: "Veuillez sélectionner un médecin."
+      date_required: "Veuillez sélectionner une date."
+      time_required: "Veuillez sélectionner un horaire."
+      invalid_slot: "Ce créneau n'est plus disponible."
+      save_failed: "Impossible d'enregistrer vos informations. Veuillez réessayer."
+      rate_limit: "Trop de tentatives. Veuillez patienter avant de réessayer."
+  booking_mailer:
+    clinic_notification:
+      subject: "Nouvelle réservation en ligne — %{clinic}"
+    patient_confirmed:
+      subject: "Votre rendez-vous a été confirmé"
+      greeting: "Bonne nouvelle, %{name} !"
+      intro: "Votre demande de rendez-vous a été confirmée par %{clinic}."
+      label_doctor: "Médecin"
+      label_date: "Date"
+      label_time: "Heure"
+      label_address: "Adresse"
+      label_phone: "Téléphone"
+      closing: "Nous nous réjouissons de vous accueillir. Merci d'arriver quelques minutes à l'avance."
+    patient_rejected:
+      subject: "Votre demande de rendez-vous a été refusée"
+      greeting: "Cher(e) %{name},"
+      intro: "Malheureusement, %{clinic} n'est pas en mesure de traiter votre demande de rendez-vous pour le moment."
+      next_steps: "Veuillez contacter le cabinet directement ou soumettre une nouvelle demande via notre page de réservation en ligne."
+      closing: "Nous nous excusons pour la gêne occasionnée."

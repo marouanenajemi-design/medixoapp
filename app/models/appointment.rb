@@ -4,9 +4,18 @@ class Appointment < ApplicationRecord
   belongs_to :patient
 
   STATUSES = ["pending", "confirmed", "completed", "cancelled"].freeze
+  SOURCES  = ["clinic", "online"].freeze
 
   validates :appointment_date, :appointment_time, :status, presence: true
   validates :status, inclusion: { in: STATUSES }
+  validates :source, inclusion: { in: SOURCES }
+
+  scope :online,  -> { where(source: "online") }
+  scope :pending, -> { where(status: "pending") }
+
+  def online?
+    source == "online"
+  end
 
   validate :doctor_and_patient_belong_to_clinic
   validate :doctor_availability

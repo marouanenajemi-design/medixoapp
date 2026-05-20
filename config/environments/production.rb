@@ -95,23 +95,24 @@ Rails.application.configure do
 
   if mail_delivery_method == :smtp
     config.action_mailer.smtp_settings = {
-      address: ENV.fetch("SMTP_ADDRESS", "smtp.sendgrid.net"),
-      port: ENV.fetch("SMTP_PORT", "587").to_i,
-      domain: ENV.fetch("SMTP_DOMAIN", app_host),
-      user_name: ENV["SMTP_USERNAME"],
-      password: ENV["SMTP_PASSWORD"],
-      authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain").to_sym,
+      address:              ENV.fetch("SMTP_ADDRESS", "smtp.postmarkapp.com"),
+      port:                 ENV.fetch("SMTP_PORT", "587").to_i,
+      domain:               ENV.fetch("SMTP_DOMAIN", app_host),
+      user_name:            ENV["SMTP_USER_NAME"],
+      password:             ENV["SMTP_PASSWORD"],
+      authentication:       ENV.fetch("SMTP_AUTHENTICATION", "plain").to_sym,
       enable_starttls_auto: ENV.fetch("SMTP_ENABLE_STARTTLS_AUTO", "true") == "true",
-      open_timeout: ENV.fetch("SMTP_OPEN_TIMEOUT", "5").to_i,
-      read_timeout: ENV.fetch("SMTP_READ_TIMEOUT", "5").to_i
+      open_timeout:         ENV.fetch("SMTP_OPEN_TIMEOUT", "5").to_i,
+      read_timeout:         ENV.fetch("SMTP_READ_TIMEOUT", "5").to_i
     }.tap do |smtp|
       smtp[:openssl_verify_mode] = ENV["SMTP_OPENSSL_VERIFY_MODE"] if ENV["SMTP_OPENSSL_VERIFY_MODE"].present?
     end
   end
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  # ActiveJob queue adapter — use Solid Queue (bundled with Rails 8) or Sidekiq in production.
+  # deliver_later enqueues mail jobs; without a persistent adapter jobs are lost on restart.
+  # config.active_job.queue_adapter     = :sidekiq
+  # config.active_job.queue_name_prefix = "medixoapp_production"
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

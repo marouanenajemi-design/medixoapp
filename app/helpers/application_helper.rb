@@ -58,4 +58,8 @@ module ApplicationHelper
 
     clinic.logo
   end
+
+  def smtp_configured?
+    ENV["SMTP_USER_NAME"].present? && ENV["SMTP_PASSWORD"].present?
+  end
 end

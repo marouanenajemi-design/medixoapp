@@ -1,0 +1,20 @@
+MedixoApp — New Online Booking
+================================
+
+A patient has submitted an online appointment request for <%= @clinic.name %>.
+
+Patient:  <%= @patient_name %>
+Email:    <%= @patient_email %>
+Doctor:   <%= @doctor.name %> (<%= @doctor.specialty %>)
+Date:     <%= @appointment.appointment_date.strftime("%A, %B %d, %Y") %>
+Time:     <%= @appointment.appointment_time.strftime("%H:%M") %>
+<% if @appointment.notes.present? %>
+Reason:   <%= @appointment.notes %>
+<% end %>
+Status:   Pending approval
+
+Log in to approve or reject this booking:
+<%= appointments_url(locale: I18n.locale) %>
+
+---
+MedixoApp · Automated notification

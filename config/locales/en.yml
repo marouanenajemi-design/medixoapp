@@ -15,6 +15,7 @@ en:
     calendar: "Calendar"
     analytics: "Analytics"
     chatbot: "Medicine Chatbot"
+    online_bookings: "Online Bookings"
     clinic_settings: "Clinic Settings"
   layout:
     navigation:
@@ -87,6 +88,8 @@ en:
       created: "Appointment created successfully."
       updated: "Appointment updated successfully."
       deleted: "Appointment deleted successfully."
+      approved: "Appointment confirmed for %{patient}."
+      rejected: "Appointment cancelled for %{patient}."
     prescriptions:
       created: "Prescription created successfully."
       updated: "Prescription updated successfully."
@@ -145,6 +148,12 @@ en:
         doctors: "Doctors"
         patients: "Patients"
         total_appointments: "Total Appointments"
+        today_appointments: "Today"
+      booking:
+        title: "Online Booking Page"
+        pending: "pending"
+        view_requests: "View Requests"
+        open_page: "Open Booking Page"
 
       empty: "No recent appointments yet."
       stats:
@@ -217,6 +226,14 @@ en:
       search_placeholder: "Search by patient, doctor, status, or date..."
       search_empty: "No appointments found for this search."
       empty: "No appointments added yet."
+      online_requests: "Online Booking Requests"
+      pending: "pending"
+      reason: "Reason"
+      approve: "Approve"
+      reject: "Reject"
+      confirm_reject: "Cancel this booking request?"
+      booking_page: "Booking Page"
+      share_booking_link: "Share booking link"
     calendar:
       title: "Calendar"
       subtitle: "View all appointments in a clear calendar layout."
@@ -568,3 +585,65 @@ en:
         submit: "Sign In as Admin"
         clinic_login_prompt: "Clinic owner?"
         back_to_clinic_login: "Sign in to your clinic →"
+
+  bookings:
+    layout:
+      title: "Book an Appointment"
+      footer_tagline: "Online appointment booking"
+    show:
+      title: "Book an Appointment at %{clinic}"
+      no_doctors_title: "No doctors available yet"
+      no_doctors_sub: "This clinic hasn't added any doctors yet. Please check back soon."
+      step1_title: "Select a Doctor"
+      step2_title: "Choose a Date"
+      step3_title: "Pick a Time"
+      step4_title: "Your Details"
+      change: "Change"
+      loading_slots: "Loading available times…"
+      summary_label: "Your appointment"
+      submit: "Book Appointment"
+      privacy_note: "Your details are only shared with the clinic."
+      fields:
+        name: "Full Name"
+        name_placeholder: "e.g. Jane Smith"
+        email: "Email Address"
+        email_placeholder: "you@example.com"
+        phone: "Phone Number"
+        phone_placeholder: "+1 555 000 0000"
+        reason: "Reason for Visit"
+        reason_placeholder: "Brief description (optional)"
+    confirmation:
+      title: "Booking Confirmed"
+      heading: "Request Received!"
+      body: "Your appointment request has been sent to the clinic. They will review and confirm it shortly."
+      pending_notice: "Awaiting clinic confirmation"
+      email_reply: "We will reply to your request by email after the clinic reviews your appointment."
+    errors:
+      name_required: "Full name is required."
+      email_required: "Email address is required."
+      phone_required: "Phone number is required."
+      doctor_required: "Please select a doctor."
+      date_required: "Please select a date."
+      time_required: "Please select a time."
+      invalid_slot: "The selected time slot is no longer available."
+      save_failed: "Unable to save your details. Please try again."
+      rate_limit: "Too many requests. Please wait before trying again."
+  booking_mailer:
+    clinic_notification:
+      subject: "New Online Booking — %{clinic}"
+    patient_confirmed:
+      subject: "Your appointment has been confirmed"
+      greeting: "Good news, %{name}!"
+      intro: "Your appointment request has been confirmed by %{clinic}."
+      label_doctor: "Doctor"
+      label_date: "Date"
+      label_time: "Time"
+      label_address: "Address"
+      label_phone: "Phone"
+      closing: "We look forward to seeing you. Please arrive a few minutes early."
+    patient_rejected:
+      subject: "Your appointment request was declined"
+      greeting: "Dear %{name},"
+      intro: "Unfortunately, %{clinic} is unable to accommodate your appointment request at this time."
+      next_steps: "Please contact the clinic directly or submit a new booking request through our online booking page."
+      closing: "We apologize for any inconvenience."

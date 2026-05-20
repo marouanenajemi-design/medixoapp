@@ -1,10 +1,12 @@
 class AppointmentsController < ApplicationController
   before_action :ensure_clinic!
-  before_action :set_appointment, only: [:show, :edit, :update, :destroy]
+  before_action :set_appointment, only: [:show, :edit, :update, :destroy, :approve, :reject]
   before_action :load_data, only: [:new, :create, :edit, :update]
 
   def index
-    @appointments = current_clinic.appointments.includes(:doctor, :patient).order(appointment_date: :desc, appointment_time: :desc)
+    base = current_clinic.appointments.includes(:doctor, :patient)
+    @online_pending = base.online.pending.order(appointment_date: :asc)
+    @appointments   = base.order(appointment_date: :desc, appointment_time: :desc)
   end
 
   def calendar
@@ -44,6 +46,20 @@ class AppointmentsController < ApplicationController
     redirect_to appointments_path, notice: t("flash.appointments.deleted")
   end
 
+  def approve
+    @appointment.update!(status: "confirmed")
+    notify_patient_confirmed(@appointment)
+    redirect_to appointments_path, notice: t("flash.appointments.approved",
+      patient: @appointment.patient.name)
+  end
+
+  def reject
+    @appointment.update!(status: "cancelled")
+    notify_patient_rejected(@appointment)
+    redirect_to appointments_path, notice: t("flash.appointments.rejected",
+      patient: @appointment.patient.name)
+  end
+
   private
 
   def set_appointment
@@ -51,11 +67,33 @@ class AppointmentsController < ApplicationController
   end
 
   def load_data
-    @doctors = current_clinic.doctors.order(:name)
+    @doctors  = current_clinic.doctors.order(:name)
     @patients = current_clinic.patients.order(:name)
   end
 
   def appointment_params
     params.require(:appointment).permit(:appointment_date, :appointment_time, :status, :notes, :doctor_id, :patient_id)
+  end
+
+  def notify_patient_confirmed(appointment)
+    email = appointment.patient_email.presence || appointment.patient.email
+    if email.blank?
+      Rails.logger.warn("[AppointmentsController] approve: no patient_email for appointment ##{appointment.id}, skipping confirmation email")
+      return
+    end
+    BookingMailer.patient_confirmed(appointment).deliver_later
+  rescue StandardError => e
+    Rails.logger.error("[AppointmentsController] patient_confirmed email failed for appointment ##{appointment.id}: #{e.class}: #{e.message}")
+  end
+
+  def notify_patient_rejected(appointment)
+    email = appointment.patient_email.presence || appointment.patient.email
+    if email.blank?
+      Rails.logger.warn("[AppointmentsController] reject: no patient_email for appointment ##{appointment.id}, skipping rejection email")
+      return
+    end
+    BookingMailer.patient_rejected(appointment).deliver_later
+  rescue StandardError => e
+    Rails.logger.error("[AppointmentsController] patient_rejected email failed for appointment ##{appointment.id}: #{e.class}: #{e.message}")
   end
 end

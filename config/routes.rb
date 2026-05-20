@@ -20,24 +20,29 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :doctors, only: [:index, :show]
-    resources :patients, only: [:index, :show]
+    resources :doctors,      only: [:index, :show]
+    resources :patients,     only: [:index, :show]
     resources :appointments, only: [:index, :show]
   end
+
+  # Public online booking (no auth)
+  get  "/book/:slug",              to: "bookings#show",         as: :clinic_booking
+  post "/book/:slug",              to: "bookings#create"
+  get  "/book/:slug/slots",        to: "bookings#slots",         as: :clinic_booking_slots
+  get  "/book/:slug/confirmation", to: "bookings#confirmation",  as: :clinic_booking_confirmation
 
   get "calendar", to: "appointments#calendar"
   devise_for :users
 
   root "dashboard#index"
 
-  get "dashboard", to: "dashboard#index"
-
-  get "chatbot", to: "chatbot#index"
-  post "chatbot", to: "chatbot#index"
+  get "dashboard",  to: "dashboard#index"
+  get "chatbot",    to: "chatbot#index"
+  post "chatbot",   to: "chatbot#index"
   get "chatbot/widget", to: "chatbot#widget", as: :chatbot_widget
 
-  get "pricing",   to: "pages#pricing"
-  get "analytics", to: "analytics#index", as: :analytics
+  get "pricing",    to: "pages#pricing"
+  get "analytics",  to: "analytics#index", as: :analytics
   post "/webhooks/lemonsqueezy", to: "webhooks#lemonsqueezy"
 
   resource :clinic, only: [:new, :create, :edit, :update]
@@ -50,7 +55,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :appointments
+  resources :appointments do
+    member do
+      patch :approve
+      patch :reject
+    end
+  end
 
   resources :prescriptions do
     member do
