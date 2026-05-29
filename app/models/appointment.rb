@@ -62,8 +62,5 @@ class Appointment < ApplicationRecord
     return if appointment_seconds >= start_seconds && appointment_seconds < end_seconds
 
     errors.add(:appointment_time, :outside_doctor_working_hours)
-
-    errors.add(:appointment_time, "has already been booked for this doctor")
-
   end
 end

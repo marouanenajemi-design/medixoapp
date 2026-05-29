@@ -29,8 +29,9 @@ Rails.application.configure do
   # Do not fall back to assets pipeline if a precompiled asset is missed.
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
-# مؤقتاً خليه true باش Heroku ما يطيحش فالـ assets
-  config.assets.compile = true
+  # Never compile assets at request time — run `rails assets:precompile` in the Render build command.
+  # Render build command: bundle install && bundle exec rails assets:precompile && bundle exec rails db:migrate
+  config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
