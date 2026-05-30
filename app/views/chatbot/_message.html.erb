@@ -1,77 +1,74 @@
-<%# Renders one chat turn (user or assistant) in the full-page chatbot view. %>
-<div class="chat-message chat-message--<%= message.role %>" id="<%= dom_id(message) %>">
+<%# One chat turn — user (right) or assistant (left). Used by the full-page chatbot
+    and appended via Turbo Stream after each AI response. %>
+<div class="cmsg cmsg--<%= message.user? ? "user" : "ai" %>" id="<%= dom_id(message) %>">
 
   <% if message.user? %>
-    <%# ── User bubble (right-aligned) ── %>
-    <div class="chat-bubble chat-bubble--user"><%= message.content %></div>
-    <div class="chat-meta chat-meta--right"><%= message.created_at.strftime("%H:%M") %></div>
+    <div class="cmsg-bubble cmsg-bubble--user"><%= message.content %></div>
+    <div class="cmsg-ts cmsg-ts--right"><%= message.created_at.strftime("%H:%M") %></div>
 
   <% else %>
-    <%# ── Assistant bubble (left-aligned) ── %>
-    <div class="chat-bubble-row">
-      <div class="chat-avatar" aria-hidden="true"><i class="bi bi-stars"></i></div>
+    <div class="cmsg-row">
+      <div class="cmsg-avatar"><i class="bi bi-stars"></i></div>
 
-      <div class="chat-bubble-col">
+      <div class="cmsg-col">
         <% res = message.parsed_response %>
 
         <% if message.error_message? || res.blank? %>
-          <div class="chat-bubble chat-bubble--assistant chat-bubble--error">
-            <%= message.content %>
-          </div>
+          <div class="cmsg-bubble cmsg-bubble--ai cmsg-bubble--error"><%= message.content %></div>
 
         <% else %>
-          <div class="chat-bubble chat-bubble--assistant">
+          <div class="cmsg-bubble cmsg-bubble--ai">
 
             <% if res[:medicine_name].present? %>
-              <p class="chat-section-title mb-1"><%= t("chatbot.response.medicine_name") %></p>
-              <p class="fw-semibold mb-2"><%= res[:medicine_name] %></p>
+              <p class="cmsg-label"><%=t "chatbot.response.medicine_name" %></p>
+              <p class="cmsg-drug-name"><%= res[:medicine_name] %></p>
             <% end %>
 
             <% if res[:description].present? %>
-              <p class="mb-2"><%= res[:description] %></p>
+              <p class="cmsg-body"><%= res[:description] %></p>
             <% end %>
 
             <% if Array(res[:common_uses]).any? %>
-              <p class="chat-section-title"><%= t("chatbot.response.common_uses") %></p>
-              <ul class="chat-list">
-                <% Array(res[:common_uses]).each do |item| %><li><%= item %></li><% end %>
+              <p class="cmsg-label"><%=t "chatbot.response.common_uses" %></p>
+              <ul class="cmsg-list">
+                <% Array(res[:common_uses]).each do |i| %><li><%= i %></li><% end %>
               </ul>
             <% end %>
 
             <% if Array(res[:common_side_effects]).any? %>
-              <p class="chat-section-title"><%= t("chatbot.response.common_side_effects") %></p>
-              <ul class="chat-list">
-                <% Array(res[:common_side_effects]).each do |item| %><li><%= item %></li><% end %>
+              <p class="cmsg-label"><%=t "chatbot.response.common_side_effects" %></p>
+              <ul class="cmsg-list">
+                <% Array(res[:common_side_effects]).each do |i| %><li><%= i %></li><% end %>
               </ul>
             <% end %>
 
             <% if Array(res[:drug_interactions]).any? %>
-              <p class="chat-section-title"><%= t("chatbot.response.drug_interactions") %></p>
-              <ul class="chat-list">
-                <% Array(res[:drug_interactions]).each do |item| %><li><%= item %></li><% end %>
+              <p class="cmsg-label"><%=t "chatbot.response.drug_interactions" %></p>
+              <ul class="cmsg-list">
+                <% Array(res[:drug_interactions]).each do |i| %><li><%= i %></li><% end %>
               </ul>
             <% end %>
 
             <% if Array(res[:general_warnings]).any? %>
-              <p class="chat-section-title"><%= t("chatbot.response.general_warnings") %></p>
-              <ul class="chat-list">
-                <% Array(res[:general_warnings]).each do |item| %><li><%= item %></li><% end %>
+              <p class="cmsg-label"><%=t "chatbot.response.general_warnings" %></p>
+              <ul class="cmsg-list">
+                <% Array(res[:general_warnings]).each do |i| %><li><%= i %></li><% end %>
               </ul>
             <% end %>
 
             <% if res[:dosage_notes].present? %>
-              <p class="chat-section-title"><%= t("chatbot.response.dosage_notes") %></p>
-              <p class="mb-0"><%= res[:dosage_notes] %></p>
+              <p class="cmsg-label"><%=t "chatbot.response.dosage_notes" %></p>
+              <p class="cmsg-body"><%= res[:dosage_notes] %></p>
             <% end %>
 
             <% if res[:disclaimer].present? %>
-              <p class="chat-disclaimer mb-0 mt-2"><i class="bi bi-info-circle me-1"></i><%= res[:disclaimer] %></p>
+              <p class="cmsg-disclaimer"><i class="bi bi-info-circle me-1"></i><%= res[:disclaimer] %></p>
             <% end %>
 
           </div>
         <% end %>
 
-        <div class="chat-meta"><%= message.created_at.strftime("%H:%M") %></div>
+        <div class="cmsg-ts"><%= message.created_at.strftime("%H:%M") %></div>
       </div>
     </div>
   <% end %>

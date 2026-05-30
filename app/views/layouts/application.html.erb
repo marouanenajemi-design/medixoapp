@@ -203,116 +203,61 @@
     <% end %>
 
 <% if user_signed_in? && !auth_page && current_clinic.present? %>
-  <div class="floating-chatbot-wrap">
-    <div class="chatbot-tooltip">Ask MedixoApp AI</div>
+  <%# ── Floating AI button + popover ──────────────────────────────────────────
+      Uses chatbot-fab Stimulus controller. The Turbo Frame inside the popover
+      loads lazily on first open (src set by JS via data-lazy-src), so there
+      is no extra DB query on every page load. No iframe — same browsing context. %>
+  <div class="cfab-wrap" data-controller="chatbot-fab">
+
+    <div class="cfab-tooltip">Ask MedixoApp AI</div>
 
     <button
+      class="cfab-btn"
       type="button"
-      class="floating-chatbot-btn"
-      id="floatingChatbotButton"
-      aria-label="Open AI chatbot"
-      title="Open AI chatbot"
+      data-action="click->chatbot-fab#toggle"
+      aria-label="Open AI assistant"
     >
-      <span class="chatbot-ai-badge">AI</span>
-      <i class="bi bi-chat-dots-fill"></i>
+      <span class="cfab-badge">AI</span>
+      <i class="bi bi-stars"></i>
     </button>
 
-    <div class="chatbot-popup" id="floatingChatbotPopup">
-      <div class="chatbot-popup-header">
-        <div class="chatbot-popup-brand">
-          <div class="chatbot-popup-icon">
-            <i class="bi bi-stars"></i>
-          </div>
-
+    <div class="cfab-card" data-chatbot-fab-target="card" hidden>
+      <%# ── Card header ── %>
+      <div class="cfab-card-header">
+        <div class="cfab-card-brand">
+          <div class="cfab-card-icon"><i class="bi bi-stars"></i></div>
           <div>
-            <p class="chatbot-popup-title">MedixoApp AI</p>
-            <p class="chatbot-popup-subtitle">Medicine information assistant</p>
+            <p class="cfab-card-title">MedixoApp AI</p>
+            <p class="cfab-card-sub">Medicine information assistant</p>
           </div>
         </div>
-
-        <div class="chatbot-popup-actions">
-          <a
-            href="<%= chatbot_path(locale: I18n.locale) %>"
-            class="chatbot-popup-action-btn"
-            title="Open full page"
-            aria-label="Open full chatbot page"
-          >
+        <div class="cfab-card-actions">
+          <%= link_to chatbot_path(locale: I18n.locale),
+                class: "cfab-action-btn",
+                title: "Open full screen",
+                "aria-label" => "Open full screen chatbot" do %>
             <i class="bi bi-box-arrow-up-right"></i>
-          </a>
-
-          <button
-            type="button"
-            class="chatbot-popup-action-btn"
-            id="closeFloatingChatbot"
-            title="Close"
-            aria-label="Close chatbot"
-          >
+          <% end %>
+          <button class="cfab-action-btn" data-action="click->chatbot-fab#close" type="button" title="Close" aria-label="Close">
             <i class="bi bi-x-lg"></i>
           </button>
         </div>
       </div>
 
-      <iframe
-        src="<%= chatbot_widget_path(locale: I18n.locale) %>"
-        class="chatbot-popup-frame"
-        title="MedixoApp AI Chatbot"
-      ></iframe>
+      <%# ── Turbo Frame (loads widget content lazily) ── %>
+      <turbo-frame
+        id="cfab-widget-frame"
+        data-chatbot-fab-target="frame"
+        data-lazy-src="<%= chatbot_widget_path(locale: I18n.locale) %>"
+        class="cfab-frame"
+      >
+        <div class="cfab-frame-loading">
+          <span class="spinner-border spinner-border-sm text-teal" role="status"></span>
+        </div>
+      </turbo-frame>
     </div>
+
   </div>
-
-  <script>
-    function initFloatingChatbot() {
-      const openBtn = document.getElementById("floatingChatbotButton");
-      const popup = document.getElementById("floatingChatbotPopup");
-      const closeBtn = document.getElementById("closeFloatingChatbot");
-
-      if (!openBtn || !popup || openBtn.dataset.chatbotBound === "true") return;
-
-      openBtn.dataset.chatbotBound = "true";
-
-      openBtn.addEventListener("click", function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        popup.classList.toggle("open");
-      });
-
-      if (closeBtn && closeBtn.dataset.chatbotBound !== "true") {
-        closeBtn.dataset.chatbotBound = "true";
-
-        closeBtn.addEventListener("click", function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-          popup.classList.remove("open");
-        });
-      }
-
-      if (!document.body.dataset.chatbotOutsideBound) {
-        document.body.dataset.chatbotOutsideBound = "true";
-
-        document.addEventListener("click", function (event) {
-          const wrap = document.querySelector(".floating-chatbot-wrap");
-          const activePopup = document.getElementById("floatingChatbotPopup");
-          if (!wrap || !activePopup) return;
-
-          if (!wrap.contains(event.target)) {
-            activePopup.classList.remove("open");
-          }
-        });
-
-        document.addEventListener("keydown", function (event) {
-          const activePopup = document.getElementById("floatingChatbotPopup");
-          if (!activePopup) return;
-
-          if (event.key === "Escape") {
-            activePopup.classList.remove("open");
-          }
-        });
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", initFloatingChatbot);
-    document.addEventListener("turbo:load", initFloatingChatbot);
-  </script>
 <% end %>
 </body>
 </html>

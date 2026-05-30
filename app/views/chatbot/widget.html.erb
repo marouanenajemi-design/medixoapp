@@ -1,211 +1,74 @@
-<!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
-<head>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <%= csrf_meta_tags %>
-  <%= javascript_importmap_tags %>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      margin: 0; padding: 0;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-      font-size: 14px; color: #0f172a; background: #f8fafc;
-      height: 100vh; display: flex; flex-direction: column;
-    }
+<%# Compact chat rendered inside the floating widget's Turbo Frame.
+    No layout — Turbo Frame extracts only the matching <turbo-frame> tag. %>
+<turbo-frame id="cfab-widget-frame">
 
-    /* ── Header ── */
-    .w-header {
-      background: linear-gradient(135deg, #0d9488, #14b8a6);
-      color: white; padding: 10px 14px;
-      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
-    }
-    .w-header-icon {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: rgba(255,255,255,.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-    }
-    .w-header-title  { font-weight: 700; font-size: 0.9rem; }
-    .w-header-sub    { font-size: 0.75rem; opacity: 0.85; }
-
-    /* ── Disclaimer bar ── */
-    .w-disclaimer {
-      background: #fefce8; border-bottom: 1px solid #fde68a;
-      color: #92400e; font-size: 0.75rem; padding: 6px 12px; flex-shrink: 0;
-    }
-
-    /* ── Thread ── */
-    .w-thread {
-      flex: 1; overflow-y: auto; padding: 12px 10px;
-      display: flex; flex-direction: column; gap: 10px;
-    }
-
-    .w-empty {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; height: 100%; color: #94a3b8; text-align: center;
-      padding: 20px;
-    }
-    .w-empty i { font-size: 2.2rem; margin-bottom: 8px; opacity: 0.5; }
-
-    /* ── Message bubbles ── */
-    .wm { display: flex; flex-direction: column; }
-    .wm--user { align-items: flex-end; }
-    .wm--assistant { align-items: flex-start; }
-
-    .wm-bubble {
-      max-width: 88%; padding: 8px 12px; border-radius: 16px;
-      font-size: 0.84rem; line-height: 1.5;
-    }
-    .wm-bubble--user {
-      background: #14b8a6; color: white;
-      border-bottom-right-radius: 4px;
-    }
-    .wm-bubble--assistant {
-      background: white; border: 1px solid #e2e8f0; color: #0f172a;
-      border-bottom-left-radius: 4px;
-    }
-    .wm-bubble--error {
-      background: #fef2f2; border-color: #fecaca; color: #b91c1c;
-    }
-    .wm-row { display: flex; align-items: flex-start; gap: 6px; max-width: 92%; }
-    .wm-col { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-    .wm-avatar {
-      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg,#0d9488,#14b8a6); color: white;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; margin-top: 2px;
-    }
-    .wm-meta { font-size: 0.68rem; color: #94a3b8; padding: 0 2px; }
-    .wm-meta--right { text-align: right; }
-
-    .wm-drug-name { display: block; font-size: 0.88rem; margin-bottom: 4px; }
-    .wm-desc      { margin: 0 0 6px; font-size: 0.82rem; }
-    .wm-section-title {
-      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.04em; color: #0d9488; margin: 6px 0 2px;
-    }
-    .wm-section-title:first-child { margin-top: 0; }
-    .wm-list { margin: 0; padding-left: 14px; font-size: 0.8rem; }
-    .wm-list li { margin-bottom: 2px; }
-    .wm-dosage  { font-size: 0.8rem; margin: 0; }
-    .wm-disclaimer {
-      font-size: 0.72rem; color: #94a3b8; margin: 6px 0 0;
-      padding-top: 6px; border-top: 1px solid #e2e8f0;
-    }
-
-    /* ── Thinking indicator ── */
-    .w-thinking {
-      display: flex; align-items: center; gap: 6px;
-      color: #64748b; font-size: 0.8rem; padding: 4px 0;
-    }
-    .w-dots { display: flex; gap: 3px; }
-    .w-dots span {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: #14b8a6;
-      animation: wDot 1.4s infinite ease-in-out both;
-    }
-    .w-dots span:nth-child(2) { animation-delay: 0.16s; }
-    .w-dots span:nth-child(3) { animation-delay: 0.32s; }
-    @keyframes wDot {
-      0%, 80%, 100% { transform: scale(0.7); opacity: 0.3; }
-      40%  { transform: scale(1);   opacity: 1; }
-    }
-
-    /* ── Input area ── */
-    .w-input-area {
-      padding: 8px 10px; border-top: 1px solid #e2e8f0;
-      background: white; flex-shrink: 0;
-      display: flex; gap: 6px; align-items: center;
-    }
-    .w-input-field {
-      flex: 1; height: 38px; border: 1px solid #e2e8f0; border-radius: 12px;
-      padding: 0 12px; font-size: 0.84rem; outline: none;
-      transition: border-color .15s;
-    }
-    .w-input-field:focus { border-color: #14b8a6; }
-    .w-send-btn {
-      width: 38px; height: 38px; border: none; border-radius: 50%;
-      background: linear-gradient(135deg,#0d9488,#14b8a6); color: white;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; flex-shrink: 0; transition: opacity .15s;
-    }
-    .w-send-btn:disabled { opacity: 0.55; cursor: not-allowed; }
-    .w-send-btn .spinner-border { width: 14px; height: 14px; }
-
-    /* ── Footer note ── */
-    .w-footer {
-      text-align: center; font-size: 0.68rem; color: #cbd5e1;
-      padding: 4px 0 6px; flex-shrink: 0;
-    }
-  </style>
-</head>
-<body data-controller="chatbot">
-
-  <%# ── Header ── %>
-  <div class="w-header">
-    <div class="w-header-icon" aria-hidden="true"><i class="bi bi-stars"></i></div>
-    <div>
-      <p class="w-header-title mb-0">MedixoApp AI</p>
-      <p class="w-header-sub mb-0"><%= t("chatbot.widget.ask_prompt") %></p>
-    </div>
-  </div>
-
-  <%# ── Disclaimer ── %>
-  <div class="w-disclaimer">
-    ⚠ <%= t("chatbot.widget.disclaimer_short") %>
-  </div>
-
-  <%# ── Message thread ── %>
-  <div class="w-thread" id="widget-thread" data-chatbot-target="thread">
-
+  <div class="cfab-thread" id="cfab-thread">
     <% if @messages.empty? %>
-      <div class="w-empty">
-        <i class="bi bi-stars d-block"></i>
-        <p class="mb-0"><%= t("chatbot.empty.hint") %></p>
+      <div class="cfab-empty">
+        <i class="bi bi-stars"></i>
+        <p><%= t("chatbot.empty.hint") %></p>
       </div>
     <% else %>
-      <% @messages.each do |message| %>
-        <%= render partial: "chatbot/widget_message", locals: { message: message } %>
+      <% @messages.each do |msg| %>
+        <div class="cfab-msg cfab-msg--<%= msg.user? ? "user" : "ai" %>">
+          <% if msg.user? %>
+            <div class="cfab-bubble cfab-bubble--user"><%= msg.content %></div>
+            <div class="cfab-ts cfab-ts--right"><%= msg.created_at.strftime("%H:%M") %></div>
+          <% else %>
+            <div class="cfab-row">
+              <div class="cfab-avatar"><i class="bi bi-stars"></i></div>
+              <div class="cfab-col">
+                <% res = msg.parsed_response %>
+                <% if msg.error_message? || res.blank? %>
+                  <div class="cfab-bubble cfab-bubble--ai cfab-bubble--error"><%= msg.content %></div>
+                <% else %>
+                  <div class="cfab-bubble cfab-bubble--ai">
+                    <% if res[:medicine_name].present? %>
+                      <strong class="cfab-drug"><%= res[:medicine_name] %></strong>
+                    <% end %>
+                    <% if res[:description].present? %>
+                      <p class="cfab-desc"><%= res[:description] %></p>
+                    <% end %>
+                    <% if Array(res[:common_uses]).any? %>
+                      <p class="cfab-section">Uses</p>
+                      <ul class="cfab-list">
+                        <% Array(res[:common_uses]).first(3).each do |i| %><li><%= i %></li><% end %>
+                      </ul>
+                    <% end %>
+                    <% if Array(res[:common_side_effects]).any? %>
+                      <p class="cfab-section">Side effects</p>
+                      <ul class="cfab-list">
+                        <% Array(res[:common_side_effects]).first(2).each do |i| %><li><%= i %></li><% end %>
+                      </ul>
+                    <% end %>
+                    <% if res[:disclaimer].present? %>
+                      <p class="cfab-disc"><%= res[:disclaimer] %></p>
+                    <% end %>
+                  </div>
+                <% end %>
+                <div class="cfab-ts"><%= msg.created_at.strftime("%H:%M") %></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
       <% end %>
     <% end %>
-
-    <%# Thinking indicator -%>
-    <div class="w-thinking" data-chatbot-target="thinking" hidden>
-      <div class="wm-avatar" aria-hidden="true"><i class="bi bi-stars"></i></div>
-      <span><%= t("chatbot.thinking") %></span>
-      <div class="w-dots" aria-hidden="true">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-
   </div>
 
-  <%# ── Input ── %>
-  <div class="w-input-area">
-    <%= form_with url: chatbot_widget_ask_path(locale: I18n.locale), method: :post,
-          data: {
-            turbo: true,
-            "action" => "turbo:submit-start->chatbot#showLoading turbo:submit-end->chatbot#hideLoading"
-          } do |f| %>
+  <form action="<%= chatbot_widget_ask_path(locale: I18n.locale) %>"
+        method="post"
+        class="cfab-composer"
+        data-turbo-frame="cfab-widget-frame">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <input type="text"
+           name="query"
+           class="cfab-input"
+           placeholder="<%= t("chatbot.form.placeholder", default: "Ask about a medicine…") %>"
+           autocomplete="off"
+           required>
+    <button type="submit" class="cfab-send-btn" aria-label="Send">
+      <i class="bi bi-arrow-up"></i>
+    </button>
+  </form>
 
-      <%= f.text_field :query,
-            class: "w-input-field",
-            placeholder: t("chatbot.form.placeholder", default: "Ask about a medicine…"),
-            autocomplete: "off",
-            "data-chatbot-target" => "input" %>
-
-      <button type="submit" class="w-send-btn" aria-label="<%= t("chatbot.form.submit") %>">
-        <span data-chatbot-target="submit"><i class="bi bi-send-fill" style="font-size:0.85rem;"></i></span>
-        <span data-chatbot-target="spinner" hidden>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        </span>
-      </button>
-
-    <% end %>
-  </div>
-
-  <div class="w-footer">Powered by MedixoApp AI</div>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</body>
-</html>
+</turbo-frame>

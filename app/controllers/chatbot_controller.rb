@@ -84,54 +84,24 @@ class ChatbotController < ApplicationController
   end
 
   # POST /chatbot/widget/ask
+  # Redirects back to the widget; the Turbo Frame reloads with updated messages.
   def widget_ask
     @conversation = find_or_create_conversation
     @query        = params[:query].to_s.strip
 
-    if @query.blank?
-      respond_to do |format|
-        format.turbo_stream {
-          render turbo_stream: turbo_stream.append(
-            "widget-thread",
-            partial: "chatbot/widget_error_bubble",
-            locals:  { message: t("chatbot.messages.empty_query") }
-          )
-        }
-        format.html { redirect_to chatbot_widget_path }
-      end
-      return
+    unless @query.blank?
+      is_first = @conversation.chat_messages.empty?
+      @conversation.chat_messages.create!(role: "user", content: @query)
+      @conversation.update!(title: @query.truncate(60)) if is_first
+
+      response_hash = MedicineChatbotService.new(locale: I18n.locale).answer(query: @query)
+      build_assistant_message(@conversation, response_hash)
     end
 
-    is_first = @conversation.chat_messages.empty?
-    user_msg = @conversation.chat_messages.create!(role: "user", content: @query)
-    @conversation.update!(title: @query.truncate(60)) if is_first
-
-    response_hash = MedicineChatbotService.new(locale: I18n.locale).answer(query: @query)
-    ai_msg        = build_assistant_message(@conversation, response_hash)
-
-    respond_to do |format|
-      format.turbo_stream {
-        render turbo_stream: [
-          turbo_stream.append("widget-thread",
-            partial: "chatbot/widget_message", locals: { message: user_msg }),
-          turbo_stream.append("widget-thread",
-            partial: "chatbot/widget_message", locals: { message: ai_msg })
-        ]
-      }
-      format.html { redirect_to chatbot_widget_path }
-    end
+    redirect_to chatbot_widget_path(locale: I18n.locale)
   rescue StandardError => e
     Rails.logger.error("[ChatbotController#widget_ask] #{e.class}: #{e.message}")
-    respond_to do |format|
-      format.turbo_stream {
-        render turbo_stream: turbo_stream.append(
-          "widget-thread",
-          partial: "chatbot/widget_error_bubble",
-          locals:  { message: t("chatbot.messages.service_unavailable") }
-        )
-      }
-      format.html { redirect_to chatbot_widget_path }
-    end
+    redirect_to chatbot_widget_path(locale: I18n.locale)
   end
 
   private
