@@ -15,7 +15,8 @@
       "Bash(grep -v \"^$\\\\|warning:\")",
       "Bash(bin/rails server *)",
       "Bash(curl -s http://localhost:3001/book/khadija-clinic -H 'Accept: text/html' -c /tmp/cookies.txt)",
-      "Bash(kill %1)"
+      "Bash(kill %1)",
+      "Bash(bin/rails db:migrate:status)"
     ],
     "additionalDirectories": [
       "/home/liam"

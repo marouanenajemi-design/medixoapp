@@ -51,9 +51,9 @@
         <% if user_signed_in? && current_clinic&.plan_tier == "starter" && current_clinic&.subscribed? %>
           <div class="pricing-current-badge">Your current plan</div>
         <% else %>
-          <a href="<%= ENV.fetch("LEMON_STARTER_URL", "https://clinicflow-saas.lemonsqueezy.com/checkout/buy/508d92eb-5487-4a44-925d-75a4ecf204a4") %>"
+          <a href="<%= lemon_checkout_url("starter", user: current_user, clinic: current_clinic) %>"
              class="btn pricing-btn pricing-btn--starter"
-             target="_blank" rel="noopener">
+             target="_blank" rel="noopener noreferrer">
             Get Started — €29/mo
           </a>
         <% end %>
@@ -89,9 +89,9 @@
         <% if user_signed_in? && current_clinic&.plan_tier == "pro" && current_clinic&.subscribed? %>
           <div class="pricing-current-badge pricing-current-badge--featured">Your current plan</div>
         <% else %>
-          <a href="<%= ENV.fetch("LEMON_PRO_URL", "https://clinicflow-saas.lemonsqueezy.com/checkout/buy/508d92eb-5487-4a44-925d-75a4ecf204a4") %>"
+          <a href="<%= lemon_checkout_url("pro", user: current_user, clinic: current_clinic) %>"
              class="btn pricing-btn pricing-btn--pro"
-             target="_blank" rel="noopener">
+             target="_blank" rel="noopener noreferrer">
             Upgrade to Pro — €69/mo
           </a>
         <% end %>
@@ -126,9 +126,9 @@
         <% if user_signed_in? && current_clinic&.plan_tier == "clinic_plus" && current_clinic&.subscribed? %>
           <div class="pricing-current-badge">Your current plan</div>
         <% else %>
-          <a href="<%= ENV.fetch("LEMON_CLINIC_PLUS_URL", "https://clinicflow-saas.lemonsqueezy.com/checkout/buy/508d92eb-5487-4a44-925d-75a4ecf204a4") %>"
+          <a href="<%= lemon_checkout_url("clinic_plus", user: current_user, clinic: current_clinic) %>"
              class="btn pricing-btn pricing-btn--enterprise"
-             target="_blank" rel="noopener">
+             target="_blank" rel="noopener noreferrer">
             Get Clinic+ — €149/mo
           </a>
         <% end %>

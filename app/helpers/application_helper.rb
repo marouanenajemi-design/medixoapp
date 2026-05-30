@@ -62,4 +62,29 @@ module ApplicationHelper
   def smtp_configured?
     ENV["SMTP_USER_NAME"].present? && ENV["SMTP_PASSWORD"].present?
   end
+
+  # ── LemonSqueezy ─────────────────────────────────────────────────────────────
+
+  LS_CHECKOUT_URLS = {
+    "starter"    => "https://medixoapp-saas.lemonsqueezy.com/checkout/buy/9267c813-60db-47ed-93dd-1cfd305f3435?enabled=1724184",
+    "pro"        => "https://medixoapp-saas.lemonsqueezy.com/checkout/buy/81feecd5-10a4-496d-adfc-b0d4b85861c3?enabled=1724194",
+    "clinic_plus" => "https://medixoapp-saas.lemonsqueezy.com/checkout/buy/6167c57f-2675-467b-a721-b89226b48a27?enabled=1724195"
+  }.freeze
+
+  # Builds a LemonSqueezy checkout URL pre-filled with user email and clinic_id.
+  # clinic_id is passed as custom_data so the webhook can identify the clinic
+  # without relying on email matching alone.
+  def lemon_checkout_url(plan_tier, user: nil, clinic: nil)
+    base = LS_CHECKOUT_URLS[plan_tier.to_s]
+    return "#" if base.blank?
+
+    parts = []
+    parts << "checkout[email]=#{CGI.escape(user.email)}"  if user&.email.present?
+    parts << "checkout[custom][clinic_id]=#{clinic.id}"   if clinic&.id.present?
+
+    return base if parts.empty?
+
+    # base already has a `?` from the `?enabled=` param — append with `&`
+    "#{base}&#{parts.join('&')}"
+  end
 end
