@@ -2,8 +2,9 @@ class Clinic < ApplicationRecord
   include PlanGating
 
   belongs_to :user
-  has_many :subscriptions,  dependent: :destroy
-  has_many :doctors,        dependent: :destroy
+  has_many :subscriptions,   dependent: :destroy
+  has_many :conversations,   dependent: :destroy
+  has_many :doctors,         dependent: :destroy
   has_many :patients,       dependent: :destroy
   has_many :appointments,   dependent: :destroy
   has_many :prescriptions,  dependent: :destroy

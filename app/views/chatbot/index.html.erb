@@ -1,11 +1,24 @@
-<div class="page-shell">
+<div class="page-shell" data-controller="chatbot">
+
+  <%# ── Header ── %>
   <div class="page-header">
     <div>
       <h1 class="page-title"><%= t("chatbot.title") %></h1>
       <div class="page-subtitle"><%= t("chatbot.subtitle") %></div>
     </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <%= button_to t("chatbot.actions.new_chat"), chatbot_new_path, method: :post,
+            class: "btn btn-sm btn-outline-secondary",
+            form: { data: { turbo_confirm: t("chatbot.actions.new_chat_confirm") } } %>
+      <% if @messages.any? %>
+        <%= button_to t("chatbot.actions.clear"), chatbot_clear_path, method: :delete,
+              class: "btn btn-sm btn-outline-danger",
+              form: { data: { turbo_confirm: t("chatbot.actions.clear_confirm") } } %>
+      <% end %>
+    </div>
   </div>
 
+  <%# ── Disclaimer ── %>
   <div class="content-card mb-4">
     <div class="alert alert-warning rounded-4 mb-0" role="alert">
       <strong><%= t("chatbot.disclaimer_title") %></strong>
@@ -13,103 +26,59 @@
     </div>
   </div>
 
-  <div class="content-card mb-4">
-    <%= form_with url: chatbot_path, method: :post, local: true do |f| %>
-      <div class="mb-3">
-        <%= f.label :query, t("chatbot.form.label"), class: "form-label" %>
-        <%= f.text_field :query,
-              value: @query,
-              class: "form-control",
-              placeholder: t("chatbot.form.placeholder"),
-              autocomplete: "off" %>
-      </div>
+  <%# ── Chat card ── %>
+  <div class="content-card p-0 overflow-hidden">
 
-      <div class="d-flex flex-wrap gap-2 align-items-center">
-        <%= f.submit t("chatbot.form.submit"), class: "btn btn-primary" %>
-        <span class="text-muted small"><%= t("chatbot.form.scope_hint") %></span>
-      </div>
-    <% end %>
-  </div>
+    <%# ── Message thread ── %>
+    <div class="chat-thread" id="chat-thread" data-chatbot-target="thread">
 
-  <% if request.post? %>
-    <div class="content-card">
-      <h2 class="section-title mb-3"><%= t("chatbot.response.title") %></h2>
-
-      <% if @chatbot_response&.dig(:error).present? %>
-        <div class="alert alert-danger rounded-4 mb-0"><%= @chatbot_response[:error] %></div>
-      <% else %>
-        <div class="chatbot-response-grid">
-
-          <div class="content-card p-3 shadow-none border mb-3">
-            <div class="text-muted small mb-1"><%= t("chatbot.response.medicine_name") %></div>
-            <div class="fw-semibold"><%= @chatbot_response[:medicine_name] %></div>
-          </div>
-
-          <div class="content-card p-3 shadow-none border mb-3">
-            <h3 class="h6 mb-2"><%= t("chatbot.response.description") %></h3>
-            <p class="mb-0"><%= @chatbot_response[:description] %></p>
-          </div>
-
-          <% if @chatbot_response[:common_uses].present? %>
-            <div class="content-card p-3 shadow-none border mb-3">
-              <h3 class="h6 mb-2"><%= t("chatbot.response.common_uses") %></h3>
-              <ul class="mb-0">
-                <% @chatbot_response[:common_uses].each do |item| %>
-                  <li><%= item %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
-
-          <% if @chatbot_response[:common_side_effects].present? %>
-            <div class="content-card p-3 shadow-none border mb-3">
-              <h3 class="h6 mb-2"><%= t("chatbot.response.common_side_effects") %></h3>
-              <ul class="mb-0">
-                <% @chatbot_response[:common_side_effects].each do |item| %>
-                  <li><%= item %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
-
-          <% if @chatbot_response[:drug_interactions].present? %>
-            <div class="content-card p-3 shadow-none border mb-3">
-              <h3 class="h6 mb-2"><%= t("chatbot.response.drug_interactions") %></h3>
-              <ul class="mb-0">
-                <% @chatbot_response[:drug_interactions].each do |item| %>
-                  <li><%= item %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
-
-          <% if @chatbot_response[:dosage_notes].present? %>
-            <div class="content-card p-3 shadow-none border mb-3">
-              <h3 class="h6 mb-2"><%= t("chatbot.response.dosage_notes") %></h3>
-              <p class="mb-0"><%= @chatbot_response[:dosage_notes] %></p>
-            </div>
-          <% end %>
-
-          <% if @chatbot_response[:general_warnings].present? %>
-            <div class="content-card p-3 shadow-none border mb-3">
-              <h3 class="h6 mb-2"><%= t("chatbot.response.general_warnings") %></h3>
-              <ul class="mb-0">
-                <% @chatbot_response[:general_warnings].each do |item| %>
-                  <li><%= item %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
-
-          <% if @chatbot_response[:disclaimer].present? %>
-            <div class="alert alert-secondary rounded-4 mb-0 small">
-              <i class="bi bi-info-circle me-1"></i>
-              <%= @chatbot_response[:disclaimer] %>
-            </div>
-          <% end %>
-
+      <% if @messages.empty? %>
+        <div class="chat-empty">
+          <i class="bi bi-stars d-block mb-2"></i>
+          <p class="mb-1 fw-semibold"><%= t("chatbot.empty.title") %></p>
+          <p class="text-muted small mb-0"><%= t("chatbot.empty.hint") %></p>
         </div>
+      <% else %>
+        <% @messages.each do |message| %>
+          <%= render partial: "chatbot/message", locals: { message: message } %>
+        <% end %>
+      <% end %>
+
+      <%# "Thinking…" indicator — hidden by default, shown by Stimulus on submit -%>
+      <div class="chat-thinking" data-chatbot-target="thinking" hidden>
+        <div class="chat-avatar" aria-hidden="true"><i class="bi bi-stars"></i></div>
+        <span class="text-muted small"><%= t("chatbot.thinking") %></span>
+        <div class="chat-dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+    </div>
+
+    <%# ── Input area ── %>
+    <div class="chat-input-area">
+      <%= form_with url: chatbot_ask_path, method: :post,
+            data: {
+              "action" => "turbo:submit-start->chatbot#showLoading turbo:submit-end->chatbot#hideLoading"
+            } do |f| %>
+
+        <%= f.text_field :query,
+              class: "form-control chat-input-field",
+              placeholder: t("chatbot.form.placeholder"),
+              autocomplete: "off",
+              "data-chatbot-target" => "input",
+              required: true %>
+
+        <button type="submit" class="btn btn-primary chat-send-btn" aria-label="<%= t("chatbot.form.submit") %>">
+          <span data-chatbot-target="submit"><i class="bi bi-send-fill"></i></span>
+          <span data-chatbot-target="spinner" hidden>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </span>
+        </button>
+
       <% end %>
     </div>
-  <% end %>
+
+  </div>
+
 </div>

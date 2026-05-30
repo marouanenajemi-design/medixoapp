@@ -418,6 +418,15 @@ en:
       common_side_effects: "Common side effects"
       drug_interactions: "Drug interactions"
       dosage_notes: "Dosage notes"
+    thinking: "MedixoApp AI is thinking…"
+    actions:
+      new_chat: "New Chat"
+      new_chat_confirm: "Start a new conversation? Your current chat will be saved."
+      clear: "Clear Chat"
+      clear_confirm: "Delete all messages in this conversation?"
+    empty:
+      title: "How can I help you?"
+      hint: "Ask about a medicine, dosage, side effects, drug interactions, or any medical topic."
     widget:
       disclaimer_short: "General information only. Always consult a doctor or pharmacist."
       ask_prompt: "Ask about a medicine or medical topic"
@@ -427,6 +436,7 @@ en:
       service_unavailable: "The medical information service is temporarily unavailable. Please try again shortly."
       disclaimer: "This information is for educational purposes only and does not constitute medical advice. Always consult a licensed healthcare professional before making any medical decisions."
       no_result: "No information found for that query."
+      chat_cleared: "Chat history cleared."
 
 
   admin:

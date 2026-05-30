@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_30_000001) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_30_000003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,6 +59,18 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_30_000001) do
     t.index ["patient_id"], name: "index_appointments_on_patient_id"
   end
 
+  create_table "chat_messages", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.string "role", null: false
+    t.text "content", default: "", null: false
+    t.jsonb "response_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id", "created_at"], name: "index_chat_messages_on_conversation_id_and_created_at"
+    t.index ["conversation_id"], name: "index_chat_messages_on_conversation_id"
+    t.index ["role"], name: "index_chat_messages_on_role"
+  end
+
   create_table "clinics", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -75,6 +87,15 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_30_000001) do
     t.string "slug", null: false
     t.index ["slug"], name: "index_clinics_on_slug", unique: true
     t.index ["user_id"], name: "index_clinics_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.bigint "clinic_id", null: false
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["clinic_id", "created_at"], name: "index_conversations_on_clinic_id_and_created_at"
+    t.index ["clinic_id"], name: "index_conversations_on_clinic_id"
   end
 
   create_table "doctors", force: :cascade do |t|
@@ -166,7 +187,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_30_000001) do
   add_foreign_key "appointments", "clinics"
   add_foreign_key "appointments", "doctors"
   add_foreign_key "appointments", "patients"
+  add_foreign_key "chat_messages", "conversations"
   add_foreign_key "clinics", "users"
+  add_foreign_key "conversations", "clinics"
   add_foreign_key "doctors", "clinics"
   add_foreign_key "patients", "clinics"
   add_foreign_key "prescription_items", "prescriptions"

@@ -42,9 +42,12 @@ Rails.application.routes.draw do
   get "home", to: "pages#home", as: :landing
 
   get "dashboard",  to: "dashboard#index"
-  get "chatbot",    to: "chatbot#index"
-  post "chatbot",   to: "chatbot#index"
-  get "chatbot/widget", to: "chatbot#widget", as: :chatbot_widget
+  get    "chatbot",            to: "chatbot#index",      as: :chatbot
+  post   "chatbot/ask",        to: "chatbot#ask",        as: :chatbot_ask
+  post   "chatbot/new",        to: "chatbot#new_chat",   as: :chatbot_new
+  delete "chatbot/clear",      to: "chatbot#clear",      as: :chatbot_clear
+  get    "chatbot/widget",     to: "chatbot#widget",     as: :chatbot_widget
+  post   "chatbot/widget/ask", to: "chatbot#widget_ask", as: :chatbot_widget_ask
 
   get "pricing",    to: "pages#pricing"
   get "analytics",  to: "analytics#index", as: :analytics

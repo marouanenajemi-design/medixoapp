@@ -1,0 +1,56 @@
+<%# Compact message partial for the floating iframe widget. %>
+<div class="wm wm--<%= message.role %>">
+
+  <% if message.user? %>
+    <div class="wm-bubble wm-bubble--user"><%= message.content %></div>
+    <div class="wm-meta wm-meta--right"><%= message.created_at.strftime("%H:%M") %></div>
+
+  <% else %>
+    <div class="wm-row">
+      <div class="wm-avatar" aria-hidden="true"><i class="bi bi-stars"></i></div>
+      <div class="wm-col">
+        <% res = message.parsed_response %>
+
+        <% if message.error_message? || res.blank? %>
+          <div class="wm-bubble wm-bubble--assistant wm-bubble--error"><%= message.content %></div>
+
+        <% else %>
+          <div class="wm-bubble wm-bubble--assistant">
+            <% if res[:medicine_name].present? %>
+              <strong class="wm-drug-name"><%= res[:medicine_name] %></strong>
+            <% end %>
+            <% if res[:description].present? %>
+              <p class="wm-desc"><%= res[:description] %></p>
+            <% end %>
+            <% if Array(res[:common_uses]).any? %>
+              <p class="wm-section-title">Common uses</p>
+              <ul class="wm-list">
+                <% Array(res[:common_uses]).first(3).each do |item| %>
+                  <li><%= item %></li>
+                <% end %>
+              </ul>
+            <% end %>
+            <% if Array(res[:common_side_effects]).any? %>
+              <p class="wm-section-title">Side effects</p>
+              <ul class="wm-list">
+                <% Array(res[:common_side_effects]).first(3).each do |item| %>
+                  <li><%= item %></li>
+                <% end %>
+              </ul>
+            <% end %>
+            <% if res[:dosage_notes].present? %>
+              <p class="wm-section-title">Dosage</p>
+              <p class="wm-dosage"><%= res[:dosage_notes] %></p>
+            <% end %>
+            <% if res[:disclaimer].present? %>
+              <p class="wm-disclaimer"><%= res[:disclaimer] %></p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="wm-meta"><%= message.created_at.strftime("%H:%M") %></div>
+      </div>
+    </div>
+  <% end %>
+
+</div>
