@@ -10,21 +10,16 @@
         font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         color: #0f172a;
       }
-
-      .widget-shell {
-        padding: 16px;
-      }
-
+      .widget-shell { padding: 16px; }
       .widget-note {
         background: #f0fdfa;
         border: 1px solid #99f6e4;
         color: #0d9488;
         border-radius: 16px;
         padding: 12px 14px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         margin-bottom: 14px;
       }
-
       .widget-card {
         background: #fff;
         border: 1px solid #e2e8f0;
@@ -32,167 +27,160 @@
         padding: 16px;
         box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
       }
-
-      .widget-title {
-        font-size: 1.1rem;
-        font-weight: 800;
-        margin-bottom: 6px;
-      }
-
-      .widget-subtitle {
-        color: #64748b;
-        margin-bottom: 16px;
-      }
-
-      .form-control {
-        height: 50px;
-        border-radius: 14px;
-      }
-
+      .widget-title  { font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; }
+      .widget-subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 16px; }
+      .form-control  { height: 48px; border-radius: 12px; }
       .btn-primary {
-        border-radius: 14px;
-        min-height: 48px;
-        font-weight: 700;
+        border-radius: 12px; min-height: 44px; font-weight: 700;
         background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
         border: none;
       }
-
       .answer-box {
         margin-top: 16px;
         background: #f8fafc;
         border: 1px solid #e2e8f0;
         border-radius: 16px;
         padding: 14px;
-        white-space: normal;
         line-height: 1.55;
       }
-
-      .answer-box > strong {
-        display: inline-block;
-        margin-bottom: 8px;
+      .answer-box > .answer-label {
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748b;
+        margin-bottom: 10px;
       }
-
-      .answer-section {
-        margin-bottom: 14px;
-      }
-
-      .answer-section:last-child {
-        margin-bottom: 0;
-      }
-
+      .answer-section { margin-bottom: 12px; }
+      .answer-section:last-child { margin-bottom: 0; }
       .answer-section-title {
         font-weight: 700;
-        margin-bottom: 6px;
-        color: #0f172a;
-      }
-
-      .answer-box p,
-      .answer-box ul {
-        margin-bottom: 0;
-      }
-
-      .answer-box ul {
-        margin-top: 6px;
-        padding-left: 18px;
-      }
-
-      .answer-box li {
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #0d9488;
         margin-bottom: 4px;
       }
-
-      .answer-box li:last-child {
-        margin-bottom: 0;
+      .answer-box p, .answer-box ul { margin-bottom: 0; font-size: 0.88rem; }
+      .answer-box ul { margin-top: 4px; padding-left: 16px; }
+      .answer-box li { margin-bottom: 3px; }
+      .answer-disclaimer {
+        font-size: 0.78rem;
+        color: #94a3b8;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #e2e8f0;
       }
     </style>
   </head>
   <body>
     <div class="widget-shell">
       <div class="widget-note">
-        General information only. For urgent symptoms, contact a doctor.
+        <%= t("chatbot.widget.disclaimer_short", default: "General information only. Always consult a doctor or pharmacist.") %>
       </div>
 
       <div class="widget-card">
         <div class="widget-title">MedixoApp AI</div>
-        <div class="widget-subtitle">Ask about a medicine</div>
+        <div class="widget-subtitle"><%= t("chatbot.widget.ask_prompt", default: "Ask about a medicine or medical topic") %></div>
 
         <%= form_with url: chatbot_widget_path(locale: I18n.locale), method: :get, local: true, data: { turbo: false } do %>
           <div class="mb-3">
-            <%= text_field_tag :query, @query, class: "form-control", placeholder: "Example: What is ibuprofen used for?" %>
+            <%= text_field_tag :query, @query,
+                  class: "form-control",
+                  placeholder: t("chatbot.form.placeholder", default: "e.g. What is amoxicillin used for?") %>
           </div>
-
-          <%= submit_tag "Get information", class: "btn btn-primary w-100" %>
+          <%= submit_tag t("chatbot.form.submit", default: "Get information"),
+                class: "btn btn-primary w-100" %>
         <% end %>
 
-       <% if @chatbot_response.present? %>
-  <% response_data =
-      if @chatbot_response.is_a?(Hash)
-        @chatbot_response.respond_to?(:with_indifferent_access) ? @chatbot_response.with_indifferent_access : @chatbot_response
-      else
-        nil
-      end
-  %>
+        <% if @chatbot_response.present? %>
+          <%
+            res = @chatbot_response.is_a?(Hash) ? @chatbot_response.transform_keys(&:to_sym) : nil
+          %>
 
-  <div class="answer-box">
-    <strong>Answer:</strong>
+          <div class="answer-box">
+            <div class="answer-label"><%= t("chatbot.response.title", default: "Answer") %></div>
 
-    <% if response_data.present? && response_data[:error].present? %>
-      <div class="mt-2 text-danger">
-        <%= response_data[:error] %>
-      </div>
+            <% if res&.dig(:error).present? %>
+              <p class="text-danger mb-0"><%= res[:error] %></p>
 
-    <% elsif response_data.present? %>
-      <div class="mt-2">
-        <% if response_data[:medicine_name].present? %>
-          <div class="answer-section">
-            <div class="answer-section-title">Medicine</div>
-            <p><%= response_data[:medicine_name] %></p>
-          </div>
-        <% end %>
+            <% elsif res.present? %>
 
-        <% if response_data[:description].present? %>
-          <div class="answer-section">
-            <div class="answer-section-title">Description</div>
-            <p><%= response_data[:description] %></p>
-          </div>
-        <% end %>
-
-        <% if response_data[:common_uses].present? %>
-          <div class="answer-section">
-            <div class="answer-section-title">Common uses</div>
-            <ul>
-              <% Array(response_data[:common_uses]).each do |item| %>
-                <li><%= item %></li>
+              <% if res[:medicine_name].present? %>
+                <div class="answer-section">
+                  <div class="answer-section-title"><%= t("chatbot.response.medicine_name", default: "Medicine") %></div>
+                  <p><strong><%= res[:medicine_name] %></strong></p>
+                </div>
               <% end %>
-            </ul>
-          </div>
-        <% end %>
 
-        <% if response_data[:general_warnings].present? %>
-          <div class="answer-section">
-            <div class="answer-section-title">Warnings</div>
-            <ul>
-              <% Array(response_data[:general_warnings]).each do |item| %>
-                <li><%= item %></li>
+              <% if res[:description].present? %>
+                <div class="answer-section">
+                  <div class="answer-section-title"><%= t("chatbot.response.description", default: "Description") %></div>
+                  <p><%= res[:description] %></p>
+                </div>
               <% end %>
-            </ul>
+
+              <% if Array(res[:common_uses]).any? %>
+                <div class="answer-section">
+                  <div class="answer-section-title"><%= t("chatbot.response.common_uses", default: "Common uses") %></div>
+                  <ul>
+                    <% Array(res[:common_uses]).each do |item| %>
+                      <li><%= item %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <% if Array(res[:common_side_effects]).any? %>
+                <div class="answer-section">
+                  <div class="answer-section-title"><%= t("chatbot.response.common_side_effects", default: "Side effects") %></div>
+                  <ul>
+                    <% Array(res[:common_side_effects]).each do |item| %>
+                      <li><%= item %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <% if Array(res[:drug_interactions]).any? %>
+                <div class="answer-section">
+                  <div class="answer-section-title"><%= t("chatbot.response.drug_interactions", default: "Drug interactions") %></div>
+                  <ul>
+                    <% Array(res[:drug_interactions]).each do |item| %>
+                      <li><%= item %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <% if res[:dosage_notes].present? %>
+                <div class="answer-section">
+                  <div class="answer-section-title"><%= t("chatbot.response.dosage_notes", default: "Dosage notes") %></div>
+                  <p><%= res[:dosage_notes] %></p>
+                </div>
+              <% end %>
+
+              <% if Array(res[:general_warnings]).any? %>
+                <div class="answer-section">
+                  <div class="answer-section-title"><%= t("chatbot.response.general_warnings", default: "Warnings") %></div>
+                  <ul>
+                    <% Array(res[:general_warnings]).each do |item| %>
+                      <li><%= item %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <% if res[:disclaimer].present? %>
+                <div class="answer-disclaimer"><%= res[:disclaimer] %></div>
+              <% end %>
+
+            <% else %>
+              <p class="text-muted mb-0"><%= t("chatbot.messages.no_result", default: "No information found.") %></p>
+            <% end %>
           </div>
         <% end %>
 
-        <% if response_data[:medicine_name].blank? &&
-              response_data[:description].blank? &&
-              response_data[:common_uses].blank? &&
-              response_data[:general_warnings].blank? %>
-          <div class="mt-2 text-muted">
-            No structured information was found for this medicine.
-          </div>
-        <% end %>
-      </div>
-
-    <% else %>
-      <div class="mt-2"><%= @chatbot_response.to_s %></div>
-    <% end %>
-  </div>
-<% end %>
       </div>
     </div>
   </body>

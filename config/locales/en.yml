@@ -416,9 +416,17 @@ en:
       common_uses: "Common uses"
       general_warnings: "General warnings"
       common_side_effects: "Common side effects"
+      drug_interactions: "Drug interactions"
+      dosage_notes: "Dosage notes"
+    widget:
+      disclaimer_short: "General information only. Always consult a doctor or pharmacist."
+      ask_prompt: "Ask about a medicine or medical topic"
     messages:
-      empty_query: "Please enter a medicine name question."
-      ask_medicine_name: "Please include a medicine name (for example: ibuprofen, paracetamol, cetirizine, or amoxicillin)."
+      empty_query: "Please enter a medicine name or medical question."
+      ask_medicine_name: "Please include a medicine name or medical topic in your question."
+      service_unavailable: "The medical information service is temporarily unavailable. Please try again shortly."
+      disclaimer: "This information is for educational purposes only and does not constitute medical advice. Always consult a licensed healthcare professional before making any medical decisions."
+      no_result: "No information found for that query."
 
 
   admin:

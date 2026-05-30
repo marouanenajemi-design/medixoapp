@@ -39,6 +39,7 @@
         <div class="alert alert-danger rounded-4 mb-0"><%= @chatbot_response[:error] %></div>
       <% else %>
         <div class="chatbot-response-grid">
+
           <div class="content-card p-3 shadow-none border mb-3">
             <div class="text-muted small mb-1"><%= t("chatbot.response.medicine_name") %></div>
             <div class="fw-semibold"><%= @chatbot_response[:medicine_name] %></div>
@@ -49,32 +50,64 @@
             <p class="mb-0"><%= @chatbot_response[:description] %></p>
           </div>
 
-          <div class="content-card p-3 shadow-none border mb-3">
-            <h3 class="h6 mb-2"><%= t("chatbot.response.common_uses") %></h3>
-            <ul class="mb-0">
-              <% @chatbot_response[:common_uses].each do |item| %>
-                <li><%= item %></li>
-              <% end %>
-            </ul>
-          </div>
+          <% if @chatbot_response[:common_uses].present? %>
+            <div class="content-card p-3 shadow-none border mb-3">
+              <h3 class="h6 mb-2"><%= t("chatbot.response.common_uses") %></h3>
+              <ul class="mb-0">
+                <% @chatbot_response[:common_uses].each do |item| %>
+                  <li><%= item %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
 
-          <div class="content-card p-3 shadow-none border mb-3">
-            <h3 class="h6 mb-2"><%= t("chatbot.response.general_warnings") %></h3>
-            <ul class="mb-0">
-              <% @chatbot_response[:general_warnings].each do |item| %>
-                <li><%= item %></li>
-              <% end %>
-            </ul>
-          </div>
+          <% if @chatbot_response[:common_side_effects].present? %>
+            <div class="content-card p-3 shadow-none border mb-3">
+              <h3 class="h6 mb-2"><%= t("chatbot.response.common_side_effects") %></h3>
+              <ul class="mb-0">
+                <% @chatbot_response[:common_side_effects].each do |item| %>
+                  <li><%= item %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
 
-          <div class="content-card p-3 shadow-none border mb-0">
-            <h3 class="h6 mb-2"><%= t("chatbot.response.common_side_effects") %></h3>
-            <ul class="mb-0">
-              <% @chatbot_response[:common_side_effects].each do |item| %>
-                <li><%= item %></li>
-              <% end %>
-            </ul>
-          </div>
+          <% if @chatbot_response[:drug_interactions].present? %>
+            <div class="content-card p-3 shadow-none border mb-3">
+              <h3 class="h6 mb-2"><%= t("chatbot.response.drug_interactions") %></h3>
+              <ul class="mb-0">
+                <% @chatbot_response[:drug_interactions].each do |item| %>
+                  <li><%= item %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <% if @chatbot_response[:dosage_notes].present? %>
+            <div class="content-card p-3 shadow-none border mb-3">
+              <h3 class="h6 mb-2"><%= t("chatbot.response.dosage_notes") %></h3>
+              <p class="mb-0"><%= @chatbot_response[:dosage_notes] %></p>
+            </div>
+          <% end %>
+
+          <% if @chatbot_response[:general_warnings].present? %>
+            <div class="content-card p-3 shadow-none border mb-3">
+              <h3 class="h6 mb-2"><%= t("chatbot.response.general_warnings") %></h3>
+              <ul class="mb-0">
+                <% @chatbot_response[:general_warnings].each do |item| %>
+                  <li><%= item %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <% if @chatbot_response[:disclaimer].present? %>
+            <div class="alert alert-secondary rounded-4 mb-0 small">
+              <i class="bi bi-info-circle me-1"></i>
+              <%= @chatbot_response[:disclaimer] %>
+            </div>
+          <% end %>
+
         </div>
       <% end %>
     </div>

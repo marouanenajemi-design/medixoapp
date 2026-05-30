@@ -387,9 +387,17 @@ fr:
       common_uses: "Usages courants"
       general_warnings: "Avertissements généraux"
       common_side_effects: "Effets secondaires courants"
+      drug_interactions: "Interactions médicamenteuses"
+      dosage_notes: "Notes de posologie"
+    widget:
+      disclaimer_short: "Informations générales uniquement. Consultez toujours un médecin ou un pharmacien."
+      ask_prompt: "Posez une question sur un médicament ou un sujet médical"
     messages:
-      empty_query: "Veuillez saisir une question avec un nom de médicament."
-      ask_medicine_name: "Veuillez inclure un nom de médicament (par exemple : ibuprofène, paracétamol, cétirizine ou amoxicilline)."
+      empty_query: "Veuillez saisir une question médicale ou un nom de médicament."
+      ask_medicine_name: "Veuillez inclure un nom de médicament ou un sujet médical dans votre question."
+      service_unavailable: "Le service d'information médicale est temporairement indisponible. Veuillez réessayer."
+      disclaimer: "Ces informations sont fournies à titre éducatif uniquement et ne constituent pas un avis médical. Consultez toujours un professionnel de santé agréé avant toute décision médicale."
+      no_result: "Aucune information trouvée pour cette recherche."
 
 
   admin:
