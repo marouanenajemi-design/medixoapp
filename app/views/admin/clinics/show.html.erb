@@ -117,6 +117,87 @@
         </div>
       </div>
     </div>
+    <%# ── Visit billing (usage-based monetization) ── %>
+    <div class="col-12">
+      <div class="content-card">
+        <div class="d-flex align-items-start justify-content-between gap-3 mb-4 flex-wrap">
+          <div>
+            <h2 class="section-title mb-1"><%= t("admin.monetization.clinic_card.title") %></h2>
+            <div class="text-muted" style="font-size:0.9rem;">
+              <%= t("admin.monetization.clinic_card.subtitle") %>
+            </div>
+          </div>
+          <%= link_to admin_monetization_path, class: "btn btn-sm btn-outline-secondary", data: { turbo: false } do %>
+            <i class="bi bi-cash-coin me-1"></i> <%= t("admin.navigation.monetization") %>
+          <% end %>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-lg-3">
+            <div class="detail-item text-center">
+              <div class="detail-label"><%= t("admin.monetization.clinic_card.period_visits") %></div>
+              <div class="detail-value" style="font-size:1.8rem;"><%= @billing_summary[:period_visits] %></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="detail-item text-center">
+              <div class="detail-label"><%= t("admin.monetization.clinic_card.total_visits") %></div>
+              <div class="detail-value" style="font-size:1.8rem;"><%= @billing_summary[:total_visits] %></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="detail-item text-center">
+              <div class="detail-label"><%= t("admin.monetization.clinic_card.price") %></div>
+              <div class="detail-value" style="font-size:1.8rem;">
+                <%= money(@billing_summary[:price_per_visit_cents], @billing_summary[:currency]) %>
+              </div>
+              <div style="font-size:0.75rem;color:#64748b;">
+                <%= @billing_summary[:custom_price] ? t("admin.monetization.clinic_card.custom") : t("admin.monetization.clinic_card.global") %>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="detail-item text-center">
+              <div class="detail-label"><%= t("admin.monetization.clinic_card.period_amount") %></div>
+              <div class="detail-value" style="font-size:1.8rem;">
+                <%= money(@billing_summary[:period_amount_cents], @billing_summary[:currency]) %>
+              </div>
+              <div style="font-size:0.75rem;color:#64748b;">
+                <%= t("admin.monetization.clinic_card.total_amount") %>:
+                <%= money(@billing_summary[:total_amount_cents], @billing_summary[:currency]) %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%= form_with url: update_visit_price_admin_clinic_path(@clinic), method: :patch,
+                      class: "d-flex align-items-end gap-3 flex-wrap", data: { turbo: false } do %>
+          <div style="flex:1;min-width:220px;">
+            <label class="form-label fw-bold text-muted"
+                   style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.5px;">
+              <%= t("admin.monetization.clinic_card.override_label") %>
+            </label>
+            <div class="input-group">
+              <span class="input-group-text"><%= BillingSetting.symbol_for(@billing_summary[:currency]) %></span>
+              <input type="text" name="price_per_visit" inputmode="decimal" class="form-control"
+                     value="<%= @clinic.custom_price_per_visit? ? format('%.2f', @clinic.effective_price_per_visit) : '' %>"
+                     placeholder="<%= format('%.2f', @billing_setting.price_per_visit) %>">
+            </div>
+            <div class="form-text"><%= t("admin.monetization.clinic_card.override_hint") %></div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap;min-height:48px;">
+            <i class="bi bi-check-lg me-1"></i> <%= t("admin.monetization.clinic_card.override_submit") %>
+          </button>
+          <% if @clinic.custom_price_per_visit? %>
+            <button type="submit" name="reset" value="1" class="btn btn-outline-secondary"
+                    style="white-space:nowrap;min-height:48px;">
+              <%= t("admin.monetization.clinic_card.override_reset") %>
+            </button>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
     <%# ── Plan management ── %>
     <div class="col-12">
       <div class="content-card">

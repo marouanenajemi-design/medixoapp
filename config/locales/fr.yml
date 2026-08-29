@@ -16,6 +16,7 @@ fr:
 
     chatbot: "Assistant médicaments"
     online_bookings: "Réservations en ligne"
+    billing: "Facturation & usage"
     clinic_settings: "Paramètres du cabinet"
   layout:
     navigation:
@@ -130,8 +131,45 @@ fr:
         pending: "en attente"
         view_requests: "Voir les demandes"
         open_page: "Ouvrir la page"
+      billing:
+        title: "Facturation des visites"
+        subtitle: "Vous êtes facturé pour chaque visite patient terminée."
+        visits: "Visites cette période"
+        price: "Prix par visite"
+        amount_due: "Montant dû"
+        view: "Voir la facturation"
 
       empty: "Aucun rendez-vous récent pour le moment."
+  billing:
+    show:
+      title: "Facturation & usage"
+      subtitle: "Vos visites patients enregistrées et leur coût."
+      period: "Période de facturation"
+      stats:
+        period_visits: "Visites cette période"
+        price_per_visit: "Prix par visite"
+        amount_due: "Montant dû cette période"
+        total_visits: "Visites facturables au total"
+      custom_price: "Tarif spécifique à votre cabinet"
+      how_title: "Comment votre facture est calculée"
+      how_body: "Chaque visite patient terminée compte pour une visite facturable. Les rendez-vous annulés et les visites non terminées ne sont jamais comptés, et une même visite n'est facturée qu'une seule fois."
+      formula: "%{visits} visites × %{price} par visite = %{amount}"
+      total_due_label: "Total depuis l'inscription"
+      history_title: "Usage mensuel"
+      history_month: "Mois"
+      history_visits: "Visites"
+      history_amount: "Montant"
+      recent_title: "Visites facturables récentes"
+      recent_subtitle: "Vos 10 dernières visites terminées"
+      table:
+        date: "Date"
+        patient: "Patient"
+        doctor: "Médecin"
+        amount: "Montant"
+      no_visits: "Aucune visite facturable pour le moment. Les rendez-vous marqués comme terminés apparaîtront ici."
+      deleted_record: "Supprimé"
+      payment_notice: "Le paiement en ligne n'est pas encore activé — cette page présente votre usage actuel et une estimation de votre facture."
+
   doctors:
     index:
       title: "Médecins"
@@ -425,6 +463,7 @@ fr:
       doctors: "Médecins"
       patients: "Patients"
       appointments: "Rendez-vous"
+      monetization: "Monétisation"
       back_to_app: "Retour à l'app"
     roles:
       super_admin: "Super Admin"
@@ -490,6 +529,67 @@ fr:
         growth_title: "Nouveaux cabinets par mois"
       activity:
         title: "Activité récente"
+      usage:
+        title: "Revenus d'usage — Visites patients"
+        subtitle: "Calculés à partir des visites patients terminées enregistrées par les cabinets"
+        manage: "Monétisation"
+        revenue_this_month: "Revenus d'usage"
+        all_time: "Depuis le début"
+        visits_this_month: "Visites ce mois-ci"
+        total_visits: "Visites facturables au total"
+        price_per_visit: "Prix par visite"
+    monetization:
+      title: "Monétisation"
+      subtitle: "Facturation à l'usage calculée à partir des visites patients réelles."
+      kpis:
+        period_revenue: "Revenus de la période"
+        all_time_revenue: "Depuis le début"
+        period_visits: "Visites facturables"
+        this_period: "Cette période de facturation"
+        total_visits: "Visites facturables au total"
+        voided: "%{count} annulée(s) (non facturée(s))"
+        billing_clinics: "Cabinets facturés"
+        with_usage: "Avec usage cette période"
+      price:
+        title: "Prix par visite patient"
+        subtitle: "Le prix global facturé à chaque cabinet pour une visite patient terminée."
+        label: "Prix par visite"
+        hint: "S'applique à tous les cabinets sans tarif spécifique."
+        currency_label: "Devise"
+        submit: "Enregistrer le prix"
+        override_note: "Un cabinet peut recevoir son propre tarif depuis sa fiche — ce tarif remplace toujours le prix global."
+      chart:
+        title: "Visites & revenus d'usage"
+        subtitle: "Visites patients facturables sur les 6 derniers mois"
+        badge: "Données réelles"
+      table:
+        title: "Usage par cabinet"
+        subtitle: "Visites facturables et montant dû pour chaque cabinet"
+        price: "Prix / visite"
+        custom: "Spécifique"
+        period_visits: "Visites (période)"
+        period_amount: "Dû (période)"
+        total_visits: "Visites (total)"
+        total_amount: "Dû (total)"
+      clinic_card:
+        title: "Facturation des visites"
+        subtitle: "Facturation à l'usage de ce cabinet, calculée à partir des visites patients terminées."
+        period_visits: "Visites cette période"
+        total_visits: "Visites au total"
+        price: "Prix / visite"
+        custom: "Tarif spécifique"
+        global: "Prix global"
+        period_amount: "Dû cette période"
+        total_amount: "Total"
+        override_label: "Prix par visite pour ce cabinet"
+        override_hint: "Laissez vide pour utiliser le prix global."
+        override_submit: "Enregistrer le prix"
+        override_reset: "Utiliser le prix global"
+      flash:
+        price_updated: "Prix par visite mis à jour : %{price}."
+        price_invalid: "Saisissez un prix valide, par exemple 2,50."
+        override_updated: "Ce cabinet est désormais facturé %{price} par visite."
+        override_cleared: "Ce cabinet utilise désormais le prix global par visite."
     users:
       cannot_change_own_role: "Vous ne pouvez pas modifier votre propre rôle."
       cannot_delete_self: "Vous ne pouvez pas supprimer votre propre compte."

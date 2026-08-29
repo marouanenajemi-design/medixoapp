@@ -16,6 +16,7 @@ en:
     analytics: "Analytics"
     chatbot: "Medicine Chatbot"
     online_bookings: "Online Bookings"
+    billing: "Billing & Usage"
     clinic_settings: "Clinic Settings"
   layout:
     navigation:
@@ -154,6 +155,13 @@ en:
         pending: "pending"
         view_requests: "View Requests"
         open_page: "Open Booking Page"
+      billing:
+        title: "Visit Billing"
+        subtitle: "You are billed for each completed patient visit."
+        visits: "Visits this period"
+        price: "Price per visit"
+        amount_due: "Amount due"
+        view: "View Billing"
 
       empty: "No recent appointments yet."
       stats:
@@ -161,6 +169,36 @@ en:
         patients: "Patients"
 
         today_appointments: "Today's Appointments"
+  billing:
+    show:
+      title: "Billing & Usage"
+      subtitle: "Your recorded patient visits and what they cost."
+      period: "Billing period"
+      stats:
+        period_visits: "Visits this period"
+        price_per_visit: "Price per visit"
+        amount_due: "Amount due this period"
+        total_visits: "Total billable visits"
+      custom_price: "Custom price for your clinic"
+      how_title: "How your bill is calculated"
+      how_body: "Every completed patient visit counts as one billable visit. Cancelled appointments and visits that were never completed are not counted, and the same visit is only ever charged once."
+      formula: "%{visits} visits × %{price} per visit = %{amount}"
+      total_due_label: "Total since sign-up"
+      history_title: "Monthly usage"
+      history_month: "Month"
+      history_visits: "Visits"
+      history_amount: "Amount"
+      recent_title: "Recent billable visits"
+      recent_subtitle: "Your 10 most recent completed visits"
+      table:
+        date: "Date"
+        patient: "Patient"
+        doctor: "Doctor"
+        amount: "Amount"
+      no_visits: "No billable visits yet. Appointments marked as completed will appear here."
+      deleted_record: "Deleted"
+      payment_notice: "Online payment is not enabled yet — this page shows your current usage and estimated bill."
+
   doctors:
     index:
       title: "Doctors"
@@ -454,6 +492,7 @@ en:
       doctors: "Doctors"
       patients: "Patients"
       appointments: "Appointments"
+      monetization: "Monetization"
       back_to_app: "Back to App"
     roles:
       super_admin: "Super Admin"
@@ -519,6 +558,67 @@ en:
         growth_title: "New Clinics per Month"
       activity:
         title: "Recent Activity"
+      usage:
+        title: "Usage Revenue — Patient Visits"
+        subtitle: "Calculated from completed patient visits recorded by clinics"
+        manage: "Monetization"
+        revenue_this_month: "Usage Revenue"
+        all_time: "All time"
+        visits_this_month: "Visits This Month"
+        total_visits: "Total Billable Visits"
+        price_per_visit: "Price per Visit"
+    monetization:
+      title: "Monetization"
+      subtitle: "Usage-based billing calculated from real patient visits."
+      kpis:
+        period_revenue: "Revenue This Period"
+        all_time_revenue: "All time"
+        period_visits: "Billable Visits"
+        this_period: "This billing period"
+        total_visits: "Total Billable Visits"
+        voided: "%{count} voided (not charged)"
+        billing_clinics: "Clinics Billing"
+        with_usage: "With usage this period"
+      price:
+        title: "Price per Patient Visit"
+        subtitle: "The global price charged to every clinic for one completed patient visit."
+        label: "Price per visit"
+        hint: "Applies to all clinics that do not have their own price."
+        currency_label: "Currency"
+        submit: "Save Price"
+        override_note: "A clinic can be given its own price from its clinic page — that override always wins over this global price."
+      chart:
+        title: "Visits & Usage Revenue"
+        subtitle: "Billable patient visits over the last 6 months"
+        badge: "Live data"
+      table:
+        title: "Usage per Clinic"
+        subtitle: "Billable visits and amount due for each clinic"
+        price: "Price / visit"
+        custom: "Custom"
+        period_visits: "Visits (period)"
+        period_amount: "Due (period)"
+        total_visits: "Visits (total)"
+        total_amount: "Due (total)"
+      clinic_card:
+        title: "Visit Billing"
+        subtitle: "Usage-based billing for this clinic, calculated from completed patient visits."
+        period_visits: "Visits This Period"
+        total_visits: "Total Visits"
+        price: "Price / Visit"
+        custom: "Custom price"
+        global: "Global price"
+        period_amount: "Due This Period"
+        total_amount: "Total"
+        override_label: "Price per visit for this clinic"
+        override_hint: "Leave empty to use the global price."
+        override_submit: "Save Price"
+        override_reset: "Use Global Price"
+      flash:
+        price_updated: "Price per visit updated to %{price}."
+        price_invalid: "Enter a valid price, for example 2.50."
+        override_updated: "This clinic is now billed %{price} per visit."
+        override_cleared: "This clinic now uses the global price per visit."
     users:
       cannot_change_own_role: "You cannot change your own admin role."
       cannot_delete_self: "You cannot delete your own account."

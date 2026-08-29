@@ -1,5 +1,5 @@
 ================================================================================
-  CLINICFLOW — BUYER DELIVERY CHECKLIST
+  MEDIXOAPP — BUYER DELIVERY CHECKLIST
   Complete this checklist before and after receiving the package
 ================================================================================
 

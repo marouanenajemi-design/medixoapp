@@ -46,7 +46,11 @@ doctors = DOCTORS_CONFIG.map do |cfg|
   d
 end
 
-# ── Reset demo appointments & patients ─────────────────────────────────────────
+# ── Reset demo appointments, patients & billing ledger ─────────────────────────
+# Visits survive appointment deletion by design (a clinic must not be able to
+# erase usage it already had), so the demo ledger is cleared explicitly here —
+# otherwise re-seeding would stack a fresh set of billable visits on the old one.
+clinic.visits.delete_all
 clinic.appointments.delete_all
 clinic.patients.delete_all
 

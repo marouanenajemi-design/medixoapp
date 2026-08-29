@@ -50,7 +50,7 @@ class ClinicsControllerTest < ActionDispatch::IntegrationTest
 
     patch clinic_url, params: {
       clinic: {
-        name: "ClinicFlow Central",
+        name: "MedixoApp Central",
         address: "99 Updated Ave",
         phone: "555-0101"
       }
@@ -58,7 +58,7 @@ class ClinicsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to dashboard_path(locale: current_locale)
     @clinic.reload
-    assert_equal "ClinicFlow Central", @clinic.name
+    assert_equal "MedixoApp Central", @clinic.name
     assert_equal "99 Updated Ave", @clinic.address
     assert_equal "555-0101", @clinic.phone
 

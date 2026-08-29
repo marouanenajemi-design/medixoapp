@@ -12,11 +12,15 @@ Rails.application.routes.draw do
       end
     end
 
+    get   "monetization", to: "monetization#show",   as: :monetization
+    patch "monetization", to: "monetization#update"
+
     resources :clinics, only: [:index, :show, :destroy] do
       member do
         patch :toggle_subscription
         patch :extend_trial
         patch :update_plan
+        patch :update_visit_price
       end
     end
 
@@ -51,6 +55,7 @@ Rails.application.routes.draw do
 
   get "pricing",    to: "pages#pricing"
   get "analytics",  to: "analytics#index", as: :analytics
+  get "billing",    to: "billing#show",    as: :billing
   post "/webhooks/lemonsqueezy", to: "webhooks#lemonsqueezy"
 
   resource :clinic, only: [:new, :create, :edit, :update]

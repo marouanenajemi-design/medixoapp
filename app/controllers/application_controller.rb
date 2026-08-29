@@ -46,7 +46,9 @@ class ApplicationController < ActionController::Base
       "devise/passwords",
       "clinics",
       "pages",
-      "webhooks"
+      "webhooks",
+      # A clinic whose access lapsed must still be able to see what it owes.
+      "billing"
     ]
 
     return if allowed_controllers.include?(controller_path)

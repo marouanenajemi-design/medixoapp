@@ -1,5 +1,5 @@
 ================================================================================
-  CLINICFLOW — DOMAIN TRANSFER CHECKLIST
+  MEDIXOAPP — DOMAIN TRANSFER CHECKLIST
   Step-by-step guide for seller and buyer
 ================================================================================
 
@@ -159,7 +159,7 @@ at the new registrar.
   STEP 8 — Update APP_HOST environment variable
   ───────────────────────────────────────────────
   Update the APP_HOST config var to your custom domain:
-    heroku config:set APP_HOST=clinicflow.com
+    heroku config:set APP_HOST=your-domain.com
 
   [ ] APP_HOST updated to custom domain
 

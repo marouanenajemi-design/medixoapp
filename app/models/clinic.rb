@@ -1,5 +1,6 @@
 class Clinic < ApplicationRecord
   include PlanGating
+  include VisitBilling
 
   belongs_to :user
   has_many :subscriptions,   dependent: :destroy
@@ -8,11 +9,15 @@ class Clinic < ApplicationRecord
   has_many :patients,       dependent: :destroy
   has_many :appointments,   dependent: :destroy
   has_many :prescriptions,  dependent: :destroy
+  has_many :visits,         dependent: :destroy
 
   has_one_attached :logo
 
   validates :name, :address, :phone, presence: true
   validates :slug, presence: true, uniqueness: { case_sensitive: false }
+  validates :price_per_visit_cents,
+            numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+            allow_nil: true
 
   before_validation :generate_slug, on: :create
 

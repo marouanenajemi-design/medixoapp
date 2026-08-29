@@ -1,9 +1,9 @@
 ================================================================================
-  CLINICFLOW — SOURCE CODE DELIVERY PACKAGE
+  MEDIXOAPP — SOURCE CODE DELIVERY PACKAGE
   Professional SaaS Handover Documentation
 ================================================================================
 
-PROJECT: ClinicFlow
+PROJECT: MedixoApp
 STACK:   Ruby on Rails 7.1 | PostgreSQL | Bootstrap | Devise | FullCalendar
 SOLD ON: Flippa
 DATE:    May 2026
@@ -84,9 +84,9 @@ DATE:    May 2026
   │ SMTP_ADDRESS                    │ SMTP server address (default: smtp.sendgrid.net)      │
   │ SMTP_USERNAME                   │ SMTP username (SendGrid: "apikey")                   │
   │ SMTP_PASSWORD                   │ SMTP password or API key                             │
-  │ SMTP_DOMAIN                     │ Your domain, e.g. clinicflow.com                     │
+  │ SMTP_DOMAIN                     │ Your domain, e.g. yourdomain.com                     │
   │ SMTP_PORT                       │ SMTP port (default: 587)                             │
-  │ APP_HOST                        │ Your production domain, e.g. clinicflow.com          │
+  │ APP_HOST                        │ Your production domain, e.g. yourdomain.com          │
   │ RAILS_SERVE_STATIC_FILES        │ Set to "true" on Heroku/Render                       │
   │ RAILS_LOG_LEVEL                 │ Optional. Default: "info"                            │
   │ MAILER_PERFORM_DELIVERIES       │ Optional. Default: "true"                            │
@@ -98,7 +98,7 @@ DATE:    May 2026
 
   Step 1 — Clone / extract the source code
     Extract the ZIP to a directory of your choice.
-    cd clinicflow
+    cd medixoapp
 
   Step 2 — Install Ruby dependencies
     gem install bundler
@@ -129,9 +129,9 @@ DATE:    May 2026
 
   Create a database user:
     sudo -u postgres psql
-    CREATE USER clinicflow WITH PASSWORD 'your_secure_password';
-    CREATE DATABASE clinic_saas_development OWNER clinicflow;
-    CREATE DATABASE clinic_saas_test OWNER clinicflow;
+    CREATE USER medixoapp WITH PASSWORD 'your_secure_password';
+    CREATE DATABASE clinic_saas_development OWNER medixoapp;
+    CREATE DATABASE clinic_saas_test OWNER medixoapp;
     \q
 
   Run migrations:
@@ -223,7 +223,7 @@ DATE:    May 2026
   9. LEMONSQUEEZY BILLING SETUP
 ================================================================================
 
-  ClinicFlow uses LemonSqueezy for subscription billing.
+  MedixoApp uses LemonSqueezy for subscription billing.
 
   Step 1 — Create account at https://lemonsqueezy.com
 

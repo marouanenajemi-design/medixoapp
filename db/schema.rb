@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_30_000003) do
+ActiveRecord::Schema[7.1].define(version: 2026_08_29_000003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,6 +59,15 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_30_000003) do
     t.index ["patient_id"], name: "index_appointments_on_patient_id"
   end
 
+  create_table "billing_settings", force: :cascade do |t|
+    t.integer "singleton_guard", default: 0, null: false
+    t.integer "price_per_visit_cents", default: 200, null: false
+    t.string "currency", default: "EUR", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["singleton_guard"], name: "index_billing_settings_on_singleton_guard", unique: true
+  end
+
   create_table "chat_messages", force: :cascade do |t|
     t.bigint "conversation_id", null: false
     t.string "role", null: false
@@ -85,6 +94,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_30_000003) do
     t.string "billing_subscription_id"
     t.string "plan_tier", default: "starter", null: false
     t.string "slug", null: false
+    t.integer "price_per_visit_cents"
     t.index ["slug"], name: "index_clinics_on_slug", unique: true
     t.index ["user_id"], name: "index_clinics_on_user_id"
   end
@@ -182,6 +192,28 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_30_000003) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "visits", force: :cascade do |t|
+    t.bigint "clinic_id", null: false
+    t.bigint "appointment_id"
+    t.bigint "patient_id"
+    t.bigint "doctor_id"
+    t.date "occurred_on", null: false
+    t.string "source", default: "appointment", null: false
+    t.integer "price_cents", default: 0, null: false
+    t.string "currency", default: "EUR", null: false
+    t.datetime "voided_at"
+    t.datetime "invoiced_at"
+    t.string "invoice_reference"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["appointment_id"], name: "index_visits_on_appointment_id", unique: true
+    t.index ["clinic_id", "occurred_on"], name: "index_visits_on_clinic_id_and_occurred_on"
+    t.index ["clinic_id", "voided_at"], name: "index_visits_on_clinic_id_and_voided_at"
+    t.index ["clinic_id"], name: "index_visits_on_clinic_id"
+    t.index ["doctor_id"], name: "index_visits_on_doctor_id"
+    t.index ["patient_id"], name: "index_visits_on_patient_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appointments", "clinics"
@@ -197,4 +229,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_30_000003) do
   add_foreign_key "prescriptions", "doctors"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "subscriptions", "clinics"
+  add_foreign_key "visits", "appointments", on_delete: :nullify
+  add_foreign_key "visits", "clinics"
+  add_foreign_key "visits", "doctors", on_delete: :nullify
+  add_foreign_key "visits", "patients", on_delete: :nullify
 end

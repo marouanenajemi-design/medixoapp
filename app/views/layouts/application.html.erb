@@ -77,6 +77,9 @@
               <span class="sidebar-notif-badge"><%= pending_count %></span>
             <% end %>
           <% end %>
+          <%= link_to billing_path, class: active_path(billing_path) do %>
+            <i class="bi bi-receipt"></i> <%= t("navigation.billing") %>
+          <% end %>
           <%= link_to edit_clinic_path, class: active_path(edit_clinic_path) do %>
             <i class="bi bi-gear"></i> <%= t("navigation.clinic_settings") %>
           <% end %>

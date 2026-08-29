@@ -19,5 +19,7 @@ class DashboardController < ApplicationController
 
     raw_status_counts = scoped_appointments.group(:status).count
     @status_breakdown = Appointment::STATUSES.index_with { |status| raw_status_counts[status].to_i }
+
+    @billing_summary = @clinic.billing_summary
   end
 end

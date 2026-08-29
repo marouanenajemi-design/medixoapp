@@ -48,6 +48,10 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+
+  # Rails 7.1's test runner is not compatible with minitest 6 (it calls
+  # Minitest::Test.run with 3 arguments), so `bin/rails test` aborts. Pin to 5.x.
+  gem "minitest", "~> 5.16"
 end
 
 group :development do

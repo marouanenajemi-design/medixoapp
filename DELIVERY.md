@@ -1,4 +1,4 @@
-# ClinicFlow — Delivery & Setup Guide
+# MedixoApp — Delivery & Setup Guide
 
 **Version:** 1.0.0  
 **Delivered:** May 2026  
@@ -26,7 +26,7 @@
 ## 1. What Is Included
 
 ```
-clinicflow/
+medixoapp/
 ├── app/
 │   ├── controllers/
 │   │   ├── admin/                  ← Super Admin Panel (NEW)
@@ -123,8 +123,8 @@ Set these in your hosting platform's dashboard (Heroku Config Vars, Render, Rail
 | `SMTP_ADDRESS` | **YES** | SMTP server (default: smtp.sendgrid.net) |
 | `SMTP_USERNAME` | **YES** | SMTP username (SendGrid: `apikey`) |
 | `SMTP_PASSWORD` | **YES** | SMTP password or API key |
-| `SMTP_DOMAIN` | **YES** | Your domain (e.g. `clinicflow.com`) |
-| `APP_HOST` | **YES** | Your domain (e.g. `clinicflow.com`) |
+| `SMTP_DOMAIN` | **YES** | Your domain (e.g. `yourdomain.com`) |
+| `APP_HOST` | **YES** | Your domain (e.g. `yourdomain.com`) |
 | `RAILS_SERVE_STATIC_FILES` | Heroku/Render | Set to `true` |
 | `RAILS_LOG_LEVEL` | optional | Default: `info` |
 
@@ -134,8 +134,8 @@ Set these in your hosting platform's dashboard (Heroku Config Vars, Render, Rail
 
 ```bash
 # 1. Extract the ZIP and enter the directory
-unzip clinicflow_delivery_*.zip
-cd clinicflow/
+unzip medixoapp_delivery_*.zip
+cd medixoapp/
 
 # 2. Install Ruby dependencies
 gem install bundler
@@ -164,9 +164,9 @@ brew services start postgresql      # macOS
 # Create database user and databases
 sudo -u postgres psql
 
-  CREATE USER clinicflow WITH PASSWORD 'choose_a_strong_password';
-  CREATE DATABASE clinic_saas_development OWNER clinicflow;
-  CREATE DATABASE clinic_saas_test OWNER clinicflow;
+  CREATE USER medixoapp WITH PASSWORD 'choose_a_strong_password';
+  CREATE DATABASE clinic_saas_development OWNER medixoapp;
+  CREATE DATABASE clinic_saas_test OWNER medixoapp;
   \q
 
 # Run migrations
@@ -399,4 +399,4 @@ Complete these before going live:
 
 ---
 
-*ClinicFlow — Clinic management made simple.*
+*MedixoApp — Clinic management made simple.*

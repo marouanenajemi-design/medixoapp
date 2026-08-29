@@ -63,6 +63,22 @@ module ApplicationHelper
     ENV["SMTP_USER_NAME"].present? && ENV["SMTP_PASSWORD"].present?
   end
 
+  # ── Billing ──────────────────────────────────────────────────────────────────
+
+  # Formats an amount stored in cents: money(250) => "€2.50"
+  def money(cents, currency = nil)
+    number_to_currency(
+      cents.to_i / 100.0,
+      unit: BillingSetting.symbol_for(currency || default_billing_currency),
+      precision: 2
+    )
+  end
+
+  # Memoised per request — the billing settings row is a single global record.
+  def default_billing_currency
+    @_default_billing_currency ||= BillingSetting.current.currency
+  end
+
   # ── LemonSqueezy ─────────────────────────────────────────────────────────────
 
   LS_CHECKOUT_URLS = {

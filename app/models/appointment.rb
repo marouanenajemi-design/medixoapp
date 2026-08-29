@@ -3,8 +3,15 @@ class Appointment < ApplicationRecord
   belongs_to :doctor
   belongs_to :patient
 
+  # Billing ledger entry for this visit. Nullified rather than destroyed so a
+  # deleted appointment cannot erase a visit the clinic already used.
+  has_one :visit, dependent: :nullify
+
   STATUSES = ["pending", "confirmed", "completed", "cancelled"].freeze
   SOURCES  = ["clinic", "online"].freeze
+
+  # The status that turns an appointment into one billable patient visit.
+  BILLABLE_STATUS = "completed".freeze
 
   validates :appointment_date, :appointment_time, :status, presence: true
   validates :status, inclusion: { in: STATUSES }
@@ -22,8 +29,23 @@ class Appointment < ApplicationRecord
 
   validate :appointment_within_doctor_working_hours
 
+  # Billing runs after the appointment is safely committed, so a billing problem
+  # can never roll back or block clinical work.
+  after_commit :sync_billable_visit, on: [:create, :update]
+
+  def billable_visit?
+    status == BILLABLE_STATUS
+  end
 
   private
+
+  def sync_billable_visit
+    return unless previously_new_record? || saved_change_to_status? || saved_change_to_appointment_date?
+
+    VisitBillingService.sync_appointment(self)
+  rescue StandardError => e
+    Rails.logger.error("[VisitBilling] failed to sync appointment ##{id}: #{e.class}: #{e.message}")
+  end
 
   def doctor_and_patient_belong_to_clinic
     return if clinic.blank?

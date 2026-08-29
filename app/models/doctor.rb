@@ -2,6 +2,8 @@ class Doctor < ApplicationRecord
   belongs_to :clinic
   has_many :appointments, dependent: :destroy
   has_many :prescriptions, dependent: :destroy
+  # Billing history outlives the doctor record.
+  has_many :visits, dependent: :nullify
 
   validates :name, :specialty, :phone, :work_start, :work_end, presence: true
 

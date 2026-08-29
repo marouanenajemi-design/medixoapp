@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  ClinicFlow — Delivery Package Builder
+#  MedixoApp — Delivery Package Builder
 #  Run this script from the project root to produce a clean ZIP for the buyer.
 #  Usage:  bash build_delivery.sh
 # =============================================================================
@@ -8,12 +8,12 @@
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PACKAGE_NAME="clinicflow_delivery_$(date +%Y%m%d)"
+PACKAGE_NAME="medixoapp_delivery_$(date +%Y%m%d)"
 OUTPUT_DIR="$HOME/Desktop"
 OUTPUT_ZIP="$OUTPUT_DIR/${PACKAGE_NAME}.zip"
 
 echo "======================================================"
-echo "  ClinicFlow Delivery Package Builder"
+echo "  MedixoApp Delivery Package Builder"
 echo "======================================================"
 echo "  Project:    $PROJECT_DIR"
 echo "  Output:     $OUTPUT_ZIP"

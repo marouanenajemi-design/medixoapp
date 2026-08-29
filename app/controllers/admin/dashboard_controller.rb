@@ -12,6 +12,17 @@ class Admin::DashboardController < Admin::BaseController
 
     @mrr               = compute_mrr
     @arr               = @mrr * 12
+
+    # ── Usage-based monetization (real patient visits) ──
+    billing_period            = Date.current.beginning_of_month..Date.current.end_of_month
+    period_visits             = Visit.billable.in_period(billing_period)
+    @billable_visits_total    = Visit.billable.count
+    @billable_visits_period   = period_visits.count
+    @usage_revenue_period     = Visit.usage_revenue_cents(period_visits)
+    @usage_revenue_total      = Visit.usage_revenue_cents
+    @price_per_visit_cents    = BillingSetting.current.price_per_visit_cents
+    @billing_currency         = BillingSetting.current.currency
+
     @starter_count     = Clinic.where(plan_tier: "starter").count
     @pro_count         = Clinic.where(plan_tier: "pro").count
     @clinic_plus_count = Clinic.where(plan_tier: "clinic_plus").count

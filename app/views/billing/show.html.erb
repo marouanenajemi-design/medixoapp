@@ -1,0 +1,158 @@
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("billing.show.title") %></h1>
+      <div class="page-subtitle"><%= t("billing.show.subtitle") %></div>
+    </div>
+    <div class="page-actions">
+      <span class="badge-soft" style="font-size:0.82rem;">
+        <i class="bi bi-calendar3 me-1"></i>
+        <%= t("billing.show.period") %>:
+        <strong><%= @summary[:period].first.strftime("%b %d") %> — <%= @summary[:period].last.strftime("%b %d, %Y") %></strong>
+      </span>
+    </div>
+  </div>
+
+  <%# ── Usage stat cards ── %>
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-lg-3">
+      <div class="stat-card stat-card-teal h-100">
+        <div class="stat-label"><%= t("billing.show.stats.period_visits") %></div>
+        <div class="stat-value"><%= @summary[:period_visits] %></div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card stat-card-green h-100">
+        <div class="stat-label"><%= t("billing.show.stats.price_per_visit") %></div>
+        <div class="stat-value"><%= money(@summary[:price_per_visit_cents], @summary[:currency]) %></div>
+        <% if @summary[:custom_price] %>
+          <div style="font-size:0.75rem;color:#0d9488;margin-top:4px;">
+            <i class="bi bi-tag-fill"></i> <%= t("billing.show.custom_price") %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card stat-card-amber h-100">
+        <div class="stat-label"><%= t("billing.show.stats.amount_due") %></div>
+        <div class="stat-value"><%= money(@summary[:period_amount_cents], @summary[:currency]) %></div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card stat-card-rose h-100">
+        <div class="stat-label"><%= t("billing.show.stats.total_visits") %></div>
+        <div class="stat-value"><%= @summary[:total_visits] %></div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── How the bill is calculated ── %>
+  <div class="content-card mb-4">
+    <div class="d-flex align-items-start gap-3 flex-wrap justify-content-between">
+      <div class="d-flex align-items-start gap-3">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(20,184,166,0.12);color:#0d9488;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;">
+          <i class="bi bi-receipt"></i>
+        </div>
+        <div>
+          <div style="font-size:0.95rem;font-weight:700;color:#0f172a;"><%= t("billing.show.how_title") %></div>
+          <div style="font-size:0.85rem;color:#64748b;margin-top:4px;max-width:52rem;">
+            <%= t("billing.show.how_body") %>
+          </div>
+          <div style="font-size:0.92rem;font-weight:700;color:#0f172a;margin-top:10px;">
+            <%= t("billing.show.formula",
+                  visits: @summary[:period_visits],
+                  price:  money(@summary[:price_per_visit_cents], @summary[:currency]),
+                  amount: money(@summary[:period_amount_cents], @summary[:currency])) %>
+          </div>
+        </div>
+      </div>
+      <div class="text-md-end">
+        <div style="font-size:0.78rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">
+          <%= t("billing.show.total_due_label") %>
+        </div>
+        <div style="font-size:1.6rem;font-weight:800;color:#0f172a;">
+          <%= money(@summary[:total_amount_cents], @summary[:currency]) %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <%# ── Monthly usage history ── %>
+    <div class="col-12 col-xl-5">
+      <div class="content-card h-100">
+        <h2 class="section-title"><%= t("billing.show.history_title") %></h2>
+        <div class="table-responsive">
+          <table class="table table-clean responsive-table">
+            <thead>
+              <tr>
+                <th><%= t("billing.show.history_month") %></th>
+                <th><%= t("billing.show.history_visits") %></th>
+                <th><%= t("billing.show.history_amount") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @visits_by_month.each do |row| %>
+                <tr>
+                  <td data-label="<%= t("billing.show.history_month") %>"><%= row[:month] %></td>
+                  <td data-label="<%= t("billing.show.history_visits") %>"><%= row[:count] %></td>
+                  <td data-label="<%= t("billing.show.history_amount") %>">
+                    <%= money(row[:amount_cents], @summary[:currency]) %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <%# ── Recent billable visits ── %>
+    <div class="col-12 col-xl-7">
+      <div class="content-card h-100">
+        <div class="card-toolbar d-flex justify-content-between align-items-center gap-3 flex-wrap mb-2">
+          <h2 class="section-title mb-0"><%= t("billing.show.recent_title") %></h2>
+          <div class="text-muted small"><%= t("billing.show.recent_subtitle") %></div>
+        </div>
+
+        <% if @recent_visits.any? %>
+          <div class="table-responsive">
+            <table class="table table-clean responsive-table">
+              <thead>
+                <tr>
+                  <th><%= t("billing.show.table.date") %></th>
+                  <th><%= t("billing.show.table.patient") %></th>
+                  <th><%= t("billing.show.table.doctor") %></th>
+                  <th><%= t("billing.show.table.amount") %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @recent_visits.each do |visit| %>
+                  <tr>
+                    <td data-label="<%= t("billing.show.table.date") %>"><%= visit.occurred_on.strftime("%b %d, %Y") %></td>
+                    <td data-label="<%= t("billing.show.table.patient") %>">
+                      <%= visit.patient&.name || content_tag(:span, t("billing.show.deleted_record"), class: "text-muted") %>
+                    </td>
+                    <td data-label="<%= t("billing.show.table.doctor") %>">
+                      <%= visit.doctor&.name || content_tag(:span, t("billing.show.deleted_record"), class: "text-muted") %>
+                    </td>
+                    <td data-label="<%= t("billing.show.table.amount") %>">
+                      <%= money(visit.price_cents, visit.currency) %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <div class="empty-state"><%= t("billing.show.no_visits") %></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info mt-4 d-flex align-items-center gap-3">
+    <i class="bi bi-info-circle fs-5"></i>
+    <div><%= t("billing.show.payment_notice") %></div>
+  </div>
+</div>

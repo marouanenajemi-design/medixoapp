@@ -158,6 +158,51 @@
     </div>
   </div>
 
+  <%# ── Visit billing card ── %>
+  <div class="content-card mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(20,184,166,0.12);color:#0d9488;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;">
+          <i class="bi bi-receipt"></i>
+        </div>
+        <div>
+          <div style="font-size:0.95rem;font-weight:700;color:#0f172a;"><%= t("dashboard.index.billing.title") %></div>
+          <div style="font-size:0.82rem;color:#64748b;margin-top:2px;">
+            <%= t("dashboard.index.billing.subtitle") %>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-4 flex-wrap">
+        <div class="text-center">
+          <div style="font-size:0.72rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">
+            <%= t("dashboard.index.billing.visits") %>
+          </div>
+          <div style="font-size:1.3rem;font-weight:800;color:#0f172a;"><%= @billing_summary[:period_visits] %></div>
+        </div>
+        <div class="text-center">
+          <div style="font-size:0.72rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">
+            <%= t("dashboard.index.billing.price") %>
+          </div>
+          <div style="font-size:1.3rem;font-weight:800;color:#0f172a;">
+            <%= money(@billing_summary[:price_per_visit_cents], @billing_summary[:currency]) %>
+          </div>
+        </div>
+        <div class="text-center">
+          <div style="font-size:0.72rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">
+            <%= t("dashboard.index.billing.amount_due") %>
+          </div>
+          <div style="font-size:1.3rem;font-weight:800;color:#0d9488;">
+            <%= money(@billing_summary[:period_amount_cents], @billing_summary[:currency]) %>
+          </div>
+        </div>
+        <%= link_to billing_path, class: "btn btn-sm btn-outline-primary" do %>
+          <i class="bi bi-graph-up"></i> <%= t("dashboard.index.billing.view") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
   <%# ── Online booking card ── %>
   <div class="content-card mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">

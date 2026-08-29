@@ -1,0 +1,244 @@
+<% content_for :head do %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script id="mx-monetization-data" type="application/json">
+    { "usage": <%= @usage_by_month.to_json %> }
+  </script>
+<% end %>
+
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title"><%= t("admin.monetization.title") %></h1>
+      <div class="page-subtitle"><%= t("admin.monetization.subtitle") %></div>
+    </div>
+  </div>
+
+  <%# ── Usage revenue KPIs (real visits) ── %>
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+      <div class="admin-metric-card admin-metric-card--teal h-100">
+        <div class="admin-metric-icon admin-metric-icon--teal"><i class="bi bi-cash-coin"></i></div>
+        <div class="admin-metric-label"><%= t("admin.monetization.kpis.period_revenue") %></div>
+        <div class="admin-metric-value"><%= money(@period_revenue_cents, @setting.currency) %></div>
+        <div class="admin-metric-sub">
+          <%= t("admin.monetization.kpis.all_time_revenue") %>:
+          <strong><%= money(@total_revenue_cents, @setting.currency) %></strong>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="admin-metric-card admin-metric-card--green h-100">
+        <div class="admin-metric-icon admin-metric-icon--green"><i class="bi bi-person-check"></i></div>
+        <div class="admin-metric-label"><%= t("admin.monetization.kpis.period_visits") %></div>
+        <div class="admin-metric-value"><%= @period_visits %></div>
+        <div class="admin-metric-sub"><%= t("admin.monetization.kpis.this_period") %></div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="admin-metric-card admin-metric-card--blue h-100">
+        <div class="admin-metric-icon admin-metric-icon--blue"><i class="bi bi-clipboard2-pulse"></i></div>
+        <div class="admin-metric-label"><%= t("admin.monetization.kpis.total_visits") %></div>
+        <div class="admin-metric-value"><%= @total_visits %></div>
+        <div class="admin-metric-sub">
+          <%= t("admin.monetization.kpis.voided", count: @voided_visits) %>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="admin-metric-card admin-metric-card--amber h-100">
+        <div class="admin-metric-icon admin-metric-icon--amber"><i class="bi bi-hospital"></i></div>
+        <div class="admin-metric-label"><%= t("admin.monetization.kpis.billing_clinics") %></div>
+        <div class="admin-metric-value"><%= @billing_clinics_count %></div>
+        <div class="admin-metric-sub"><%= t("admin.monetization.kpis.with_usage") %></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <%# ── Global price setting ── %>
+    <div class="col-12 col-lg-5">
+      <div class="content-card h-100">
+        <h2 class="section-title mb-1"><%= t("admin.monetization.price.title") %></h2>
+        <div class="text-muted mb-4" style="font-size:0.9rem;"><%= t("admin.monetization.price.subtitle") %></div>
+
+        <%= form_with model: @setting, scope: :billing_setting,
+                      url: admin_monetization_path, method: :patch, data: { turbo: false } do |f| %>
+          <div class="mb-3">
+            <label class="form-label fw-bold text-muted"
+                   style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.5px;">
+              <%= t("admin.monetization.price.label") %>
+            </label>
+            <div class="input-group">
+              <span class="input-group-text"><%= @setting.currency_symbol %></span>
+              <%= f.text_field :price_per_visit, value: format("%.2f", @setting.price_per_visit),
+                    class: "form-control", inputmode: "decimal" %>
+            </div>
+            <div class="form-text"><%= t("admin.monetization.price.hint") %></div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold text-muted"
+                   style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.5px;">
+              <%= t("admin.monetization.price.currency_label") %>
+            </label>
+            <%= f.select :currency, BillingSetting::CURRENCIES, {}, class: "form-select" %>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="min-height:48px;">
+            <i class="bi bi-check-lg me-1"></i> <%= t("admin.monetization.price.submit") %>
+          </button>
+        <% end %>
+
+        <div class="alert alert-secondary mt-4 mb-0" style="font-size:0.85rem;">
+          <i class="bi bi-info-circle me-1"></i>
+          <%= t("admin.monetization.price.override_note") %>
+        </div>
+      </div>
+    </div>
+
+    <%# ── Usage chart ── %>
+    <div class="col-12 col-lg-7">
+      <div class="content-card h-100">
+        <div class="d-flex align-items-start justify-content-between mb-3 flex-wrap gap-2">
+          <div>
+            <h2 class="section-title mb-1" style="font-size:1.15rem;"><%= t("admin.monetization.chart.title") %></h2>
+            <div class="text-muted" style="font-size:0.85rem;"><%= t("admin.monetization.chart.subtitle") %></div>
+          </div>
+          <span class="admin-trend-badge admin-trend-badge--up" style="margin-top:4px;">
+            <i class="bi bi-activity"></i> <%= t("admin.monetization.chart.badge") %>
+          </span>
+        </div>
+        <div class="admin-chart-wrap">
+          <canvas id="adminUsageChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── Per-clinic usage & billing ── %>
+  <div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div>
+        <h2 class="section-title mb-1"><%= t("admin.monetization.table.title") %></h2>
+        <div class="text-muted" style="font-size:0.85rem;"><%= t("admin.monetization.table.subtitle") %></div>
+      </div>
+      <%= link_to t("admin.dashboard.view_all"), admin_clinics_path, class: "btn btn-sm btn-outline-secondary" %>
+    </div>
+
+    <% if @clinic_rows.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("admin.tables.clinic") %></th>
+              <th><%= t("admin.monetization.table.price") %></th>
+              <th><%= t("admin.monetization.table.period_visits") %></th>
+              <th><%= t("admin.monetization.table.period_amount") %></th>
+              <th><%= t("admin.monetization.table.total_visits") %></th>
+              <th><%= t("admin.monetization.table.total_amount") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @clinic_rows.each do |row| %>
+              <tr>
+                <td data-label="<%= t("admin.tables.clinic") %>">
+                  <%= link_to row[:clinic].name, admin_clinic_path(row[:clinic]), class: "fw-semibold text-decoration-none" %>
+                  <div class="text-muted" style="font-size:0.78rem;"><%= row[:clinic].user.email %></div>
+                </td>
+                <td data-label="<%= t("admin.monetization.table.price") %>">
+                  <%= money(row[:price_cents], @setting.currency) %>
+                  <% if row[:custom_price] %>
+                    <span class="badge-soft badge-admin" style="font-size:0.68rem;"><%= t("admin.monetization.table.custom") %></span>
+                  <% end %>
+                </td>
+                <td data-label="<%= t("admin.monetization.table.period_visits") %>"><%= row[:period_visits] %></td>
+                <td data-label="<%= t("admin.monetization.table.period_amount") %>">
+                  <strong><%= money(row[:period_amount_cents], @setting.currency) %></strong>
+                </td>
+                <td data-label="<%= t("admin.monetization.table.total_visits") %>"><%= row[:total_visits] %></td>
+                <td data-label="<%= t("admin.monetization.table.total_amount") %>">
+                  <%= money(row[:total_amount_cents], @setting.currency) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("admin.dashboard.no_clinics") %></div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+(function () {
+  var chartUsage;
+
+  function destroyUsageChart() {
+    if (chartUsage) chartUsage.destroy();
+    chartUsage = null;
+  }
+
+  function initUsageChart() {
+    var el = document.getElementById("mx-monetization-data");
+    if (!el) return;
+    var data;
+    try { data = JSON.parse(el.textContent); } catch (e) { return; }
+
+    var canvas = document.getElementById("adminUsageChart");
+    if (!canvas) return;
+
+    var teal    = "rgba(20,184,166,1)";
+    var tealBg  = "rgba(20,184,166,0.15)";
+    var slate   = "#94a3b8";
+    var gridCol = "rgba(226,232,240,0.6)";
+
+    Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+
+    chartUsage = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: data.usage.map(function (d) { return d.month; }),
+        datasets: [
+          {
+            type: "bar",
+            label: "Visits",
+            data: data.usage.map(function (d) { return d.visits; }),
+            backgroundColor: "rgba(148,163,184,0.55)",
+            borderRadius: 8,
+            borderSkipped: false,
+            yAxisID: "y"
+          },
+          {
+            type: "line",
+            label: "Usage revenue",
+            data: data.usage.map(function (d) { return d.revenue; }),
+            borderColor: teal,
+            backgroundColor: tealBg,
+            borderWidth: 3,
+            pointBackgroundColor: teal,
+            pointRadius: 4,
+            tension: 0.4,
+            fill: true,
+            yAxisID: "y1"
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: "bottom", labels: { boxWidth: 12, padding: 14 } } },
+        scales: {
+          x:  { grid: { display: false }, ticks: { color: slate, font: { size: 12 } } },
+          y:  { position: "left", grid: { color: gridCol }, ticks: { color: slate, precision: 0 }, beginAtZero: true },
+          y1: { position: "right", grid: { display: false }, ticks: { color: slate }, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  document.addEventListener("turbo:before-cache", destroyUsageChart);
+  document.addEventListener("turbo:load", initUsageChart);
+  document.addEventListener("DOMContentLoaded", initUsageChart);
+})();
+</script>

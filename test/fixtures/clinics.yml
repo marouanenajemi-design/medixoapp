@@ -1,13 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# slug is NOT NULL and normally filled by a before_validation callback, which
+# fixtures bypass — so it has to be set here.
 
 one:
   name: MyString
   address: MyString
   phone: MyString
+  slug: clinic-one
   user: one
 
 two:
   name: MyString
   address: MyString
   phone: MyString
+  slug: clinic-two
   user: two
