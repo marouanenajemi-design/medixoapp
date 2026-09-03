@@ -1,6 +1,6 @@
 class AppointmentsController < ApplicationController
   before_action :ensure_clinic!
-  before_action :set_appointment, only: [:show, :edit, :update, :destroy, :approve, :reject]
+  before_action :set_appointment, only: [:show, :edit, :update, :destroy, :approve, :reject, :complete]
   before_action :load_data, only: [:new, :create, :edit, :update]
 
   def index
@@ -60,6 +60,23 @@ class AppointmentsController < ApplicationController
       patient: @appointment.patient.name)
   end
 
+  # Point of sale: marks the visit completed and records the amount charged.
+  # Also used to correct the amount on an already-completed visit.
+  def complete
+    @appointment.assign_attributes(status: "completed", visit_amount: params[:visit_amount])
+
+    if @appointment.save
+      visit = @appointment.reload.visit
+      redirect_back fallback_location: appointments_path,
+        notice: t("flash.appointments.completed",
+                  patient: @appointment.patient.name,
+                  amount: helpers.money(visit&.price_cents.to_i, visit&.currency))
+    else
+      redirect_back fallback_location: appointments_path,
+        alert: @appointment.errors.full_messages.to_sentence
+    end
+  end
+
   private
 
   def set_appointment
@@ -72,7 +89,8 @@ class AppointmentsController < ApplicationController
   end
 
   def appointment_params
-    params.require(:appointment).permit(:appointment_date, :appointment_time, :status, :notes, :doctor_id, :patient_id)
+    params.require(:appointment).permit(:appointment_date, :appointment_time, :status, :notes,
+                                        :doctor_id, :patient_id, :visit_amount)
   end
 
   def notify_patient_confirmed(appointment)

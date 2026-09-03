@@ -79,6 +79,17 @@ module ApplicationHelper
     @_default_billing_currency ||= BillingSetting.current.currency
   end
 
+  def billing_currency_symbol(currency = nil)
+    BillingSetting.symbol_for(currency || default_billing_currency)
+  end
+
+  # Value for a point-of-sale amount input: the amount already charged for this
+  # visit, otherwise the clinic's suggested price as a starting point.
+  def visit_amount_field_value(appointment, clinic)
+    cents = appointment.visit&.price_cents || clinic.effective_price_per_visit_cents
+    format("%.2f", cents.to_i / 100.0)
+  end
+
   # ── LemonSqueezy ─────────────────────────────────────────────────────────────
 
   LS_CHECKOUT_URLS = {

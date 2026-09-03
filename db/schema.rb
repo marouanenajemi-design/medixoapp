@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_08_29_000003) do
+ActiveRecord::Schema[7.1].define(version: 2026_09_03_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -206,6 +206,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_08_29_000003) do
     t.string "invoice_reference"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "amount_entered_at"
     t.index ["appointment_id"], name: "index_visits_on_appointment_id", unique: true
     t.index ["clinic_id", "occurred_on"], name: "index_visits_on_clinic_id_and_occurred_on"
     t.index ["clinic_id", "voided_at"], name: "index_visits_on_clinic_id_and_voided_at"

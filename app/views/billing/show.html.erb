@@ -23,13 +23,11 @@
     </div>
     <div class="col-6 col-lg-3">
       <div class="stat-card stat-card-green h-100">
-        <div class="stat-label"><%= t("billing.show.stats.price_per_visit") %></div>
-        <div class="stat-value"><%= money(@summary[:price_per_visit_cents], @summary[:currency]) %></div>
-        <% if @summary[:custom_price] %>
-          <div style="font-size:0.75rem;color:#0d9488;margin-top:4px;">
-            <i class="bi bi-tag-fill"></i> <%= t("billing.show.custom_price") %>
-          </div>
-        <% end %>
+        <div class="stat-label"><%= t("billing.show.stats.average_per_visit") %></div>
+        <div class="stat-value"><%= money(@summary[:period_average_cents], @summary[:currency]) %></div>
+        <div style="font-size:0.75rem;color:#64748b;margin-top:4px;">
+          <%= t("billing.show.suggested_price", amount: money(@summary[:suggested_price_cents], @summary[:currency])) %>
+        </div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -56,12 +54,11 @@
         <div>
           <div style="font-size:0.95rem;font-weight:700;color:#0f172a;"><%= t("billing.show.how_title") %></div>
           <div style="font-size:0.85rem;color:#64748b;margin-top:4px;max-width:52rem;">
-            <%= t("billing.show.how_body") %>
+            <%= t("billing.show.how_body_pos") %>
           </div>
           <div style="font-size:0.92rem;font-weight:700;color:#0f172a;margin-top:10px;">
-            <%= t("billing.show.formula",
+            <%= t("billing.show.period_total",
                   visits: @summary[:period_visits],
-                  price:  money(@summary[:price_per_visit_cents], @summary[:currency]),
                   amount: money(@summary[:period_amount_cents], @summary[:currency])) %>
           </div>
         </div>
@@ -142,6 +139,12 @@
                   </tr>
                 <% end %>
               </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="3" style="text-align:right;"><%= t("billing.show.table.total") %></th>
+                  <th><%= money(@recent_visits.sum(&:price_cents), @summary[:currency]) %></th>
+                </tr>
+              </tfoot>
             </table>
           </div>
         <% else %>
@@ -149,6 +152,50 @@
         <% end %>
       </div>
     </div>
+  </div>
+
+  <%# ── Revenue by doctor ── %>
+  <div class="content-card mt-4">
+    <div class="card-toolbar d-flex justify-content-between align-items-center gap-3 flex-wrap mb-2">
+      <h2 class="section-title mb-0"><%= t("billing.show.by_doctor.title") %></h2>
+      <div class="text-muted small"><%= t("billing.show.by_doctor.subtitle") %></div>
+    </div>
+
+    <% if @revenue_by_doctor.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("shared.tables.doctor") %></th>
+              <th><%= t("billing.show.by_doctor.visits") %></th>
+              <th><%= t("billing.show.by_doctor.revenue") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @revenue_by_doctor.each do |row| %>
+              <tr>
+                <td data-label="<%= t("shared.tables.doctor") %>" class="fw-semibold">
+                  <%= row[:doctor]&.name || t("billing.show.by_doctor.unassigned") %>
+                </td>
+                <td data-label="<%= t("billing.show.by_doctor.visits") %>"><%= row[:visits] %></td>
+                <td data-label="<%= t("billing.show.by_doctor.revenue") %>">
+                  <strong><%= money(row[:revenue_cents], @summary[:currency]) %></strong>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th><%= t("billing.show.table.total") %></th>
+              <th><%= @summary[:total_visits] %></th>
+              <th><%= money(@summary[:total_amount_cents], @summary[:currency]) %></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("billing.show.no_visits") %></div>
+    <% end %>
   </div>
 
   <div class="alert alert-info mt-4 d-flex align-items-center gap-3">

@@ -16,7 +16,10 @@ class Admin::MonetizationController < Admin::BaseController
     @total_revenue_cents  = Visit.usage_revenue_cents
     @period_revenue_cents = Visit.usage_revenue_cents(period_visits)
 
+    @average_visit_cents = @total_visits.zero? ? 0 : (@total_revenue_cents.to_f / @total_visits).round
+
     @clinic_rows           = clinic_rows(@period)
+    @doctor_rows           = doctor_rows
     @billing_clinics_count = @clinic_rows.count { |row| row[:period_visits].positive? }
     @usage_by_month        = usage_by_month
   end
@@ -39,26 +42,34 @@ class Admin::MonetizationController < Admin::BaseController
     params.require(:billing_setting).permit(:price_per_visit, :currency)
   end
 
-  # One row per clinic: price, visits and amount due — all from real visits.
+  # One row per clinic: visits and revenue summed from the amounts actually
+  # charged at each point of sale.
   def clinic_rows(period)
-    period_counts = Visit.billable.in_period(period).group(:clinic_id).count
-    total_counts  = Visit.billable.group(:clinic_id).count
+    period_totals = Visit.revenue_by_clinic(Visit.billable.in_period(period))
+    total_totals  = Visit.revenue_by_clinic
 
     Clinic.includes(:user).order(created_at: :desc).map do |clinic|
-      price_cents   = clinic.effective_price_per_visit_cents
-      period_visits = period_counts[clinic.id].to_i
-      total_visits  = total_counts[clinic.id].to_i
+      period_row = period_totals[clinic.id] || { visits: 0, revenue_cents: 0 }
+      total_row  = total_totals[clinic.id]  || { visits: 0, revenue_cents: 0 }
 
       {
         clinic:              clinic,
-        price_cents:         price_cents,
+        suggested_cents:     clinic.effective_price_per_visit_cents,
         custom_price:        clinic.custom_price_per_visit?,
-        period_visits:       period_visits,
-        total_visits:        total_visits,
-        period_amount_cents: period_visits * price_cents,
-        total_amount_cents:  total_visits * price_cents
+        period_visits:       period_row[:visits],
+        total_visits:        total_row[:visits],
+        period_amount_cents: period_row[:revenue_cents],
+        total_amount_cents:  total_row[:revenue_cents]
       }
     end
+  end
+
+  # Doctor | clinic | visits | revenue, across the whole platform.
+  def doctor_rows
+    rows = Visit.revenue_by_doctor
+    doctors = Doctor.includes(:clinic).where(id: rows.map { |r| r[:doctor_id] }.compact).index_by(&:id)
+
+    rows.map { |row| row.merge(doctor: doctors[row[:doctor_id]]) }
   end
 
   # Platform-wide visits and usage revenue per month, oldest first.

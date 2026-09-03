@@ -39,6 +39,21 @@
     </div>
   </div>
 
+  <%# Amount taken at the point of sale — only recorded when the visit is completed. %>
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <%= f.label :visit_amount, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text"><%= billing_currency_symbol(@appointment.visit&.currency) %></span>
+        <%= f.text_field :visit_amount,
+              value: @appointment.visit_amount.presence || visit_amount_field_value(@appointment, current_clinic),
+              inputmode: "decimal",
+              class: "form-control" %>
+      </div>
+      <div class="form-text"><%= t("appointments.form.visit_amount_hint") %></div>
+    </div>
+  </div>
+
   <div class="mb-3">
     <%= f.label :notes, class: "form-label" %>
     <%= f.text_area :notes, class: "form-control", rows: 5, placeholder: t("appointments.form.placeholders.notes") %>

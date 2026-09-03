@@ -49,7 +49,10 @@
         <div class="admin-metric-icon admin-metric-icon--amber"><i class="bi bi-hospital"></i></div>
         <div class="admin-metric-label"><%= t("admin.monetization.kpis.billing_clinics") %></div>
         <div class="admin-metric-value"><%= @billing_clinics_count %></div>
-        <div class="admin-metric-sub"><%= t("admin.monetization.kpis.with_usage") %></div>
+        <div class="admin-metric-sub">
+          <%= t("admin.monetization.kpis.average_visit") %>:
+          <strong><%= money(@average_visit_cents, @setting.currency) %></strong>
+        </div>
       </div>
     </div>
   </div>
@@ -146,7 +149,7 @@
                   <div class="text-muted" style="font-size:0.78rem;"><%= row[:clinic].user.email %></div>
                 </td>
                 <td data-label="<%= t("admin.monetization.table.price") %>">
-                  <%= money(row[:price_cents], @setting.currency) %>
+                  <%= money(row[:suggested_cents], @setting.currency) %>
                   <% if row[:custom_price] %>
                     <span class="badge-soft badge-admin" style="font-size:0.68rem;"><%= t("admin.monetization.table.custom") %></span>
                   <% end %>
@@ -166,6 +169,61 @@
       </div>
     <% else %>
       <div class="empty-state"><%= t("admin.dashboard.no_clinics") %></div>
+    <% end %>
+  </div>
+
+  <%# ── Revenue by doctor (across all clinics) ── %>
+  <div class="content-card mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div>
+        <h2 class="section-title mb-1"><%= t("admin.monetization.doctors.title") %></h2>
+        <div class="text-muted" style="font-size:0.85rem;"><%= t("admin.monetization.doctors.subtitle") %></div>
+      </div>
+    </div>
+
+    <% if @doctor_rows.any? %>
+      <div class="table-responsive">
+        <table class="table table-clean responsive-table">
+          <thead>
+            <tr>
+              <th><%= t("admin.monetization.doctors.doctor") %></th>
+              <th><%= t("admin.tables.clinic") %></th>
+              <th><%= t("admin.monetization.doctors.visits") %></th>
+              <th><%= t("admin.monetization.doctors.revenue") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @doctor_rows.each do |row| %>
+              <tr>
+                <td data-label="<%= t("admin.monetization.doctors.doctor") %>" class="fw-semibold">
+                  <%= row[:doctor]&.name || t("admin.monetization.doctors.unassigned") %>
+                </td>
+                <td data-label="<%= t("admin.tables.clinic") %>">
+                  <% if row[:doctor]&.clinic %>
+                    <%= link_to row[:doctor].clinic.name, admin_clinic_path(row[:doctor].clinic),
+                                class: "text-decoration-none" %>
+                  <% else %>
+                    <span class="text-muted">—</span>
+                  <% end %>
+                </td>
+                <td data-label="<%= t("admin.monetization.doctors.visits") %>"><%= row[:visits] %></td>
+                <td data-label="<%= t("admin.monetization.doctors.revenue") %>">
+                  <strong><%= money(row[:revenue_cents], @setting.currency) %></strong>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="2"><%= t("admin.monetization.doctors.total") %></th>
+              <th><%= @total_visits %></th>
+              <th><%= money(@total_revenue_cents, @setting.currency) %></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state"><%= t("admin.monetization.doctors.empty") %></div>
     <% end %>
   </div>
 </div>

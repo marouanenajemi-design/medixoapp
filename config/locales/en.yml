@@ -86,6 +86,7 @@ en:
       updated: "Patient updated successfully."
       deleted: "Patient deleted successfully."
     appointments:
+      completed: "Visit completed for %{patient} — %{amount} recorded."
       created: "Appointment created successfully."
       updated: "Appointment updated successfully."
       deleted: "Appointment deleted successfully."
@@ -159,7 +160,7 @@ en:
         title: "Visit Billing"
         subtitle: "You are billed for each completed patient visit."
         visits: "Visits this period"
-        price: "Price per visit"
+        average: "Avg / visit"
         amount_due: "Amount due"
         view: "View Billing"
 
@@ -177,12 +178,21 @@ en:
       stats:
         period_visits: "Visits this period"
         price_per_visit: "Price per visit"
+        average_per_visit: "Average per visit"
         amount_due: "Amount due this period"
         total_visits: "Total billable visits"
       custom_price: "Custom price for your clinic"
+      suggested_price: "Suggested: %{amount}"
       how_title: "How your bill is calculated"
       how_body: "Every completed patient visit counts as one billable visit. Cancelled appointments and visits that were never completed are not counted, and the same visit is only ever charged once."
-      formula: "%{visits} visits × %{price} per visit = %{amount}"
+      how_body_pos: "The amount for each visit is the amount entered when the visit was completed, so every visit can be a different price. Cancelled appointments and visits that were never completed are not counted, and the same visit is only ever charged once."
+      period_total: "%{visits} visits this period, totalling %{amount}"
+      by_doctor:
+        title: "Revenue by doctor"
+        subtitle: "Totals from the amounts actually charged"
+        visits: "Visits"
+        revenue: "Revenue"
+        unassigned: "Unassigned"
       total_due_label: "Total since sign-up"
       history_title: "Monthly usage"
       history_month: "Month"
@@ -195,6 +205,7 @@ en:
         patient: "Patient"
         doctor: "Doctor"
         amount: "Amount"
+        total: "Total"
       no_visits: "No billable visits yet. Appointments marked as completed will appear here."
       deleted_record: "Deleted"
       payment_notice: "Online payment is not enabled yet — this page shows your current usage and estimated bill."
@@ -272,6 +283,12 @@ en:
       confirm_reject: "Cancel this booking request?"
       booking_page: "Booking Page"
       share_booking_link: "Share booking link"
+      amount: "Visit amount"
+      amount_label: "Amount charged for %{patient}'s visit"
+      complete: "Complete & charge"
+      update_amount: "Update amount"
+      billed: "Billed %{amount}"
+      not_billed: "Not billed"
     calendar:
       title: "Calendar"
       subtitle: "View all appointments in a clear calendar layout."
@@ -294,6 +311,7 @@ en:
         status: "Select status"
       placeholders:
         notes: "Add appointment notes..."
+      visit_amount_hint: "Charged to the patient. Only recorded once the appointment status is Completed."
   prescriptions:
     index:
       title: "Prescriptions"
@@ -416,6 +434,16 @@ en:
         appointment_time: "Appointment Time"
         status: "Status"
         notes: "Notes"
+        visit_amount: "Amount charged"
+    errors:
+      models:
+        appointment:
+          attributes:
+            visit_amount:
+              invalid_amount: "must be an amount like 35 or 35.50, and cannot be negative"
+            appointment_time:
+              doctor_double_booked: "This doctor already has an appointment at this date and time."
+              outside_doctor_working_hours: "must be within the selected doctor's working hours"
       prescription:
         prescription_date: "Prescription Date"
         diagnosis: "Diagnosis"
@@ -569,7 +597,7 @@ en:
         price_per_visit: "Price per Visit"
     monetization:
       title: "Monetization"
-      subtitle: "Usage-based billing calculated from real patient visits."
+      subtitle: "Revenue aggregated from the amount charged at each patient visit."
       kpis:
         period_revenue: "Revenue This Period"
         all_time_revenue: "All time"
@@ -579,22 +607,32 @@ en:
         voided: "%{count} voided (not charged)"
         billing_clinics: "Clinics Billing"
         with_usage: "With usage this period"
+        average_visit: "Avg / visit"
+      doctors:
+        title: "Revenue by Doctor"
+        subtitle: "Visits and revenue per doctor, from the amounts actually charged"
+        doctor: "Doctor"
+        visits: "Visits"
+        revenue: "Revenue"
+        total: "Total"
+        unassigned: "Unassigned (doctor deleted)"
+        empty: "No billable visits recorded yet."
       price:
-        title: "Price per Patient Visit"
-        subtitle: "The global price charged to every clinic for one completed patient visit."
-        label: "Price per visit"
-        hint: "Applies to all clinics that do not have their own price."
+        title: "Suggested Amount per Visit"
+        subtitle: "Prefilled into the amount field when a clinic completes a visit. Staff can change it at the point of sale, and the amount they enter is what gets billed."
+        label: "Suggested amount"
+        hint: "A starting value only — it never changes an amount already recorded on a visit."
         currency_label: "Currency"
-        submit: "Save Price"
-        override_note: "A clinic can be given its own price from its clinic page — that override always wins over this global price."
+        submit: "Save Suggested Amount"
+        override_note: "A clinic can be given its own suggested amount from its clinic page — that override is used as its default instead of this one."
       chart:
         title: "Visits & Usage Revenue"
         subtitle: "Billable patient visits over the last 6 months"
         badge: "Live data"
       table:
         title: "Usage per Clinic"
-        subtitle: "Billable visits and amount due for each clinic"
-        price: "Price / visit"
+        subtitle: "Billable visits and revenue for each clinic"
+        price: "Suggested / visit"
         custom: "Custom"
         period_visits: "Visits (period)"
         period_amount: "Due (period)"
@@ -602,23 +640,23 @@ en:
         total_amount: "Due (total)"
       clinic_card:
         title: "Visit Billing"
-        subtitle: "Usage-based billing for this clinic, calculated from completed patient visits."
+        subtitle: "Revenue for this clinic, summed from the amount charged at each completed visit."
         period_visits: "Visits This Period"
         total_visits: "Total Visits"
-        price: "Price / Visit"
-        custom: "Custom price"
-        global: "Global price"
-        period_amount: "Due This Period"
+        price: "Suggested / Visit"
+        custom: "Custom suggested amount"
+        global: "Global suggested amount"
+        period_amount: "Revenue This Period"
         total_amount: "Total"
-        override_label: "Price per visit for this clinic"
-        override_hint: "Leave empty to use the global price."
-        override_submit: "Save Price"
-        override_reset: "Use Global Price"
+        override_label: "Suggested amount for this clinic"
+        override_hint: "Leave empty to use the global suggested amount. Amounts already recorded on visits never change."
+        override_submit: "Save"
+        override_reset: "Use Global Amount"
       flash:
-        price_updated: "Price per visit updated to %{price}."
-        price_invalid: "Enter a valid price, for example 2.50."
-        override_updated: "This clinic is now billed %{price} per visit."
-        override_cleared: "This clinic now uses the global price per visit."
+        price_updated: "Suggested amount per visit updated to %{price}."
+        price_invalid: "Enter a valid amount, for example 20.00."
+        override_updated: "This clinic now suggests %{price} per visit."
+        override_cleared: "This clinic now uses the global suggested amount."
     users:
       cannot_change_own_role: "You cannot change your own admin role."
       cannot_delete_self: "You cannot delete your own account."

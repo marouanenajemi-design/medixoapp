@@ -182,10 +182,10 @@
         </div>
         <div class="text-center">
           <div style="font-size:0.72rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">
-            <%= t("dashboard.index.billing.price") %>
+            <%= t("dashboard.index.billing.average") %>
           </div>
           <div style="font-size:1.3rem;font-weight:800;color:#0f172a;">
-            <%= money(@billing_summary[:price_per_visit_cents], @billing_summary[:currency]) %>
+            <%= money(@billing_summary[:period_average_cents], @billing_summary[:currency]) %>
           </div>
         </div>
         <div class="text-center">

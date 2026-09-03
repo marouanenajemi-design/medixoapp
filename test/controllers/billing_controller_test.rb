@@ -49,7 +49,7 @@ class BillingControllerTest < ActionDispatch::IntegrationTest
     assert_match I18n.t("billing.show.no_visits"), response.body
   end
 
-  test "uses the clinic's own price when one is set" do
+  test "shows the clinic's suggested amount alongside the real average" do
     @clinic.update!(price_per_visit_cents: 500)
     record_visit(clinic: @clinic)
     sign_in_as(@owner)
@@ -58,7 +58,40 @@ class BillingControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_match "€5.00", response.body
-    assert_match I18n.t("billing.show.custom_price"), response.body
+    assert_match I18n.t("billing.show.suggested_price", amount: "€5.00"), response.body
+  end
+
+  test "totals are the sum of each visit's own amount, not a count times a price" do
+    Visit.create!(clinic: @clinic, occurred_on: Date.current, source: "appointment",
+                  price_cents: 2000, currency: "EUR")
+    Visit.create!(clinic: @clinic, occurred_on: Date.current, source: "appointment",
+                  price_cents: 3500, currency: "EUR")
+    Visit.create!(clinic: @clinic, occurred_on: Date.current, source: "appointment",
+                  price_cents: 1500, currency: "EUR")
+    sign_in_as(@owner)
+
+    get billing_url
+
+    assert_response :success
+    assert_match "€70.00", response.body
+    assert_select ".stat-value", text: "3"
+    assert_no_match(/visits × /, response.body)
+  end
+
+  test "the billing page breaks revenue down by doctor" do
+    doctor = doctors(:one)
+    Visit.create!(clinic: @clinic, doctor: doctor, occurred_on: Date.current,
+                  source: "appointment", price_cents: 2000, currency: "EUR")
+    Visit.create!(clinic: @clinic, doctor: doctor, occurred_on: Date.current,
+                  source: "appointment", price_cents: 3500, currency: "EUR")
+    sign_in_as(@owner)
+
+    get billing_url
+
+    assert_response :success
+    assert_match I18n.t("billing.show.by_doctor.title"), response.body
+    assert_match doctor.name, response.body
+    assert_match "€55.00", response.body
   end
 
   test "never counts another clinic's visits" do

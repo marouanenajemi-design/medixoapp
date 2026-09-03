@@ -29,6 +29,12 @@ class Appointment < ApplicationRecord
 
   validate :appointment_within_doctor_working_hours
 
+  # Amount taken at the point of sale, in the clinic's currency ("35", "35.50",
+  # "35,50"). Virtual: it is stored on the Visit ledger row, not here.
+  attr_accessor :visit_amount
+
+  validate :visit_amount_is_a_valid_money_amount
+
   # Billing runs after the appointment is safely committed, so a billing problem
   # can never roll back or block clinical work.
   after_commit :sync_billable_visit, on: [:create, :update]
@@ -37,12 +43,32 @@ class Appointment < ApplicationRecord
     status == BILLABLE_STATUS
   end
 
+  # nil when nothing was typed, so the ledger keeps the amount it already has.
+  def visit_amount_cents
+    return nil if visit_amount.blank?
+
+    BillingSetting.to_cents(visit_amount)
+  end
+
   private
 
-  def sync_billable_visit
-    return unless previously_new_record? || saved_change_to_status? || saved_change_to_appointment_date?
+  def visit_amount_is_a_valid_money_amount
+    return if visit_amount.blank?
 
-    VisitBillingService.sync_appointment(self)
+    if BillingSetting.to_cents(visit_amount).nil?
+      errors.add(:visit_amount, :invalid_amount)
+    end
+  end
+
+  def sync_billable_visit
+    amount_cents = visit_amount_cents
+
+    # A typed amount is itself a reason to sync: it lets an already-completed
+    # visit be re-priced without the status having to change.
+    return unless previously_new_record? || saved_change_to_status? ||
+                  saved_change_to_appointment_date? || amount_cents
+
+    VisitBillingService.sync_appointment(self, amount_cents: amount_cents)
   rescue StandardError => e
     Rails.logger.error("[VisitBilling] failed to sync appointment ##{id}: #{e.class}: #{e.message}")
   end

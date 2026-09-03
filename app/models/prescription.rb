@@ -20,7 +20,7 @@ class Prescription < ApplicationRecord
   validate :doctor_and_patient_belong_to_clinic
 
 
-  before_validation :discard_blank_prescription_it
+  before_validation :discard_blank_prescription_items
 
   private
 

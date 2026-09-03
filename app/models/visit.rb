@@ -25,16 +25,32 @@ class Visit < ApplicationRecord
   scope :uninvoiced,    -> { billable.where(invoiced_at: nil) }
   scope :chronological, -> { order(occurred_on: :desc, created_at: :desc) }
 
-  # Billable visits × the clinic's effective price, for any scope of visits.
-  # Used by the admin monetization dashboard.
+  # Revenue is the sum of the amounts actually charged at the point of sale.
+  # Never count × a configured price: each visit carries its own amount.
   def self.usage_revenue_cents(scope = billable)
-    counts = scope.group(:clinic_id).count
-    return 0 if counts.empty?
+    scope.sum(:price_cents)
+  end
 
-    overrides    = Clinic.where(id: counts.keys).pluck(:id, :price_per_visit_cents).to_h
-    default_cents = BillingSetting.current.price_per_visit_cents
+  # [{ doctor_id:, visits:, revenue_cents: }] for any scope, richest first.
+  # doctor_id may be nil (the doctor record was deleted after the visit).
+  def self.revenue_by_doctor(scope = billable)
+    scope.group(:doctor_id)
+         .pluck(Arel.sql("doctor_id, COUNT(*), COALESCE(SUM(price_cents), 0)"))
+         .map { |doctor_id, count, revenue| { doctor_id: doctor_id, visits: count, revenue_cents: revenue.to_i } }
+         .sort_by { |row| -row[:revenue_cents] }
+  end
 
-    counts.sum { |clinic_id, count| count * (overrides[clinic_id] || default_cents) }
+  # [{ clinic_id:, visits:, revenue_cents: }] for any scope.
+  def self.revenue_by_clinic(scope = billable)
+    scope.group(:clinic_id)
+         .pluck(Arel.sql("clinic_id, COUNT(*), COALESCE(SUM(price_cents), 0)"))
+         .to_h { |clinic_id, count, revenue| [clinic_id, { visits: count, revenue_cents: revenue.to_i }] }
+  end
+
+  # True when a person typed this amount at the point of sale, rather than the
+  # visit falling back to the suggested default price.
+  def amount_entered?
+    amount_entered_at.present?
   end
 
   def billable?

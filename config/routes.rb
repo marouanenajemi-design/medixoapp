@@ -72,6 +72,7 @@ Rails.application.routes.draw do
     member do
       patch :approve
       patch :reject
+      patch :complete
     end
   end
 

@@ -11,7 +11,7 @@ namespace :billing do
     period  = Date.current.beginning_of_month..Date.current.end_of_month
     scope   = Visit.billable.in_period(period)
 
-    puts "Price per visit (global): #{setting.currency_symbol}#{format('%.2f', setting.price_per_visit)}"
+    puts "Suggested amount/visit:   #{setting.currency_symbol}#{format('%.2f', setting.price_per_visit)} (default only)"
     puts "Billing period:           #{period.first} → #{period.last}"
     puts "Billable visits (period): #{scope.count}"
     puts "Billable visits (total):  #{Visit.billable.count}"

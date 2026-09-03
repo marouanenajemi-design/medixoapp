@@ -149,7 +149,7 @@
             <div class="detail-item text-center">
               <div class="detail-label"><%= t("admin.monetization.clinic_card.price") %></div>
               <div class="detail-value" style="font-size:1.8rem;">
-                <%= money(@billing_summary[:price_per_visit_cents], @billing_summary[:currency]) %>
+                <%= money(@billing_summary[:suggested_price_cents], @billing_summary[:currency]) %>
               </div>
               <div style="font-size:0.75rem;color:#64748b;">
                 <%= @billing_summary[:custom_price] ? t("admin.monetization.clinic_card.custom") : t("admin.monetization.clinic_card.global") %>

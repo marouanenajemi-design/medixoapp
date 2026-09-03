@@ -61,13 +61,33 @@ class Admin::MonetizationControllerTest < ActionDispatch::IntegrationTest
     assert_equal 350, BillingSetting.current.price_per_visit_cents
   end
 
-  test "a new global price changes what clinics owe" do
+  test "a new suggested amount never changes revenue already recorded" do
     2.times { record_visit(clinic: @clinic) }
     sign_in_as(@admin)
 
     patch admin_monetization_url, params: { billing_setting: { price_per_visit: "10", currency: "EUR" } }
 
-    assert_equal 2000, @clinic.reload.total_amount_due_cents
+    # The two visits were charged 200 each at their own point of sale; changing
+    # the suggested amount afterwards must leave that history alone.
+    assert_equal 400, @clinic.reload.total_amount_due_cents
+    assert_equal 400, Visit.usage_revenue_cents
+    assert_equal 1000, BillingSetting.current.price_per_visit_cents
+  end
+
+  test "the doctor breakdown aggregates revenue per doctor" do
+    doctor = doctors(:one)
+    Visit.create!(clinic: @clinic, doctor: doctor, occurred_on: Date.current,
+                  source: "appointment", price_cents: 2000, currency: "EUR")
+    Visit.create!(clinic: @clinic, doctor: doctor, occurred_on: Date.current,
+                  source: "appointment", price_cents: 3500, currency: "EUR")
+    sign_in_as(@admin)
+
+    get admin_monetization_url
+
+    assert_response :success
+    assert_select "th", text: I18n.t("admin.monetization.doctors.doctor")
+    assert_match doctor.name, response.body
+    assert_match "€55.00", response.body
   end
 
   test "an invalid price is rejected and the old price kept" do

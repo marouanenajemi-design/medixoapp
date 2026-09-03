@@ -94,6 +94,7 @@
               <th><%= t("shared.tables.date") %></th>
               <th><%= t("shared.tables.time") %></th>
               <th><%= t("shared.tables.status") %></th>
+              <th><%= t("appointments.index.amount") %></th>
               <th><%= t("shared.tables.actions") %></th>
             </tr>
           </thead>
@@ -122,6 +123,42 @@
                 <td data-label="<%= t("shared.tables.status") %>">
                   <span class="badge-soft <%= badge_class %>"><%= appointment_status_label(appointment.status) %></span>
                 </td>
+
+                <%# ── Point of sale: the amount charged for this visit ── %>
+                <td data-label="<%= t("appointments.index.amount") %>">
+                  <% visit  = appointment.visit %>
+                  <% billed = appointment.billable_visit? && visit&.billable? %>
+
+                  <%= form_with url: complete_appointment_path(appointment), method: :patch,
+                                data: { turbo: false },
+                                class: "d-flex align-items-center gap-2 flex-wrap" do %>
+                    <div class="input-group input-group-sm" style="width:120px;flex:0 0 auto;">
+                      <span class="input-group-text"><%= billing_currency_symbol(visit&.currency) %></span>
+                      <input type="text"
+                             name="visit_amount"
+                             inputmode="decimal"
+                             class="form-control"
+                             value="<%= visit_amount_field_value(appointment, current_clinic) %>"
+                             aria-label="<%= t("appointments.index.amount_label", patient: appointment.patient.name) %>">
+                    </div>
+                    <button type="submit" class="btn btn-sm <%= billed ? 'btn-outline-secondary' : 'btn-success' %>">
+                      <i class="bi bi-<%= billed ? 'pencil' : 'cash-coin' %>"></i>
+                      <%= billed ? t("appointments.index.update_amount") : t("appointments.index.complete") %>
+                    </button>
+                  <% end %>
+
+                  <% if billed %>
+                    <div style="font-size:0.72rem;color:#0d9488;margin-top:4px;">
+                      <i class="bi bi-check-circle-fill"></i>
+                      <%= t("appointments.index.billed", amount: money(visit.price_cents, visit.currency)) %>
+                    </div>
+                  <% elsif visit.present? && !visit.billable? %>
+                    <div style="font-size:0.72rem;color:#94a3b8;margin-top:4px;">
+                      <i class="bi bi-slash-circle"></i> <%= t("appointments.index.not_billed") %>
+                    </div>
+                  <% end %>
+                </td>
+
                 <td class="actions-cell" data-label="<%= t("shared.tables.actions") %>">
                   <div class="action-group">
                     <%= link_to t("shared.actions.edit"), edit_appointment_path(appointment), class: "btn btn-sm btn-warning" %>

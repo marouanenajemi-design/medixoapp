@@ -14,6 +14,7 @@ class BillingController < ApplicationController
                             .chronological
                             .limit(10)
 
-    @visits_by_month = @clinic.visit_counts_by_month
+    @visits_by_month   = @clinic.visit_counts_by_month
+    @revenue_by_doctor = @clinic.revenue_by_doctor
   end
 end
